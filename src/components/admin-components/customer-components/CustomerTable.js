@@ -1,0 +1,284 @@
+import React, { useState } from 'react';
+import { makeStyles } from '@mui/styles';
+import { useRouter } from 'next/router';
+// mat ui stuff
+import {
+    Card,
+    Table,
+    Stack,
+    Avatar,
+    Button,
+    Checkbox,
+    TableRow,
+    TableBody,
+    TableCell,
+    Container,
+    Typography,
+    TableContainer,
+    TablePagination
+} from '@mui/material';
+
+// import file
+import DatePickerCustomer from './date-picker-customer/DatePickerCustomer';
+import USERLIST from './_mocks/customer';
+import CustomerListHead from './CustomerListHead';
+
+// table stuff
+const TABLE_HEAD = [
+    { id: 'pelanggan', label: 'Pelanggan', alignRight: false },
+    { id: 'alamat', label: 'Alamat', alignRight: false },
+    { id: 'notelp', label: 'No Telp', alignRight: false },
+    { id: 'tanggal', label: 'Tanggal Datfar', alignRight: false },
+    { id: '' }
+];
+
+// ----------------------------------------------------------------------
+// filter bawaan table dari mat ui
+function descendingComparator(a, b, orderBy) {
+    if (b[orderBy] < a[orderBy]) {
+        return -1;
+    }
+    if (b[orderBy] > a[orderBy]) {
+        return 1;
+    }
+    return 0;
+}
+
+function getComparator(order, orderBy) {
+    return order === 'desc'
+        ? (a, b) => descendingComparator(a, b, orderBy)
+        : (a, b) => -descendingComparator(a, b, orderBy);
+}
+function applySortFilter(array, comparator, query) {
+    const stabilizedThis = array.map((el, index) => [el, index]);
+    stabilizedThis.sort((a, b) => {
+        const order = comparator(a[0], b[0]);
+        if (order !== 0) return order;
+        return a[1] - b[1];
+    });
+    if (query) {
+        return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    }
+    return stabilizedThis.map((el) => el[0]);
+}
+
+const useStyles = makeStyles((theme) => ({
+    MainContainer: {
+        paddingInline: 32,
+        paddingTop: 33
+    },
+    ItemTop: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        [theme.breakpoints.down('tablet')]: {
+            flexWrap: 'wrap',
+            rowGap: 20,
+            columnGap: 20
+        }
+    },
+    ItemTopLeft: {
+        flex: 1,
+        display: 'flex',
+        alignItems: 'center',
+        columnGap: 10
+        // backgroundColor: 'red'
+    },
+    ItemDatePicker: {
+        width: 167,
+        height: 35,
+        background: '#FFFFFF',
+        border: '1px solid #898989',
+        borderRadius: 12
+    },
+    ItemTopRight: {
+        flex: 1,
+        display: 'flex',
+        justifyContent: 'flex-end',
+        columnGap: 10,
+        [theme.breakpoints.down('tablet')]: {
+            justifyContent: 'unset'
+        }
+        // backgroundColor: 'blue'
+    },
+    TextExport: {
+        fontSize: 14,
+        fontWeight: 600,
+        color: '#000000'
+    },
+    TextTambah: {
+        fontSize: 14,
+        fontWeight: 600,
+        color: '#FFFFFF'
+    },
+    // table
+    ContainerTable: {
+        paddingTop: 44
+    }
+}));
+
+export default function CustomerTable() {
+    const classes = useStyles();
+    const [dateFrom, setDateFrom] = useState();
+    const [dateTo, setDateTo] = useState();
+
+    const [page, setPage] = useState(0);
+    const [order, setOrder] = useState('asc');
+    const [orderBy, setOrderBy] = useState('name');
+    const [selected, setSelected] = useState([]);
+    const [filterName, setFilterName] = useState('');
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const router = useRouter();
+
+    // handleClick to
+    const handleClickCustomer = () => {
+        router.push('/admin/customer/customer-detail');
+    };
+
+    // const handleDateFrom = (newValue) => {
+    //     setDateFrom(newValue);
+    // };
+    // const handleDateTo = (newValue) => {
+    //     setDateTo(newValue);
+    // };
+
+    const handleRequestSort = (event, property) => {
+        const isAsc = orderBy === property && order === 'asc';
+        setOrder(isAsc ? 'desc' : 'asc');
+        setOrderBy(property);
+    };
+    // pagination table
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
+    const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
+    return (
+        <Container>
+            <Card className={classes.MainContainer}>
+                <div className={classes.ItemTop}>
+                    <div className={classes.ItemTopLeft}>
+                        <div>
+                            <input
+                                type="date"
+                                className={classes.ItemDatePicker}
+                                value={dateFrom}
+                                onChange={(e) => setDateFrom(e.target.value)}
+                            />
+                        </div>
+                        <span style={{ fontSize: 14, fontWeight: 400, color: '#898989' }}>To</span>
+                        <div>
+                            <input
+                                type="date"
+                                className={classes.ItemDatePicker}
+                                value={dateTo}
+                                onChange={(e) => setDateTo(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                    <div className={classes.ItemTopRight}>
+                        <div className={classes.BtnExport}>
+                            <Button
+                                style={{
+                                    textTransform: 'none',
+                                    border: '1px solid #898989',
+                                    width: 179,
+                                    height: 37,
+                                    borderRadius: 12
+                                }}
+                            >
+                                <span className={classes.TextExport}>Export</span>
+                            </Button>
+                        </div>
+                        <div className={classes.BtnTambah}>
+                            <Button
+                                style={{
+                                    textTransform: 'none',
+                                    background: '#673AB7',
+                                    width: 179,
+                                    height: 37,
+                                    borderRadius: 12
+                                }}
+                            >
+                                <span className={classes.TextTambah}>Tambah</span>
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+                <div className={classes.ContainerTable}>
+                    {/* <Scrollbar> */}
+                    <TableContainer sx={{ minWidth: 600 }}>
+                        <Table
+                            sx={{
+                                width: '100%',
+                                maxHeight: '100%',
+                                backgroundColor: '#ffffff',
+                                borderRadius: 4
+                            }}
+                        >
+                            <CustomerListHead
+                                order={order}
+                                orderBy={orderBy}
+                                headLabel={TABLE_HEAD}
+                                rowCount={USERLIST.length}
+                                numSelected={selected.length}
+                                onRequestSort={handleRequestSort}
+                            />
+                            <TableBody>
+                                {filteredUsers
+                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                    .map((row) => {
+                                        const { id, name, role, date, noPelanggan, email } = row;
+                                        const isItemSelected = selected.indexOf(name) !== -1;
+                                        return (
+                                            <TableRow
+                                                hover
+                                                key={id}
+                                                tabIndex={-1}
+                                                onClick={handleClickCustomer}
+                                                style={{ cursor: 'pointer' }}
+                                            >
+                                                {/* <TableCell>#{noPelanggan}</TableCell> */}
+                                                <TableCell component="th" scope="row">
+                                                    <Stack direction="column" alignItems="left" spacing={0}>
+                                                        <Typography noWrap>{name}</Typography>
+                                                        <Typography noWrap>{email}</Typography>
+                                                    </Stack>
+                                                </TableCell>
+                                                <TableCell align="left">
+                                                    <Typography noWrap>
+                                                        pinang residence Unit 36, DKI Jakarta, Kota Jakarta Selatan
+                                                    </Typography>
+                                                </TableCell>
+                                                <TableCell align="left">
+                                                    <Typography noWrap>+6281236006789</Typography>
+                                                </TableCell>
+                                                <TableCell align="left">
+                                                    <Typography noWrap>11-03-2021</Typography>
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                    })}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                    <TablePagination
+                        rowsPerPageOptions={[5, 10, 25]}
+                        component="div"
+                        count={USERLIST.length}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                        style={{ display: 'flex' }}
+                    />
+                    {/* </Scrollbar> */}
+                </div>
+            </Card>
+        </Container>
+    );
+}

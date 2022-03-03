@@ -1,0 +1,5 @@
+-ada 1 RED WARNING di slider-single-product.js
+ error di dev tool muncul ketika melakukan fetching lewat api
+ meski ada RED WARNING,..aplikasi dan data yang di fetch masih muncul denga baik
+
+https://colinhacks.com/essays/building-a-spa-with-nextjs

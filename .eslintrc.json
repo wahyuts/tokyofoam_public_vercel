@@ -1,0 +1,41 @@
+{
+    "extends": ["next", "plugin:import/recommended", "airbnb-base", "prettier"],
+    "rules": {
+        // rule from next plugin
+        "@next/next/no-img-element": "off",
+        "@next/next/no-document-import-in-page": "off",
+
+        // rule from airbnb-base
+        "spaced-comment": "off",
+        "no-undef": "off",
+        "prefer-const": "off",
+        "class-methods-use-this": "off",
+        "arrow-body-style": 0,
+        "no-nested-ternary": "off",
+        "no-unused-vars": "off",
+        "no-underscore-dangle": "off",
+        "func-names": "off",
+        "no-use-before-define": "off",
+        "dot-notation": "off",
+        "no-console": "off",
+        "no-else-return": "off",
+        "camelcase": "off",
+        "consistent-return": "off",
+        "no-case-declarations": "off",
+        "no-self-compare": "off",
+        "no-plusplus": "off",
+        "no-alert": "off",
+        "prefer-template": "off",
+        "prefer-destructuring": "off",
+        "object-shorthand": "off",
+        "no-shadow": "off",
+        "no-lonely-if": "off",
+        "no-unused-expressions": "off",
+
+        // rule from plugin:import/recommended
+        "import/no-mutable-exports": 0,
+        "import/prefer-default-export": 0,
+        "import/no-named-as-default": 0,
+        "import/order": 0
+    }
+}

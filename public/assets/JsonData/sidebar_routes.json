@@ -1,0 +1,42 @@
+[
+    {
+        "display_name": "Dashboard",
+        "route": "/dashboard",
+        "icon": "bx bxs-dashboard"
+    },
+    {
+        "display_name": "Pesanan",
+        "route": "/pesanan",
+        "icon": "bx bxs-store"
+    },
+    {
+        "display_name": "Produk",
+        "route": "/product",
+        "icon": "bx bx-package"
+    },
+    {
+        "display_name": "Inventory",
+        "route": "/inventory",
+        "icon": "bx bxs-user-badge"
+    },
+    {
+        "display_name": "Warna",
+        "route": "/warna",
+        "icon": "bx bx-info-circle"
+    },
+    {
+        "display_name": "Situsku",
+        "route": "/situsku",
+        "icon": "bx bx-user-pin"
+    },
+    {
+        "display_name": "Report",
+        "route": "/report",
+        "icon": "bx bx-notepad"
+    },
+    {
+        "display_name": "Setting",
+        "route": "/settings",
+        "icon": "bx bx-cog"
+    }
+]

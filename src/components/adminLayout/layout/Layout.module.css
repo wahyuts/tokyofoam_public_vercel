@@ -1,0 +1,20 @@
+.Layout {
+    width: 100%;
+    height: 100vh;
+}
+.LayoutContent {
+    padding-left: 259px;
+
+    min-height: 100vh;
+}
+.LayoutContentMain {
+    padding: 20px;
+    background-color: #e3f2fd;
+    border-radius: 12px;
+    /* width: 89%; */
+    /* height: 100vh; */
+    /* width: 1181px;
+    height: 965px; */
+    /* width: 100%;
+    height: 100vh; */
+}

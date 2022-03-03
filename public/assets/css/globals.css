@@ -1,0 +1,160 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100&display=swap'); */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+* {
+    /* box-sizing: border-box; */
+    padding: 0;
+    margin: 0;
+}
+
+html,
+body {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    background-color: #ffffff;
+}
+
+a {
+    font-size: 15px;
+    color: inherit;
+    text-decoration: none;
+}
+
+p {
+    font-size: 18px;
+    font-weight: 400;
+    color: #474747;
+}
+
+h1 {
+    font-size: 30px;
+    font-weight: 600;
+    color: #474747;
+}
+
+h2 {
+    font-size: 25px;
+    font-weight: 600;
+    color: #474747;
+}
+
+.content {
+    flex: 1 0 auto;
+}
+
+/*Khusus untuk ARROW Button Carousel*/
+.embla__button {
+    outline: 0;
+    cursor: pointer;
+    background-color: transparent;
+    touch-action: manipulation;
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 0;
+    width: 30px;
+    height: 30px;
+    justify-content: center;
+    align-items: center;
+    fill: #2c2c2c;
+    padding: 0;
+}
+
+.embla__button:disabled {
+    cursor: default;
+    opacity: 0.3;
+}
+
+.embla__button__svg {
+    width: 100%;
+    height: 100%;
+}
+
+.embla__button--prev {
+    left: 27px;
+}
+
+.embla__button--next {
+    right: 27px;
+}
+
+.textAreaFormCheckout {
+    font-family: 'Poppins', sans-serif;
+    padding-left: 10px;
+    padding-top: 10px;
+    outline: none;
+    font-size: 15px;
+    font-weight: 400;
+}
+
+.textSubTitleFormCheckout {
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    margin-bottom: 10px;
+}
+
+.boxProfile {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    /* background-color: red; */
+    /* margin-bottom: 5px; */
+    cursor: pointer;
+}
+
+.boxProfile:hover {
+    background-color: #c0e9ed;
+}
+/*******************************************/
+
+@media only screen and (max-width: 767px) {
+    p {
+        font-size: 10px;
+        color: #474747;
+    }
+
+    h1 {
+        font-size: 20px;
+        font-weight: 800;
+        color: #474747;
+    }
+
+    h2 {
+        font-size: 20px;
+        font-weight: 800;
+        color: #474747;
+    }
+}
+
+/* @media only screen and (min-width: 375px) {
+    p {
+        font-size: 10px;
+        color: #474747;
+    }
+
+    h1 {
+        font-size: 20px;
+        font-weight: 800;
+        color: #474747;
+    }
+} */
+
+@media only screen and (min-width: 768px) {
+    p {
+        font-size: 18px;
+        color: #474747;
+    }
+
+    h1 {
+        font-size: 30px;
+        font-weight: 600;
+        color: #474747;
+    }
+}

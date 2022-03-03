@@ -1,0 +1,51 @@
+.Dropdown {
+    position: relative;
+    z-index: 99;
+}
+.DropdownToggle {
+    border: 0;
+    outline: 0;
+    background-color: transparent;
+    position: relative;
+}
+.DropdownToggle > i {
+    font-size: 2.5rem;
+    color: grey;
+}
+
+.DropdownToggleBadge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: -12px;
+    right: -10px;
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+    background-color: tomato;
+    color: grey;
+    font-size: 0.8rem;
+}
+.DropdownContent {
+    position: absolute;
+    top: calc(100% + 5px);
+    right: 0;
+    width: max-content;
+    max-width: 400px;
+    background-color: grey;
+    /* box-shadow: var(--box-shadow); */
+    border-radius: 18px;
+    overflow: hidden;
+    transform-origin: top right;
+    transform: scale(0);
+    transition: transform 0.3s ease 0s;
+}
+.DropdownContent.active {
+    transform: scale(1);
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.DropdownFooter {
+    padding: 20px;
+    text-align: center;
+}

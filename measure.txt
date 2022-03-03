@@ -1,0 +1,5 @@
+Font size
+Subtitle = 35
+fontweght = 800 (untuk bold)
+            600 (untuk standart) 
+

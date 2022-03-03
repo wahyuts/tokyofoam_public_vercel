@@ -1,0 +1,77 @@
+.TopNav {
+    padding: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 50px;
+}
+.TopNavSearch {
+    position: relative;
+    height: 50px;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    border-radius: 12px;
+    /* overflow: hidden; */
+}
+.TopNavSearch > input {
+    height: 55px;
+    width: 329px;
+    padding-inline: 20px;
+    /* padding: 10px 60px 10px 20px; */
+    font-size: 1rem;
+    border-radius: 12px;
+    color: #455560;
+    border-width: 0;
+    background-color: #ffffff;
+}
+.TopNavSearch > i {
+    font-size: 18px;
+    position: absolute;
+    right: 20px;
+}
+.WrapperTopNavRight {
+    display: flex;
+    align-items: center;
+    column-gap: 20px;
+}
+
+.DropdownBell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: #ede7f6;
+    border-radius: 5px;
+    color: #5e35b1;
+}
+.DropdownBlueCog {
+    width: 100px;
+    height: 56px;
+    background: #1e88e5;
+    border-radius: 28px;
+    display: flex;
+    align-items: center;
+    padding-inline: 20px;
+    justify-content: space-between;
+}
+.LogoAvatar {
+    border-radius: 50%;
+    width: 72px;
+    height: 50px;
+}
+
+.NotificationItem {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+}
+.NotificationItem:hover {
+    background-color: #fafafb;
+}
+.NotificationItem > i {
+    margin-right: 20px;
+    font-size: 1.5rem;
+}
