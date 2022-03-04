@@ -27,6 +27,9 @@ export const LOADING_PRODUCT = 'LOADING_PRODUCT';
 //ID Uniq Reducer
 export const SET_ID_UNIQ_CART_USER = 'SET_ID_UNIQ_CART_USER';
 
+//ID Uniq Reducer
+export const SET_ORDER_ID = 'SET_ORDER_ID';
+
 // data bagReducer
 export const SET_ADD_TO_BAG = 'SET_ADD_TO_BAG';
 export const LOADING_ON_BAG = 'LOADING_ON_BAG';

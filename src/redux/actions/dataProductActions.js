@@ -26,7 +26,8 @@ import {
     SET_TOTAL_PLUS_SHIPPING,
     SET_ADD_KURIR,
     SET_POTONGAN_MEMBERSHIP,
-    SET_ID_UNIQ_CART_USER
+    SET_ID_UNIQ_CART_USER,
+    SET_ORDER_ID
 
     // TOTAL_PRICE
 } from '../type';
@@ -617,6 +618,10 @@ export const postNewPesananPayNow = (
         getAuthorizationHeaderToken();
         const res = await axios.post(API, selected);
         const order_id = res.data.order_id;
+        dispatch({
+            type: SET_ORDER_ID,
+            payload: order_id
+        });
         console.log('RESPONSE', order_id);
 
         if (res.data.message === 'Data berhasil disimpan') {
@@ -654,6 +659,23 @@ export const postNewPesananPayNow = (
                 // alert('Pesanan Anda Sudah Berhasil Dibuat, Pesanan Akan Segera Diproses dan Dikirim ke Tempat Anda!');
                 window.location.href = `${midtrans_url}`;
             }
+        }
+    } catch (error) {
+        if (error.response.status === 500) {
+            dispatch({ type: STOP_LOADING_BUTTON_PAYNOW });
+            alert('Terjadi Gangguan Koneksi!');
+        }
+    }
+};
+
+export const updateStatusPayment = (selected, router) => async (dispatch) => {
+    try {
+        getAuthorizationHeaderToken();
+        const res = await axios.post(`https://tokyofoam.herokuapp.com/api/payment/success/${selected}`);
+        if (res.data.message === 'Status pembayaran saat ini: Pending') {
+            router.push('/payment-pending');
+        } else if (res.data.message === 'Pesan pemberitahuan telah dikirim ke email') {
+            router.push('/payment-success');
         }
     } catch (error) {
         if (error.response.status === 500) {

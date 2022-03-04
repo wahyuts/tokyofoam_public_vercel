@@ -14,6 +14,7 @@ import seputarOngkirReducer from './reducers/SeputarOngkirReducer';
 import seputarOngkirForCheckoutReducer from './reducers/SeputarOngkirForCheckoutReducer';
 import formLoginReducer from './reducers/formLoginReducer';
 import idUniqCartReducer from './reducers/idUniqCartReducer';
+import orderReducer from './reducers/orderReducer';
 
 import uiPesanan from '../pages/admin/pesanan/redux/reducer/uiPesanan';
 import storage from './sync_storage';
@@ -39,6 +40,7 @@ const combinedReducer = combineReducers({
     url_profile: urlProfileReducer,
     data_history_order: dataHistoryOrder,
     idUniqCart: idUniqCartReducer,
+    orderUniq: orderReducer,
     uiPesanan
 });
 
@@ -62,7 +64,16 @@ const makeStore = ({ isServer }) => {
         const persistConfig = {
             key: 'nextjs',
             blacklist: ['url_profile'],
-            whitelist: ['user', 'url', 'dataProduct', 'bag', 'shippingAddres', 'detailOngkirForCheckout', 'idUniqCart'],
+            whitelist: [
+                'user',
+                'url',
+                'dataProduct',
+                'bag',
+                'shippingAddres',
+                'detailOngkirForCheckout',
+                'idUniqCart',
+                'orderUniq'
+            ],
 
             storage // if needed, use a safer storage
         };

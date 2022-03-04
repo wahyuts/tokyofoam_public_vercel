@@ -50,8 +50,10 @@ function MyApp(props) {
         currentPath === '/test-sign-in' ||
         currentPath === '/sign-up' ||
         currentPath === '/testing' ||
+        currentPath === '/process-your-transaction' ||
         currentPath === '/success-verification-email' ||
         currentPath === '/payment-success' ||
+        currentPath === '/payment-pending' ||
         currentPath === '/mobile-register-member' ||
         currentPath === '/admin-login' ||
         currentPath === '/admin' ||
