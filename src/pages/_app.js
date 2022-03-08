@@ -51,6 +51,7 @@ function MyApp(props) {
         currentPath === '/sign-up' ||
         currentPath === '/testing' ||
         currentPath === '/process-your-transaction' ||
+        currentPath === '/pay-later' ||
         currentPath === '/success-verification-email' ||
         currentPath === '/payment-success' ||
         currentPath === '/payment-pending' ||

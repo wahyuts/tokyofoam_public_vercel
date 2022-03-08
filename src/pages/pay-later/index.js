@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const PaymentPending = () => {
+const PayLater = () => {
     const router = useRouter();
     const classes = useStyles();
 
@@ -57,8 +57,7 @@ const PaymentPending = () => {
                     <Image src={Logo} alt="Logo" layout="responsive" objectFit="fill" />
                 </div>
                 <p className={classes.textFont}>
-                    Pesanan Anda Telah Kami Catat! Silahkan lakukan pembayaran max 1 x 24 jam. Silahkan mengikuti
-                    langkah-langkah cara pembayaran yang sudah dikirimkan ke email Anda.
+                    Pesanan Anda Telah Kami Catat! Silahkan lakukan pembayaran max 1 x 24 jam melalui akun profile anda.
                 </p>
                 <hr style={{ border: 'none', marginBottom: 10 }} />
                 <p className={`${classes.textFont} ${classes.cursorPointer}`} onClick={klik}>
@@ -69,4 +68,4 @@ const PaymentPending = () => {
     );
 };
 
-export default PaymentPending;
+export default PayLater;
