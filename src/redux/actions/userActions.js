@@ -65,6 +65,55 @@ export const loginUser = (userData, setMenuOpen, keranjang, setIsOpenDrawer, set
     }
 };
 
+//Admin-Login untuk DESKTOP And MOBILE Version
+export const adminLogin = (userData, router) => async (dispatch) => {
+    // setMenuOpen itu buat drawer desktop
+    // setIsOpenDrawer, setShowSI itu buat drawer mobile
+    // console.log('USER', userData);
+    // console.log('keranjang', keranjang);
+    const API = 'https://tokyofoam.herokuapp.com/api/auth/login';
+    // const URLCheckout = localStorage.getItem('URLCheckout');
+
+    try {
+        await dispatch({ type: LOADING_UI });
+        const results = await axios.post(API, userData);
+        setAuthorizationHeader(results.data.token);
+        if (results.data.token) {
+            dispatch({
+                type: STOP_LOADING_UI
+            });
+            dispatch({ type: SET_AUTHENTICATED });
+            dispatch(getAdminData());
+            router.push('/admin');
+        }
+        // set authenticated nya ada didalam getUserData
+        // if (URLCheckout === '/cart') {
+        //     dispatch(clearErrorCheckoutButton());
+        // }
+    } catch (error) {
+        if (error.response) {
+            // internet online, request made, tapi error karena data tidak match dengan BE
+            alert('Email atau Password salah');
+            dispatch({
+                type: STOP_LOADING_UI
+            });
+            // dispatch({
+            //     type: SET_ERRORS,
+            //     payload: error.response.data.message
+            // });
+        } else if (error.request) {
+            // jiks internet offline / disconnect/ gangguan koneksi terjadi
+            console.log(error.request);
+            alert('Terjadi Gangguan Pada Koneksi Anda!');
+            dispatch({
+                type: STOP_LOADING_UI
+            });
+        } else {
+            console.log('Error', error.message);
+        }
+    }
+};
+
 //Buat Update Cart BE
 export const updatePutCartBEFromLogin = (keranjang) => async (dispatch) => {
     const API = `https://tokyofoam.herokuapp.com/api/cart/findByUserId`;
@@ -187,26 +236,31 @@ export const updatePutCartBEFromLogin = (keranjang) => async (dispatch) => {
 };
 
 // forgot password/ change password untuk DESKTOP version
-export const changePassword =
-    (newUserData, setShowBoxEmailVerification, setRegister, setForgot, setBoxForgot) => async (dispatch) => {
-        const API = 'https://tokyofoam.herokuapp.com/api/auth/forgotPassword';
-        try {
-            await dispatch({ type: LOADING_UI }); // meanggil dispatch untuk membuar loading : true
-            const results = await axios.post(API, newUserData);
-            if (results.data.message === 'Link reset password sudah dikirim ke email') {
-                const tokenReset = `Bearer ${results.data.token}`;
-                localStorage.setItem('ResetToken', tokenReset); // menyimpan IdToken di localStorage
-                dispatch({ type: STOP_LOADING_UI });
-                setShowBoxEmailVerification(true);
-                setRegister(false);
-                setForgot(false);
-                setBoxForgot(true);
-                dispatch({ type: CLEAR_ERRORS });
-            }
-        } catch (error) {
-            dispatch({ type: SET_ERRORS, payload: error.response.data.message });
+export const changePassword = (
+    newUserData,
+    setShowBoxEmailVerification,
+    setRegister,
+    setForgot,
+    setBoxForgot
+) => async (dispatch) => {
+    const API = 'https://tokyofoam.herokuapp.com/api/auth/forgotPassword';
+    try {
+        await dispatch({ type: LOADING_UI }); // meanggil dispatch untuk membuar loading : true
+        const results = await axios.post(API, newUserData);
+        if (results.data.message === 'Link reset password sudah dikirim ke email') {
+            const tokenReset = `Bearer ${results.data.token}`;
+            localStorage.setItem('ResetToken', tokenReset); // menyimpan IdToken di localStorage
+            dispatch({ type: STOP_LOADING_UI });
+            setShowBoxEmailVerification(true);
+            setRegister(false);
+            setForgot(false);
+            setBoxForgot(true);
+            dispatch({ type: CLEAR_ERRORS });
         }
-    };
+    } catch (error) {
+        dispatch({ type: SET_ERRORS, payload: error.response.data.message });
+    }
+};
 
 // Reset password
 export const resetPassword = (newUserData, router) => async (dispatch) => {

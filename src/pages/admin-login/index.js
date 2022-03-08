@@ -3,8 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@mui/styles';
 import { Button } from '@mui/material';
 import { useRouter } from 'next/router';
-// import { adminLogin, loginUser } from '../../redux/actions/userActions';
-// import { adminLogin, loginUser } from '../../redux/actions/userActions';
+import { adminLogin, loginUser } from '../../redux/actions/userActions';
 import { settingEmail, settingPassword } from '../../redux/actions/formLoginActions';
 import CircularProgress from '@mui/material/CircularProgress';
 
@@ -99,14 +98,14 @@ export default function AdminLogin() {
     //     setPassowordAdmin(e.target.value);
     // };
 
-    // const handleSubmitLogin = (e) => {
-    //     e.preventDefault();
-    //     const userData = {
-    //         email: email,
-    //         password: password
-    //     };
-    //     dispatch(adminLogin(userData, router));
-    // };
+    const handleSubmitLogin = (e) => {
+        e.preventDefault();
+        const userData = {
+            email: email,
+            password: password
+        };
+        dispatch(adminLogin(userData, router));
+    };
 
     return (
         <div className={classes.ContainerAdmin}>
