@@ -27,7 +27,7 @@ export const LOADING_PRODUCT = 'LOADING_PRODUCT';
 //ID Uniq Reducer
 export const SET_ID_UNIQ_CART_USER = 'SET_ID_UNIQ_CART_USER';
 
-//ID Uniq Reducer
+//ID ORDER ID
 export const SET_ORDER_ID = 'SET_ORDER_ID';
 
 // data bagReducer
@@ -86,3 +86,9 @@ export const SET_CHANGEABLE_URL = 'SET_CHANGEABLE_URL';
 //FORM login
 export const SET_EMAIL = 'SET_EMAIL';
 export const SET_PASSWORD = 'SET_PASSWORD';
+
+// DATA USER
+export const SET_GET_ALL_DATA_USER = 'SET_GET_ALL_DATA_USER';
+
+// GET DETAIL ORDER USERS
+export const SET_GET_DATA_USER_ORDER = 'SET_GET_DATA_USER_ORDER';

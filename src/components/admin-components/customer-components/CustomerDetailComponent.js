@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import crown_logo from '../../../../public/assets/images/Crown.png';
 import { useRouter } from 'next/router';
+import { useDispatch, useSelector } from 'react-redux';
 
 // mat ui stuff
 import {
@@ -20,6 +21,7 @@ import {
     TablePagination
 } from '@mui/material';
 import Image from 'next/image';
+import { getAllUsers, getDataOrdersById } from '../../../redux/actions/userActions';
 
 const useStyles = makeStyles((theme) => ({
     CardTop: {
@@ -155,9 +157,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function CustomerDetailComponent() {
-    const classes = useStyles();
-    const [valueNama, setValueNama] = useState('');
-    const [valueEmail, setValueEmail] = useState('');
+    const { detailUserOrder } = useSelector((state) => state.user);
+    const { userDataAll } = useSelector((state) => state.user);
+    const [valueNama, setValueNama] = useState(detailUserOrder.nama);
+    const [valueEmail, setValueEmail] = useState(detailUserOrder.email);
     const [valueType, setValueType] = useState('');
     const [valueNohp, setValueNohp] = useState('');
     const [valueAlamat, setValueAlamat] = useState('');
@@ -165,6 +168,31 @@ export default function CustomerDetailComponent() {
     const [valueBanyakProduk, setValueBanyakProduk] = useState('');
     const [valueTotalBelanja, setValueTotalBelanja] = useState('');
     const [valueUlasan, setValueUlasan] = useState('');
+    const dispatch = useDispatch();
+    const classes = useStyles();
+
+    console.log(detailUserOrder, 'detailUserORder <<<,');
+    console.log(userDataAll, 'userDataAll');
+
+    useEffect(() => {
+        setValueNama(detailUserOrder.nama);
+        setValueEmail(detailUserOrder.email);
+        setValueType(detailUserOrder.level_user);
+        setValueNohp(detailUserOrder.no_telp);
+        setValueAlamat(detailUserOrder.alamat);
+        setValueTelahBelanja(detailUserOrder.total_pembelanjaan);
+        setValueBanyakProduk(detailUserOrder.total_product);
+        setValueTotalBelanja(detailUserOrder.jumlah_belanja);
+    }, [
+        detailUserOrder.nama,
+        detailUserOrder.email,
+        detailUserOrder.level_user,
+        detailUserOrder.no_telp,
+        detailUserOrder.alamat,
+        detailUserOrder.jumlah_belanja,
+        detailUserOrder.total_product,
+        detailUserOrder.total_pembelanjaan
+    ]);
 
     const router = useRouter();
     const handleClickKembali = () => {
@@ -176,6 +204,9 @@ export default function CustomerDetailComponent() {
     const handleClickRiwayat = () => {
         router.push('/admin/customer/detail-riwayat');
     };
+
+    // Updte function
+    const handleUpdateNama = () => {};
     return (
         <Container>
             <Card className={classes.CardTop}>
@@ -197,7 +228,7 @@ export default function CustomerDetailComponent() {
                     </Button>
                 </div>
             </Card>
-            <form className={classes.ContainerCardMiddle}>
+            <div className={classes.ContainerCardMiddle}>
                 <Card className={classes.CardMiddleLeft}>
                     <div className={classes.MainBoxMiddle}>
                         <div className={classes.ItemMiddleLeft}>
@@ -205,14 +236,14 @@ export default function CustomerDetailComponent() {
                                 Pelanggan
                             </span>
                         </div>
-                        <div className={classes.ItemMiddleRight}>
+                        {/* <div className={classes.ItemMiddleRight}>
                             <Button
                                 style={{ width: 114, height: 24.52, background: '#2C2C2C', borderRadius: 5 }}
-                                // onClick={handleUpdate}
+                                onClick={handleUpdateNama}
                             >
-                                <span className={classes.TextEdit}>Edit</span>
+                                <span className={classes.TextEdit}>Edit & Save</span>
                             </Button>
-                        </div>
+                        </div> */}
                     </div>
                     <hr style={{ width: '100%' }} />
                     <div className={classes.ItemMiddleBottom}>
@@ -239,12 +270,12 @@ export default function CustomerDetailComponent() {
                                         fontWeight: 600,
                                         color: '#252733',
                                         border: 'none',
-                                        width: 100
+                                        width: 150
                                     }}
                                     value={valueType}
                                     onChange={(e) => setValueType(e.target.value)}
                                 />
-                                <Image src={crown_logo} width={16} height={16} alt="crown-logo" />
+                                {/* <Image src={crown_logo} width={16} height={16} alt="crown-logo" /> */}
                             </div>
                         </div>
                     </div>
@@ -281,7 +312,7 @@ export default function CustomerDetailComponent() {
                         </div>
                         <div className={classes.ItemMiddleRight}>
                             <Button style={{ width: 114, height: 24.52, background: '#2C2C2C', borderRadius: 5 }}>
-                                <span className={classes.TextEdit}>Edit</span>
+                                <span className={classes.TextEdit}>Edit & Save</span>
                             </Button>
                         </div>
                     </div>
@@ -330,7 +361,7 @@ export default function CustomerDetailComponent() {
                         />
                     </div> */}
                 </Card>
-            </form>
+            </div>
             {/* card bottom */}
             <form className={classes.ContainerCardMiddle}>
                 <Card className={classes.CardMiddleLeft}>
@@ -352,7 +383,9 @@ export default function CustomerDetailComponent() {
                     <hr style={{ width: '100%' }} />
                     <div className={classes.ItemMiddleBottom}>
                         <div className={classes.ItemNama}>
-                            <span style={{ fontSize: 14, fontWeight: 400, color: '#ADADAD' }}>Telah Belanja</span>
+                            <span style={{ fontSize: 14, fontWeight: 400, color: '#ADADAD' }}>
+                                Total Transaksi Sukses
+                            </span>
                             <div className="" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                                 <input
                                     type="text"
@@ -365,6 +398,7 @@ export default function CustomerDetailComponent() {
                                         border: 'none',
                                         width: 30
                                     }}
+                                    disabled
                                     value={valueTotalBelanja}
                                     onChange={(e) => setValueTotalBelanja(e.target.value)}
                                 />
@@ -372,6 +406,21 @@ export default function CustomerDetailComponent() {
                             </div>
                         </div>
                         <div className={classes.ItemType}>
+                            <span style={{ fontSize: 14, fontWeight: 400, color: '#ADADAD' }}>Total Pembelanjaan</span>
+                            <div className="" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                <span style={{ fontSize: 14, fontWeight: 600, color: '#252733', paddingRight: 10 }}>
+                                    IDR
+                                </span>
+                                <input
+                                    style={{ fontSize: 14, fontWeight: 600, color: '#252733', border: 'none' }}
+                                    value={valueTelahBelanja}
+                                    onChange={(e) => setValueTelahBelanja(e.target.value)}
+                                    placeholder="31.000.000"
+                                    disabled
+                                />
+                            </div>
+                        </div>
+                        {/* <div className={classes.ItemType}>
                             <span style={{ fontSize: 14, fontWeight: 400, color: '#ADADAD', border: 'none' }}>
                                 Banyak Produk
                             </span>
@@ -386,16 +435,14 @@ export default function CustomerDetailComponent() {
                                         border: 'none',
                                         width: 30
                                     }}
-                                    value={valueBanyakProduk}
+                                    value={valueBanyakProduk ? valueBanyakProduk : "-"}
                                     onChange={(e) => setValueBanyakProduk(e.target.value)}
                                 />
                                 <span style={{ fontSize: 14, fontWeight: 600, color: '#252733' }}>Barang</span>
-
-                                {/* <Image src={crown_logo} width={16} height={16} /> */}
                             </div>
-                        </div>
+                        </div> */}
                     </div>
-                    <div className={classes.ItemEmail}>
+                    {/* <div className={classes.ItemEmail}>
                         <span style={{ fontSize: 14, fontWeight: 400, color: '#ADADAD' }}>Total Pembelanjaan</span>
                         <div className="" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                             <span style={{ fontSize: 14, fontWeight: 600, color: '#252733', paddingRight: 10 }}>
@@ -408,11 +455,11 @@ export default function CustomerDetailComponent() {
                                 placeholder="31.000.000"
                             />
                         </div>
-                    </div>
+                    </div> */}
                 </Card>
                 {/* ---------- */}
                 <Card className={classes.CardMiddleRight}>
-                    <div className={classes.MainBoxMiddleRight}>
+                    {/* <div className={classes.MainBoxMiddleRight}>
                         <div className={classes.ItemMiddleLeft}>
                             <span className={classes.TextPelanggan} style={{ fontSize: 16 }}>
                                 Ulasan
@@ -447,10 +494,8 @@ export default function CustomerDetailComponent() {
                                 />
                                 <span style={{ fontSize: 14, fontWeight: 600, color: '#252733' }}>Kali</span>
                             </div>
-
-                            {/* <h3>Barang</h3> */}
                         </div>
-                    </div>
+                    </div> */}
                 </Card>
             </form>
             <div className={classes.ContainerCardMiddle}>

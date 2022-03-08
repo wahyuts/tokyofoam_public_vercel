@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@mui/styles';
 import { Button } from '@mui/material';
 import { useRouter } from 'next/router';
+// import { adminLogin, loginUser } from '../../redux/actions/userActions';
+// import { adminLogin, loginUser } from '../../redux/actions/userActions';
+import { settingEmail, settingPassword } from '../../redux/actions/formLoginActions';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const useStyles = makeStyles((theme) => ({
     ContainerAdmin: {
@@ -68,24 +72,49 @@ export default function AdminLogin() {
     const [emailAdmin, setEmailAdmin] = useState('');
     const [passwordAdmin, setPassowordAdmin] = useState('');
     const { loading } = useSelector((state) => state.UI);
+    const { email, password } = useSelector((state) => state.formLoginData);
     const router = useRouter();
-    const handleChangeEmailAdmin = (e) => {
-        setEmailAdmin(e.target.value);
+    const dispatch = useDispatch();
+
+    // useEffect(() => {
+    //     if()
+    // })
+
+    //onChange Buat Login
+    const handleChangeEmail = (e) => {
+        dispatch(settingEmail(e.target.value));
+        // setEmail(e.target.value);
     };
-    const handleChangePasswordAdmin = (e) => {
-        setPassowordAdmin(e.target.value);
+
+    const handleChangePassword = (e) => {
+        dispatch(settingPassword(e.target.value));
+        // setPassword(e.target.value);
     };
-    const handleClickLogin = (e) => {
-        e.preventDefault();
-        router.push('/admin');
-    };
+
+    // const handleChangeEmailAdmin = (e) => {
+    //     setEmailAdmin(e.target.value);
+    // };
+
+    // const handleChangePasswordAdmin = (e) => {
+    //     setPassowordAdmin(e.target.value);
+    // };
+
+    // const handleSubmitLogin = (e) => {
+    //     e.preventDefault();
+    //     const userData = {
+    //         email: email,
+    //         password: password
+    //     };
+    //     dispatch(adminLogin(userData, router));
+    // };
+
     return (
         <div className={classes.ContainerAdmin}>
             <div className={classes.WrapperAdminLogin}>
                 <div className={classes.FormLogin}>
                     <span className={classes.TextLogin}>Login</span>
                 </div>
-                <div className={classes.BoxFormLogin}>
+                <form className={classes.BoxFormLogin} onSubmit={handleSubmitLogin}>
                     <div className={classes.BoxItemLeft}>
                         <div className={classes.BoxItemEmail}>
                             <span className={classes.TextEmail}>* Email</span>
@@ -94,8 +123,8 @@ export default function AdminLogin() {
                                 type="text"
                                 placeholder="Masukan Email"
                                 style={{ paddingLeft: 20 }}
-                                value={emailAdmin}
-                                onChange={handleChangeEmailAdmin}
+                                value={email}
+                                onChange={handleChangeEmail}
                             />
                         </div>
                         <div className={classes.BoxItemPassword}>
@@ -105,27 +134,42 @@ export default function AdminLogin() {
                                 type="password"
                                 placeholder="Masukan Password"
                                 style={{ paddingLeft: 20 }}
-                                value={passwordAdmin}
-                                onChange={handleChangePasswordAdmin}
+                                value={password}
+                                onChange={handleChangePassword}
                             />
                         </div>
                     </div>
                     <div className={classes.WrapperButton} to="/admin">
-                        <Button
-                            className={classes.ButtonLogin}
-                            onClick={handleClickLogin}
-                            style={{
-                                width: 304,
-                                height: 40,
-                                backgroundColor: '#2c2c2c',
-                                borderRadius: 5,
-                                textTransform: 'none'
-                            }}
-                        >
-                            <span style={{ fontSize: 20, fontWeight: 500, color: 'white' }}>Login</span>
-                        </Button>
+                        {loading ? (
+                            <Button
+                                className={classes.ButtonLogin}
+                                style={{
+                                    width: 304,
+                                    height: 40,
+                                    backgroundColor: '#2c2c2c',
+                                    borderRadius: 5,
+                                    textTransform: 'none'
+                                }}
+                            >
+                                <span style={{ fontSize: 20, fontWeight: 500, color: 'white' }}>Loading</span>
+                            </Button>
+                        ) : (
+                            <Button
+                                type="submit"
+                                className={classes.ButtonLogin}
+                                style={{
+                                    width: 304,
+                                    height: 40,
+                                    backgroundColor: '#2c2c2c',
+                                    borderRadius: 5,
+                                    textTransform: 'none'
+                                }}
+                            >
+                                <span style={{ fontSize: 20, fontWeight: 500, color: 'white' }}>Login</span>
+                            </Button>
+                        )}
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     );

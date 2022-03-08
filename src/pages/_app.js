@@ -65,7 +65,8 @@ function MyApp(props) {
         currentPath === '/admin/pesanan' ||
         currentPath === '/admin/produk' ||
         currentPath === '/admin/produk/EditProduct' ||
-        currentPath === '/admin/produk/tambah-produk' ? (
+        currentPath === '/admin/produk/tambah-produk' ||
+        currentPath === '/admin/situsku' ? (
             <Component {...pageProps} />
         ) : (
             <GeneralLayout>
@@ -77,15 +78,6 @@ function MyApp(props) {
         <div>
             <Head>
                 <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
-                <link
-                    rel="stylesheet"
-                    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-                    integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
-                    crossOrigin="anonymous"
-                    referrerPolicy="no-referrer"
-                />
-                <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css" />
-                <link rel="icon" href="/apple-touch-icon-180x180.png" />
             </Head>
             <ThemeProvider theme={themes}>
                 {/* <Provider store={store}> */}

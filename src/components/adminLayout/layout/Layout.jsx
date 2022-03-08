@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 
 import Topbar from '../topNav/Topbar';
 import { getAllDataProduct } from '../../../redux/actions/dataProductActions';
+import Appbar from '../appBar/Appbar';
 // import RoutesLink from '../../RoutesLink';
 export default function Layout({ children }) {
     const dispatch = useDispatch();
@@ -17,23 +18,12 @@ export default function Layout({ children }) {
     return (
         <div className={Styles.Layout}>
             <Sidebar />
+            {/* <SidebarNew /> */}
             <div className={Styles.LayoutContent}>
                 <Topbar />
+                {/* <Appbar /> */}
                 <div className={Styles.LayoutContentMain}>{children}</div>
             </div>
         </div>
-        // <Routes
-        //     render={(props) => (
-        //         <div className="layout">
-        //             <Sidebar {...props} />
-        //             <div className="layout__content">
-        //                 <Topbar />
-        //                 <div className="layout__content-main">
-        //                     <RoutesLink />
-        //                 </div>
-        //             </div>
-        //         </div>
-        //     )}
-        // />
     );
 }

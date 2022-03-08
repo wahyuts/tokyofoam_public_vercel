@@ -31,7 +31,8 @@ const users = [...Array(24)].map((_, index) => ({
         'Full Stack Developer'
     ]),
     noPelanggan: number(),
-    statusPayment: sample(['Done', 'Waiting for Payment', 'Delivering', 'Cancelled'])
+    statusPayment: sample(['Done', 'Waiting for Payment', 'Delivering', 'Cancelled']),
+    dateJoin: sample(['13-01-2022'])
 }));
 
 export default users;

@@ -50,7 +50,7 @@ const PleaseWait = () => {
 
     useEffect(() => {
         dispatch(updateStatusPayment(order_id, router));
-    });
+    }, [dispatch, order_id, router]);
 
     return (
         <div className={classes.mainCont}>

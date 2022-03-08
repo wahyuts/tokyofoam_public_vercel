@@ -1,7 +1,6 @@
 .Sidebar {
     width: 259px;
     height: 100vh;
-    /* background-color: aquamarine; */
     position: fixed;
     left: 0;
     top: 0;
@@ -16,10 +15,6 @@
 .LogoClick {
     cursor: pointer;
 }
-/* .LogoInside {
-    width: 87px;
-    height: 49px;
-} */
 
 /* sidebar items */
 .SidebarItem {
@@ -80,7 +75,53 @@
     height: 46px;
 }
 
-.NavLink.active {
-    /* color: #ede7f6;
-    border-radius: 15px; */
+/* .NavLink.active {
+    color: #ede7f6;
+    border-radius: 15px;
+} */
+
+/* New Sidebar Styles */
+.SidebarList {
+    width: 100%;
+    height: auto;
+    padding: 0;
+}
+
+.SidebarList .Row {
+    width: 100%;
+    height: 60px;
+    list-style-type: none;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: #898989;
+    font: 'Poppins';
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.SidebarList .Row:hover {
+    width: 228px;
+    height: 46px;
+    background-color: #ede7f6;
+    border-radius: 12px;
+    transition: all 1 ease-out;
+    cursor: pointer;
+}
+
+.SidebarList #active {
+    width: 228px;
+    height: 46px;
+    background-color: #ede7f6;
+    border-radius: 12px;
+}
+.Row #icon {
+    flex: 30%;
+    display: grid;
+    place-items: center;
+}
+
+.Row #title {
+    flex: 70%;
 }

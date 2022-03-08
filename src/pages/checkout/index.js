@@ -387,13 +387,8 @@ const Checkout = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const router = useRouter();
-    const {
-        dataProductOnBag,
-        totalPrice,
-        shippingFee,
-        kurir,
-        totalPrice_plus_shipping_minus_benefit_member
-    } = useSelector((state) => state.bag);
+    const { dataProductOnBag, totalPrice, shippingFee, kurir, totalPrice_plus_shipping_minus_benefit_member } =
+        useSelector((state) => state.bag);
     const { stateKota, stateKecamatan } = useSelector((state) => state.shippingAddres);
     const { detailDataKurirForCheckout, kurirNameForCheckout } = useSelector((state) => state.detailOngkirForCheckout);
 

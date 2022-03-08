@@ -18,13 +18,16 @@
 .TopNavSearch > input {
     height: 55px;
     width: 329px;
-    padding-inline: 20px;
+    padding-left: 20px;
+    padding-right: 50px;
+    background: #ffffff;
     /* padding: 10px 60px 10px 20px; */
     font-size: 1rem;
     border-radius: 12px;
-    color: #455560;
-    border-width: 0;
-    background-color: #ffffff;
+    border: 1px solid #898989;
+    /* color: #455560; */
+    /* border-width: 0; */
+    /* background-color: #ffffff; */
 }
 .TopNavSearch > i {
     font-size: 18px;
@@ -35,6 +38,7 @@
     display: flex;
     align-items: center;
     column-gap: 20px;
+    /* position: relative; */
 }
 
 .DropdownBell {
@@ -46,8 +50,11 @@
     background: #ede7f6;
     border-radius: 5px;
     color: #5e35b1;
+    cursor: pointer;
+    /* position: relative; */
 }
 .DropdownBlueCog {
+    flex-grow: 0;
     width: 100px;
     height: 56px;
     background: #1e88e5;
@@ -67,6 +74,7 @@
     display: flex;
     align-items: center;
     padding: 20px;
+    cursor: pointer;
 }
 .NotificationItem:hover {
     background-color: #fafafb;
@@ -74,4 +82,30 @@
 .NotificationItem > i {
     margin-right: 20px;
     font-size: 1.5rem;
+}
+.MenuItemContent {
+    display: flex;
+    align-items: center;
+    width: max-content;
+    right: 0;
+    border-radius: 29px;
+    overflow: hidden;
+    transform-origin: top right;
+    transform: scale(0);
+    transition: transform 0.3s ease 0s;
+}
+
+.DropdownContent {
+    /* position: absolute; */
+    top: calc(100% + 5px);
+    right: 0;
+    width: max-content;
+    max-width: 400px;
+    /* background-color: vaR(--main-bg); */
+    /* box-shadow: var(--box-shadow); */
+    border-radius: 29px;
+    overflow: hidden;
+    transform-origin: top right;
+    transform: scale(0);
+    transition: transform 0.3s ease 0s;
 }

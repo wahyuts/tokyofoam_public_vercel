@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import { useRouter } from 'next/router';
+import dayjs from 'dayjs';
 // mat ui stuff
 import {
     Card,
@@ -19,17 +20,17 @@ import {
 } from '@mui/material';
 
 // import file
-import DatePickerCustomer from './date-picker-customer/DatePickerCustomer';
 import USERLIST from './_mocks/customer';
 import CustomerListHead from './CustomerListHead';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllUsers, getDataOrdersById } from '../../../redux/actions/userActions';
 
 // table stuff
 const TABLE_HEAD = [
     { id: 'pelanggan', label: 'Pelanggan', alignRight: false },
     { id: 'alamat', label: 'Alamat', alignRight: false },
     { id: 'notelp', label: 'No Telp', alignRight: false },
-    { id: 'tanggal', label: 'Tanggal Datfar', alignRight: false },
-    { id: '' }
+    { id: 'tanggal', label: 'Tanggal Datfar', alignRight: false }
 ];
 
 // ----------------------------------------------------------------------
@@ -50,8 +51,8 @@ function getComparator(order, orderBy) {
         : (a, b) => -descendingComparator(a, b, orderBy);
 }
 function applySortFilter(array, comparator, query) {
-    const stabilizedThis = array.map((el, index) => [el, index]);
-    stabilizedThis.sort((a, b) => {
+    const stabilizedThis = array?.map((el, index) => [el, index]);
+    stabilizedThis?.sort((a, b) => {
         const order = comparator(a[0], b[0]);
         if (order !== 0) return order;
         return a[1] - b[1];
@@ -59,7 +60,7 @@ function applySortFilter(array, comparator, query) {
     if (query) {
         return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
     }
-    return stabilizedThis.map((el) => el[0]);
+    return stabilizedThis?.map((el) => el[0]);
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -116,11 +117,17 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+// const isSameOrAfter = require('dayjs/plugin/isSameOrAfter');
+// dayjs.extend(isSameOrAfter);
+
+// const isSameOrBefore = require('dayjs/plugin/isSameOrBefore');
+// dayjs.extend(isSameOrBefore);
+
 export default function CustomerTable() {
     const classes = useStyles();
     const [dateFrom, setDateFrom] = useState();
     const [dateTo, setDateTo] = useState();
-
+    const [data, setData] = useState(usersDataAll);
     const [page, setPage] = useState(0);
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('name');
@@ -130,9 +137,9 @@ export default function CustomerTable() {
     const router = useRouter();
 
     // handleClick to
-    const handleClickCustomer = () => {
-        router.push('/admin/customer/customer-detail');
-    };
+    // const handleClickCustomer = () => {
+    //     router.push('/admin/customer/customer-detail');
+    // };
 
     // const handleDateFrom = (newValue) => {
     //     setDateFrom(newValue);
@@ -140,6 +147,12 @@ export default function CustomerTable() {
     // const handleDateTo = (newValue) => {
     //     setDateTo(newValue);
     // };
+    const { usersDataAll } = useSelector((state) => state.user);
+    // console.log(usersDataAll._id, 'usersDataAll Id');
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(getAllUsers());
+    }, [dispatch]);
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -156,7 +169,17 @@ export default function CustomerTable() {
         setPage(0);
     };
 
-    const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
+    const filteredUsers = applySortFilter(usersDataAll, getComparator(order, orderBy), filterName);
+    // console.log(filteredUsers[5]._id, 'filtered users ')
+
+    // const handleFilterDate = (createdAt, field) => {
+    //     const filteredUsersData = usersDataAll.filter((item) => {
+    //         if ('from' && dayjs(item.createdAt).isSameOrAfter(dayjs(createdAt))) {
+    //             return item;
+    //         }
+    //         setData(filteredUsersData);
+    //     });
+    // };
     return (
         <Container>
             <Card className={classes.MainContainer}>
@@ -230,35 +253,37 @@ export default function CustomerTable() {
                             />
                             <TableBody>
                                 {filteredUsers
-                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                    .map((row) => {
-                                        const { id, name, role, date, noPelanggan, email } = row;
-                                        const isItemSelected = selected.indexOf(name) !== -1;
+                                    ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                    .map((users, el) => {
+                                        // const { id, nama, email, alamat, tgl_daftar, phone, level_user } = row;
+                                        // const isItemSelected = selected.indexOf(name) !== -1;
                                         return (
                                             <TableRow
                                                 hover
-                                                key={id}
+                                                key={el}
                                                 tabIndex={-1}
-                                                onClick={handleClickCustomer}
+                                                onClick={() => {
+                                                    dispatch(getDataOrdersById(users._id));
+                                                    console.log(users._id, 'cek id <<<');
+                                                    router.push('/admin/customer/customer-detail');
+                                                }}
                                                 style={{ cursor: 'pointer' }}
                                             >
-                                                {/* <TableCell>#{noPelanggan}</TableCell> */}
+                                                {/* <TableCell></TableCell> */}
                                                 <TableCell component="th" scope="row">
                                                     <Stack direction="column" alignItems="left" spacing={0}>
-                                                        <Typography noWrap>{name}</Typography>
-                                                        <Typography noWrap>{email}</Typography>
+                                                        <Typography noWrap>{users.nama}</Typography>
+                                                        <Typography noWrap>{users.email}</Typography>
                                                     </Stack>
                                                 </TableCell>
                                                 <TableCell align="left">
-                                                    <Typography noWrap>
-                                                        pinang residence Unit 36, DKI Jakarta, Kota Jakarta Selatan
-                                                    </Typography>
+                                                    <Typography noWrap>{users.alamat}</Typography>
                                                 </TableCell>
                                                 <TableCell align="left">
-                                                    <Typography noWrap>+6281236006789</Typography>
+                                                    <Typography noWrap>{users.no_telp}</Typography>
                                                 </TableCell>
                                                 <TableCell align="left">
-                                                    <Typography noWrap>11-03-2021</Typography>
+                                                    <Typography noWrap>{users.createdAt.substring(0, 10)}</Typography>
                                                 </TableCell>
                                             </TableRow>
                                         );

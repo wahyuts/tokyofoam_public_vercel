@@ -23,15 +23,16 @@ import {
     SET_ADD_KOTA_LOGREG,
     SET_ADD_KECAMATAN_LOGREG,
     SET_ADD_TO_BAG,
-    SET_ID_UNIQ_CART_USER
+    SET_ID_UNIQ_CART_USER,
+    SET_GET_ALL_DATA_USER,
+    SET_GET_DATA_USER_ORDER
 } from '../type';
 
 // Login untuk DESKTOP And MOBILE Version
 export const loginUser = (userData, setMenuOpen, keranjang, setIsOpenDrawer, setShowSI) => async (dispatch) => {
     // setMenuOpen itu buat drawer desktop
     // setIsOpenDrawer, setShowSI itu buat drawer mobile
-    // console.log('USER', userData);
-
+    console.log('USER', userData);
     // console.log('keranjang', keranjang);
     const API = 'https://tokyofoam.herokuapp.com/api/auth/login';
     const URLCheckout = localStorage.getItem('URLCheckout');
@@ -304,6 +305,73 @@ export const getUserData = (setMenuOpen, setIsOpenDrawer, setShowSI, keranjang) 
         .catch((err) => {
             console.log(err);
         });
+};
+
+//Fungsi mau dapetin data2 user (biasanya buat user profile atau mau cantumin nama di headnav)
+export const getAdminData = () => (dispatch) => {
+    const API = 'https://tokyofoam.herokuapp.com/api/user/profile';
+    dispatch({ type: LOADING_USER });
+    axios
+        .get(API)
+        .then((res) => {
+            console.log(res, 'cek res');
+            dispatch({
+                type: SET_USER,
+                payload: res.data.user
+            });
+
+            dispatch({
+                type: SET_EMAIL,
+                payload: ''
+            });
+            dispatch({
+                type: SET_PASSWORD,
+                payload: ''
+            });
+            // dispatch(updatePutCartBEFromLogin(keranjang));
+
+            // setMenuOpen(false);
+            // setIsOpenDrawer(false);
+            // setShowSI(true);
+
+            // setTimeout(dispatch({ type: CLEAR_ERRORS }), 3000);
+            dispatch({ type: CLEAR_ERRORS });
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+};
+
+// GET ALL USERS
+export const getAllUsers = () => async (dispatch) => {
+    const API = 'https://tokyofoam.herokuapp.com/api/user/allUser';
+    try {
+        getAuthorizationHeaderTokenUser();
+        const res = await axios.get(API);
+        // console.log(res, 'cek res <<<')
+        dispatch({
+            type: SET_GET_ALL_DATA_USER,
+            payload: res.data.users
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+// GET DATA ODER USERS
+export const getDataOrdersById = (id) => async (dispatch) => {
+    const API = `https://tokyofoam.herokuapp.com/api/order/admin/${id}`;
+    try {
+        getAuthorizationHeaderTokenUser();
+        const res = await axios.get(API);
+        // console.log(res, 'cek res data orders <<<')
+        dispatch({
+            type: SET_GET_DATA_USER_ORDER,
+            payload: res.data.data
+        });
+    } catch (error) {
+        console.log(error);
+    }
 };
 
 //Fungsi buat set dan clear berbagai error
