@@ -622,23 +622,10 @@ export const postNewPesananPayNow = (
             type: SET_ORDER_ID,
             payload: order_id
         });
-        console.log('RESPONSE', order_id);
+        // console.log('RESPONSE', order_id);
 
         if (res.data.message === 'Data berhasil disimpan') {
-            // dispatch({ type: CLEAR_ERRORS });
-            // dispatch(deleteBag([]));
-            // dispatch(deleteCartBEfromPayButton());
-            // setKodeposMember('');
-            // setNoted('');
-            // setOtherNameMember('');
-            // setOtherAddressMember('');
-            // setOtherNoHandphoneMember('');
-            // setOtherKodeposMember('');
-            // alert('Pesanan Anda Sudah Berhasil Dibuat, Pesanan Akan Segera Diproses dan Dikirim ke Tempat Anda!');
-
-            // dispatch({ type: STOP_LOADING_BUTTON_PAYNOW });
-            // router.push('/profile');
-            console.log('RESPONSE', res);
+            // console.log('RESPONSE', res);
 
             getAuthorizationHeaderToken();
             const resp = await axios.get(`https://tokyofoam.herokuapp.com/api/payment/getToken/${order_id}`);
