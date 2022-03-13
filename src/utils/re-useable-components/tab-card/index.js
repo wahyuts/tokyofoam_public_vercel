@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Rating from '@mui/material/Rating';
+import { useSelector } from 'react-redux';
 
 import { makeStyles } from '@mui/styles';
 
@@ -70,6 +71,12 @@ const useStyles = makeStyles((theme) => ({
 export default function TabCard() {
     const classes = useStyles();
     const [value, setValue] = useState(0);
+    const { review_comment } = useSelector((state) => state.theComment);
+
+    // NANTI MAPPING NYA PAKE YANG Variable threeTopComment
+    const threeTopComment = review_comment.slice(0, 2);
+    console.log('review', review_comment);
+    console.log('review TERATAS', threeTopComment);
 
     return (
         <div className={classes.ContainerCard}>
@@ -79,7 +86,8 @@ export default function TabCard() {
                         <Avatar>MI</Avatar>
                         <span className={classes.TextRectangleInside}> Mika Liana </span>
                     </div>
-                    <div className={classes.RatingReview}>
+                    <hr style={{ border: 'none', marginBottom: 15 }} />
+                    {/* <div className={classes.RatingReview}>
                         <Rating
                             size="small"
                             value={value}
@@ -87,7 +95,7 @@ export default function TabCard() {
                                 setValue(newValues);
                             }}
                         />
-                    </div>
+                    </div> */}
                     <div className={classes.ReviewText}>
                         <label className={classes.TextLabel}>Lorem Ipsum</label>
                         <span className={classes.TextSpan}>Lorem ipsum dolor sit amet</span>
@@ -104,7 +112,9 @@ export default function TabCard() {
                         <Avatar>JL</Avatar>
                         <span className={classes.TextRectangleInside}> Joshua Telderon </span>
                     </div>
-                    <div className={classes.RatingReview}>
+                    <hr style={{ border: 'none', marginBottom: 15 }} />
+
+                    {/* <div className={classes.RatingReview}>
                         <Rating
                             size="small"
                             value={value}
@@ -112,7 +122,7 @@ export default function TabCard() {
                                 setValue(newValues);
                             }}
                         />
-                    </div>
+                    </div> */}
                     <div className={classes.ReviewText}>
                         <label className={classes.TextLabel}>Lorem Ipsum</label>
                         <span className={classes.TextSpan}>Lorem ipsum dolor sit amet</span>
@@ -129,7 +139,9 @@ export default function TabCard() {
                         <Avatar>KW</Avatar>
                         <span className={classes.TextRectangleInside}> Kwang Soo </span>
                     </div>
-                    <div className={classes.RatingReview}>
+                    <hr style={{ border: 'none', marginBottom: 15 }} />
+
+                    {/* <div className={classes.RatingReview}>
                         <Rating
                             size="small"
                             value={value}
@@ -137,7 +149,7 @@ export default function TabCard() {
                                 setValue(newValues);
                             }}
                         />
-                    </div>
+                    </div> */}
                     <div className={classes.ReviewText}>
                         <label className={classes.TextLabel}>Lorem Ipsum</label>
                         <span className={classes.TextSpan}>Lorem ipsum dolor sit amet</span>

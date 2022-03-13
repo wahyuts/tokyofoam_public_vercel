@@ -27,7 +27,8 @@ import {
     SET_ADD_KURIR,
     SET_POTONGAN_MEMBERSHIP,
     SET_ID_UNIQ_CART_USER,
-    SET_ORDER_ID
+    SET_ORDER_ID,
+    GET_ALL_NOTIFICATIONS
 
     // TOTAL_PRICE
 } from '../type';
@@ -377,6 +378,44 @@ export const deleteProduct = (selected, router) => async (dispatch) => {
     }
 };
 
+export const pushNotificationPost = (DataNotif, setOpen, setNotifNoted) => async (dispatch) => {
+    const API = `https://tokyofoam.herokuapp.com/api/notification/create`;
+
+    try {
+        await dispatch({ type: LOADING_UI });
+        getAuthorizationHeaderToken();
+        const results = await axios.post(API, DataNotif);
+
+        if (results.data.message === 'Notification berhasil dibuat') {
+            dispatch({ type: STOP_LOADING_UI });
+            dispatch({ type: CLEAR_ERRORS });
+            alert('Notifikasi Sukses Dibuat');
+            setNotifNoted('');
+            setOpen(false);
+        }
+    } catch (error) {
+        if (error.response) {
+            // internet online, request made, tapi error karena data tidak match dengan BE
+            console.log(error);
+            // dispatch({
+            //     type: SET_ERRORS,
+            //     payload: error.response.data.message
+            // });
+        } else if (error.request) {
+            // jiks internet offline / disconnect/ gangguan koneksi terjadi
+            console.log(error.request);
+            alert('Terjadi Gangguan Pada Koneksi Anda!');
+        } else {
+            console.log('Error', error.message);
+        }
+        // dispatch({
+        //     type: SET_ERRORS,
+        //     payload: error.response.data.message
+        // });
+        // console.log(error);
+    }
+};
+
 export const updateDataInformasiUmum = (DataEditProduct, selected) => async (dispatch) => {
     const API = `https://tokyofoam.herokuapp.com/api/product/updateDataProduct/${selected}`;
 
@@ -558,84 +597,28 @@ export const potonganMembership = (selected) => (dispatch) => {
     });
 };
 
-export const postNewPesananPayLater = (
-    selected,
-    router,
-    setKodeposMember,
-    setNoted,
-    setOtherNameMember,
-    setOtherAddressMember,
-    setOtherNoHandphoneMember,
-    setOtherKodeposMember
-) => async (dispatch) => {
-    const API = `https://tokyofoam.herokuapp.com/api/order/create`;
+export const postNewPesananPayLater =
+    (
+        selected,
+        router,
+        setKodeposMember,
+        setNoted,
+        setOtherNameMember,
+        setOtherAddressMember,
+        setOtherNoHandphoneMember,
+        setOtherKodeposMember
+    ) =>
+    async (dispatch) => {
+        const API = `https://tokyofoam.herokuapp.com/api/order/create`;
 
-    try {
-        await dispatch({ type: LOADING_BUTTON_PAYLATTER });
-        getAuthorizationHeaderToken();
-        const res = await axios.post(API, selected);
-
-        if (res.data.message === 'Data berhasil disimpan') {
-            dispatch({ type: CLEAR_ERRORS });
-
-            dispatch(deleteBag([]));
-            dispatch(deleteCartBEfromPayButton());
-            setKodeposMember('');
-            setNoted('');
-            setOtherNameMember('');
-            setOtherAddressMember('');
-            setOtherNoHandphoneMember('');
-            setOtherKodeposMember('');
-            // alert(
-            //     'Pesanan Anda Sudah Berhasil Dibuat, Silahkan Lakukan Pembayaran Melaui Akun Dashboard Anda Max 1 x 24 Jam!'
-            // );
-            // dispatch({ type: STOP_LOADING_BUTTON_PAYLATTER });
-            router.push('/pay-later');
-        }
-    } catch (error) {
-        if (error.response.status === 500) {
-            dispatch({ type: STOP_LOADING_BUTTON_PAYLATTER });
-            alert('Terjadi Gangguan Koneksi!');
-        }
-        console.log('ERROR', error);
-    }
-};
-
-export const postNewPesananPayNow = (
-    selected,
-    router,
-    setKodeposMember,
-    setNoted,
-    setOtherNameMember,
-    setOtherAddressMember,
-    setOtherNoHandphoneMember,
-    setOtherKodeposMember
-) => async (dispatch) => {
-    const API = `https://tokyofoam.herokuapp.com/api/order/create`;
-
-    try {
-        await dispatch({ type: LOADING_BUTTON_PAYNOW });
-        getAuthorizationHeaderToken();
-        const res = await axios.post(API, selected);
-        const order_id = res.data.order_id;
-        dispatch({
-            type: SET_ORDER_ID,
-            payload: order_id
-        });
-        // console.log('RESPONSE', order_id);
-
-        if (res.data.message === 'Data berhasil disimpan') {
-            // console.log('RESPONSE', res);
-
+        try {
+            await dispatch({ type: LOADING_BUTTON_PAYLATTER });
             getAuthorizationHeaderToken();
-            const resp = await axios.get(`https://tokyofoam.herokuapp.com/api/payment/getToken/${order_id}`);
-            console.log;
-            if (resp.data.success === true) {
-                const midtrans_url = resp.data.url;
-                const token_mt = resp.data.token;
-                const IdTokenMT = `Bearer ${token_mt}`;
-                localStorage.setItem('TokenMT', IdTokenMT); // menyimpan IdToken di localStorage
+            const res = await axios.post(API, selected);
+
+            if (res.data.message === 'Data berhasil disimpan') {
                 dispatch({ type: CLEAR_ERRORS });
+
                 dispatch(deleteBag([]));
                 dispatch(deleteCartBEfromPayButton());
                 setKodeposMember('');
@@ -644,17 +627,77 @@ export const postNewPesananPayNow = (
                 setOtherAddressMember('');
                 setOtherNoHandphoneMember('');
                 setOtherKodeposMember('');
-                // alert('Pesanan Anda Sudah Berhasil Dibuat, Pesanan Akan Segera Diproses dan Dikirim ke Tempat Anda!');
-                window.location.href = `${midtrans_url}`;
+                alert(
+                    'Pesanan Anda Sudah Berhasil Dibuat, Silahkan Lakukan Pembayaran Melaui Akun Dashboard Anda Max 1 x 24 Jam!'
+                );
+                // dispatch({ type: STOP_LOADING_BUTTON_PAYLATTER });
+                router.push('/pay-later');
+            }
+        } catch (error) {
+            if (error.response.status === 500) {
+                dispatch({ type: STOP_LOADING_BUTTON_PAYLATTER });
+                alert('Terjadi Gangguan Koneksi!');
+            }
+            console.log('ERROR', error);
+        }
+    };
+
+export const postNewPesananPayNow =
+    (
+        selected,
+        router,
+        setKodeposMember,
+        setNoted,
+        setOtherNameMember,
+        setOtherAddressMember,
+        setOtherNoHandphoneMember,
+        setOtherKodeposMember
+    ) =>
+    async (dispatch) => {
+        const API = `https://tokyofoam.herokuapp.com/api/order/create`;
+
+        try {
+            await dispatch({ type: LOADING_BUTTON_PAYNOW });
+            getAuthorizationHeaderToken();
+            const res = await axios.post(API, selected);
+            const order_id = res.data.order_id;
+            dispatch({
+                type: SET_ORDER_ID,
+                payload: order_id
+            });
+            // console.log('RESPONSE', order_id);
+
+            if (res.data.message === 'Data berhasil disimpan') {
+                // console.log('RESPONSE', res);
+
+                getAuthorizationHeaderToken();
+                const resp = await axios.get(`https://tokyofoam.herokuapp.com/api/payment/getToken/${order_id}`);
+                console.log;
+                if (resp.data.success === true) {
+                    const midtrans_url = resp.data.url;
+                    const token_mt = resp.data.token;
+                    const IdTokenMT = `Bearer ${token_mt}`;
+                    localStorage.setItem('TokenMT', IdTokenMT); // menyimpan IdToken di localStorage
+                    dispatch({ type: CLEAR_ERRORS });
+                    dispatch(deleteBag([]));
+                    dispatch(deleteCartBEfromPayButton());
+                    setKodeposMember('');
+                    setNoted('');
+                    setOtherNameMember('');
+                    setOtherAddressMember('');
+                    setOtherNoHandphoneMember('');
+                    setOtherKodeposMember('');
+                    // alert('Pesanan Anda Sudah Berhasil Dibuat, Pesanan Akan Segera Diproses dan Dikirim ke Tempat Anda!');
+                    window.location.href = `${midtrans_url}`;
+                }
+            }
+        } catch (error) {
+            if (error.response.status === 500) {
+                dispatch({ type: STOP_LOADING_BUTTON_PAYNOW });
+                alert('Terjadi Gangguan Koneksi!');
             }
         }
-    } catch (error) {
-        if (error.response.status === 500) {
-            dispatch({ type: STOP_LOADING_BUTTON_PAYNOW });
-            alert('Terjadi Gangguan Koneksi!');
-        }
-    }
-};
+    };
 
 export const updateStatusPayment = (selected, router) => async (dispatch) => {
     try {
@@ -671,6 +714,22 @@ export const updateStatusPayment = (selected, router) => async (dispatch) => {
             alert('Terjadi Gangguan Koneksi!');
         }
         // console.log(error);
+    }
+};
+
+// Untuk Notification Product
+export const getAllNotificationFunction = () => async (dispatch) => {
+    const API = 'https://tokyofoam.herokuapp.com/api/notification/getAll';
+    try {
+        getAuthorizationHeaderToken();
+        const res = await axios.get(API);
+        // console.log(res, 'cek res <<<')
+        dispatch({
+            type: GET_ALL_NOTIFICATIONS,
+            payload: res.data.data
+        });
+    } catch (error) {
+        console.log(error);
     }
 };
 

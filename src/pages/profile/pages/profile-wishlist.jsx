@@ -1,8 +1,6 @@
 import { makeStyles } from '@mui/styles';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-// import { ButtonTab } from '../component';
-import ButtonTab from '../component/ButtonTab';
 
 const useStyles = makeStyles((theme) => ({
     desktopContainer: {
@@ -37,6 +35,27 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+const data = [
+    {
+        id: 'yuewhjncdkdcpowkldmdj',
+        name: 'njsdkj',
+        img: '/assets/images/Single-Pillow-2.png',
+        price: '1609099'
+    },
+    {
+        id: 'yuewhjncdkdcpowkldmdj',
+        name: 'njsdkj',
+        img: '/assets/images/Single-Pillow-2.png',
+        price: '1609099'
+    },
+    {
+        id: 'yuewhjncdkdcpowkldmdj',
+        name: 'njsdkj',
+        img: '/assets/images/Single-Pillow-2.png',
+        price: '1609099'
+    }
+];
+
 const Wishlist = (params) => {
     const classes = useStyles();
     const { show_label_profile } = useSelector((state) => state.url_profile);
@@ -45,43 +64,52 @@ const Wishlist = (params) => {
         <div>
             <div className={classes.wishlistContainer}>
                 <p className={'title'}>{show_label_profile}</p>
-                <div>
-                    <img
-                        src={'/assets/images/Single-Pillow-2.png'}
-                        alt="Single Product"
-                        style={{ width: '100%', height: '70%', objectFit: 'cover' }}
-                    />
-                    <p>Mulberry Silk Pillowcase</p>
-                    <p>IDR 750.000</p>
-                    <div
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            justifyContent: 'space-between'
-                        }}
-                    >
-                        <div
-                            style={{ backgroundColor: '#474747', borderRadius: '10px', width: '20px', height: '20px' }}
-                        ></div>
-                        <div
-                            style={{
-                                border: '1px solid #474747',
-                                borderRadius: '20px',
-                                padding: '8px',
-                                flexDirection: 'row',
-                                display: 'flex',
-                                justifyContent: 'space-around',
-                                width: '116px',
-                                backgroundColor: 'white'
-                            }}
-                        >
-                            <p style={{ fontSize: '18px', fontWeight: '400' }}>-</p>
-                            <p style={{ fontSize: '18px', fontWeight: '400' }}>3</p>
-                            <p style={{ fontSize: '18px', fontWeight: '400' }}>+</p>
+                {data.map((e, i) => {
+                    return (
+                        <div key={i} style={{ margin: '8px 8px 8px 8px' }}>
+                            <img
+                                src={'/assets/images/Single-Pillow-2.png'}
+                                alt="Single Product"
+                                style={{ width: '100%', height: '70%', objectFit: 'cover' }}
+                            />
+                            <p>Mulberry Silk Pillowcase</p>
+                            <p>IDR 750.000</p>
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between'
+                                }}
+                            >
+                                <div
+                                    style={{
+                                        backgroundColor: '#474747',
+                                        borderRadius: '10px',
+                                        width: '20px',
+                                        height: '20px'
+                                    }}
+                                ></div>
+                                <div
+                                    style={{
+                                        border: '1px solid #474747',
+                                        borderRadius: '20px',
+                                        padding: '8px',
+                                        flexDirection: 'row',
+                                        display: 'flex',
+                                        justifyContent: 'space-around',
+                                        width: '116px',
+                                        backgroundColor: 'white'
+                                    }}
+                                >
+                                    <p style={{ fontSize: '18px', fontWeight: '400' }}>-</p>
+                                    <p style={{ fontSize: '18px', fontWeight: '400' }}>3</p>
+                                    <p style={{ fontSize: '18px', fontWeight: '400' }}>+</p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
+                    );
+                })}
             </div>
         </div>
     );

@@ -15,6 +15,8 @@ import seputarOngkirForCheckoutReducer from './reducers/SeputarOngkirForCheckout
 import formLoginReducer from './reducers/formLoginReducer';
 import idUniqCartReducer from './reducers/idUniqCartReducer';
 import orderReducer from './reducers/orderReducer';
+import commentReducer from './reducers/commentReducer';
+import notificationsReducer from './reducers/notificationsReducer';
 
 import uiPesanan from '../pages/admin/pesanan/redux/reducer/uiPesanan';
 import storage from './sync_storage';
@@ -41,6 +43,8 @@ const combinedReducer = combineReducers({
     data_history_order: dataHistoryOrder,
     idUniqCart: idUniqCartReducer,
     orderUniq: orderReducer,
+    theComment: commentReducer,
+    theNotifications: notificationsReducer,
     uiPesanan
 });
 
@@ -72,7 +76,9 @@ const makeStore = ({ isServer }) => {
                 'shippingAddres',
                 'detailOngkirForCheckout',
                 'idUniqCart',
-                'orderUniq'
+                'orderUniq',
+                'theComment',
+                'theNotifications'
             ],
 
             storage // if needed, use a safer storage

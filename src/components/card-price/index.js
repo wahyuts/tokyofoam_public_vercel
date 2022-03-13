@@ -530,11 +530,13 @@ const CardPrice = ({ image }) => {
                     handleDecrement={handleDecrement}
                     quantity={quantity}
                 />
-                <div className={classes.pickIcon}>
+
+                {/* hidupkan jika nanti mo buat whistlist */}
+                {/* <div className={classes.pickIcon}>
                     <span className={classes.IconFav}>
                         <AddToFavButton />
                     </span>
-                </div>
+                </div> */}
             </div>
             <div className={classes.pickColor}>
                 <span className={classes.firstColor}></span>
@@ -591,11 +593,12 @@ const CardPrice = ({ image }) => {
                             handleDecrement={handleDecrement}
                             quantity={quantity}
                         />
-                        <div style={{}}>
+                        {/* hidupkan jika nanti mo buat whistlist */}
+                        {/* <div style={{}}>
                             <span>
                                 <AddToFavButton />
                             </span>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>

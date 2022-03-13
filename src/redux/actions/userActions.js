@@ -25,7 +25,8 @@ import {
     SET_ADD_TO_BAG,
     SET_ID_UNIQ_CART_USER,
     SET_GET_ALL_DATA_USER,
-    SET_GET_DATA_USER_ORDER
+    SET_GET_DATA_USER_ORDER,
+    GET_COMMENT
 } from '../type';
 
 // Login untuk DESKTOP And MOBILE Version
@@ -236,31 +237,26 @@ export const updatePutCartBEFromLogin = (keranjang) => async (dispatch) => {
 };
 
 // forgot password/ change password untuk DESKTOP version
-export const changePassword = (
-    newUserData,
-    setShowBoxEmailVerification,
-    setRegister,
-    setForgot,
-    setBoxForgot
-) => async (dispatch) => {
-    const API = 'https://tokyofoam.herokuapp.com/api/auth/forgotPassword';
-    try {
-        await dispatch({ type: LOADING_UI }); // meanggil dispatch untuk membuar loading : true
-        const results = await axios.post(API, newUserData);
-        if (results.data.message === 'Link reset password sudah dikirim ke email') {
-            const tokenReset = `Bearer ${results.data.token}`;
-            localStorage.setItem('ResetToken', tokenReset); // menyimpan IdToken di localStorage
-            dispatch({ type: STOP_LOADING_UI });
-            setShowBoxEmailVerification(true);
-            setRegister(false);
-            setForgot(false);
-            setBoxForgot(true);
-            dispatch({ type: CLEAR_ERRORS });
+export const changePassword =
+    (newUserData, setShowBoxEmailVerification, setRegister, setForgot, setBoxForgot) => async (dispatch) => {
+        const API = 'https://tokyofoam.herokuapp.com/api/auth/forgotPassword';
+        try {
+            await dispatch({ type: LOADING_UI }); // meanggil dispatch untuk membuar loading : true
+            const results = await axios.post(API, newUserData);
+            if (results.data.message === 'Link reset password sudah dikirim ke email') {
+                const tokenReset = `Bearer ${results.data.token}`;
+                localStorage.setItem('ResetToken', tokenReset); // menyimpan IdToken di localStorage
+                dispatch({ type: STOP_LOADING_UI });
+                setShowBoxEmailVerification(true);
+                setRegister(false);
+                setForgot(false);
+                setBoxForgot(true);
+                dispatch({ type: CLEAR_ERRORS });
+            }
+        } catch (error) {
+            dispatch({ type: SET_ERRORS, payload: error.response.data.message });
         }
-    } catch (error) {
-        dispatch({ type: SET_ERRORS, payload: error.response.data.message });
-    }
-};
+    };
 
 // Reset password
 export const resetPassword = (newUserData, router) => async (dispatch) => {
@@ -488,6 +484,21 @@ export const addKecamatanLogreg = (selected) => (dispatch) => {
 // Fungsi ga kepake (bisa diapus nanti)
 export const loginUserTrial = () => (dispatch) => {
     dispatch({ type: SET_AUTHENTICATED });
+};
+
+// The Comment
+export const getAllCommentar = () => async (dispatch) => {
+    const API = 'https://tokyofoam.herokuapp.com/api/comment/getAll';
+    try {
+        const res = await axios.get(API);
+        // console.log(res, 'cek res <<<')
+        dispatch({
+            type: GET_COMMENT,
+            payload: res.data.data
+        });
+    } catch (error) {
+        console.log(error);
+    }
 };
 
 //****************************************************************************** */

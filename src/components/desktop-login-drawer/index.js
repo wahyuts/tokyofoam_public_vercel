@@ -413,7 +413,7 @@ const DesktopLoginDrawer = ({ menuOpens, setMenuOpen }) => {
                             borderRadius: 5
                         }}
                         onClick={klikLogin}
-                        type="submit"
+                        // type="submit"
                     >
                         LOGIN
                     </Button>
@@ -453,75 +453,75 @@ const DesktopLoginDrawer = ({ menuOpens, setMenuOpen }) => {
             <ListItem className={classes.containerLogin}>
                 <p className={classes.text}>Register</p>
             </ListItem>
-            <form onSubmit={klikRegister}>
-                <div className={classes.EmailPassword}>
-                    <TextField
-                        label="Nama"
-                        size="small"
-                        type="text"
-                        value={namaUser}
-                        onChange={handleChangeNamaUser}
-                        fullWidth
-                        style={{ marginBottom: 15 }}
-                    />
-                    <TextField
-                        label="Alamat"
-                        size="small"
-                        type="text"
-                        value={regAlamat}
-                        onChange={handleChangeRegAlamat}
-                        fullWidth
-                        style={{ marginBottom: 15 }}
-                    />
-                    <TextField
-                        label="No Telp"
-                        size="small"
-                        type="number"
-                        value={regNoHandphone}
-                        onChange={handleChangeRegNoHandphone}
-                        fullWidth
-                        style={{ marginBottom: 15 }}
-                    />
-                    <div style={{ marginBottom: 15 }}>
-                        {/* <AutoCompleteProvince /> */}
-                        <AutoCompleteProvinceLogreg />
-                    </div>
-                    <div style={{ marginBottom: 15 }}>
-                        {/* <DropdownKabupaten /> */}
-                        <DropdownKabupatenLogreg />
-                    </div>
-                    <div style={{ marginBottom: 15 }}>
-                        <DropdownKecamatanLogreg />
-                    </div>
-                    <TextField
-                        label="Email"
-                        size="small"
-                        type="text"
-                        value={regEmail}
-                        onChange={handleChangeRegEmail}
-                        fullWidth
-                        style={{ marginBottom: 15 }}
-                    />
-                    <TextField
-                        label="Password"
-                        size="small"
-                        type="password"
-                        value={regPassword}
-                        onChange={handleChangeRegPassword}
-                        fullWidth
-                        style={{ marginBottom: 15 }}
-                    />
-                    <TextField
-                        label="Confirm Password"
-                        size="small"
-                        type="password"
-                        value={confirmPassword}
-                        onChange={handleChangeConfirmPassword}
-                        fullWidth
-                        style={{ marginBottom: 15 }}
-                    />
+            {/* <form onSubmit={klikRegister}> */}
+            <div className={classes.EmailPassword}>
+                <TextField
+                    label="Nama"
+                    size="small"
+                    type="text"
+                    value={namaUser}
+                    onChange={handleChangeNamaUser}
+                    fullWidth
+                    style={{ marginBottom: 15 }}
+                />
+                <TextField
+                    label="Alamat lengkap (sesuai KTP)"
+                    size="small"
+                    type="text"
+                    value={regAlamat}
+                    onChange={handleChangeRegAlamat}
+                    fullWidth
+                    style={{ marginBottom: 15 }}
+                />
+                <TextField
+                    label="No Telp"
+                    size="small"
+                    type="number"
+                    value={regNoHandphone}
+                    onChange={handleChangeRegNoHandphone}
+                    fullWidth
+                    style={{ marginBottom: 15 }}
+                />
+                <div style={{ marginBottom: 15 }}>
+                    {/* <AutoCompleteProvince /> */}
+                    <AutoCompleteProvinceLogreg />
                 </div>
-            </form>
+                <div style={{ marginBottom: 15 }}>
+                    {/* <DropdownKabupaten /> */}
+                    <DropdownKabupatenLogreg />
+                </div>
+                <div style={{ marginBottom: 15 }}>
+                    <DropdownKecamatanLogreg />
+                </div>
+                <TextField
+                    label="Email"
+                    size="small"
+                    type="text"
+                    value={regEmail}
+                    onChange={handleChangeRegEmail}
+                    fullWidth
+                    style={{ marginBottom: 15 }}
+                />
+                <TextField
+                    label="Password"
+                    size="small"
+                    type="password"
+                    value={regPassword}
+                    onChange={handleChangeRegPassword}
+                    fullWidth
+                    style={{ marginBottom: 15 }}
+                />
+                <TextField
+                    label="Confirm Password"
+                    size="small"
+                    type="password"
+                    value={confirmPassword}
+                    onChange={handleChangeConfirmPassword}
+                    fullWidth
+                    style={{ marginBottom: 15 }}
+                />
+            </div>
+            {/* </form> */}
             <div>
                 <p style={{ fontSize: 15, color: '#FF7373', marginLeft: 20, marginTop: 10 }}>{errors_register}</p>
             </div>
@@ -544,9 +544,9 @@ const DesktopLoginDrawer = ({ menuOpens, setMenuOpen }) => {
                             marginTop: 15,
                             borderRadius: 5
                         }}
-                        type="submit"
+                        onClick={klikRegister}
                     >
-                        Submit
+                        REGISTER
                     </Button>
                     {/* <MainBlackButton className={'BlackButton'} onClick={klikRegister}>
                         {' '}

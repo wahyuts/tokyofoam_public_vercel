@@ -24,6 +24,8 @@ import { setAddressLabel } from '../../../redux/actions/urlOnProfileButtonTabAct
 import Dashboard from './profile-dashboard';
 import Wishlist from './profile-wishlist';
 import PromoAndSale from './profile-promo-and-sale';
+import DropdownKecamatan from '../../../utils/re-useable-components/dropdown/dropdown-kecamatan';
+import DropdownProvinsi from '../../../utils/re-useable-components/dropdown/dropdown-provinsi';
 
 const style = {
     btnPrimaryContained: {
@@ -333,96 +335,104 @@ const Address = (params) => {
                                 </MainBlackButton>
                             </Box>
                         </Box>
-                        <Dialog
-                            open={showModal}
-                            innerContainerStyle={{ width: '798px', left: '50%' }}
-                            className={classes.dialogContainer}
-                        >
-                            <Typography id="modal-modal-title" className={'title'}>
-                                {headerPage}
-                            </Typography>
-                            <Box className={'dialogInnerContainerSigleForm'}>
-                                <Box className={classes.dialogFormWrapper}>
-                                    <Typography className={'lable'}>*Name</Typography>
-                                    <TextField
-                                        id="outlined-basic"
-                                        placeholder={headerPage === 'Add New Address' ? '' : 'Mia Artina'}
-                                        variant="outlined"
-                                        r
-                                        className={classes.dialogInput}
-                                        size="small"
-                                    />
-                                </Box>
-                                <Box className={classes.dialogFormWrapper}>
-                                    <Typography className={'lable'}>*Address</Typography>
-                                    <TextField
-                                        placeholder={
-                                            headerPage === 'Add New Address'
-                                                ? ''
-                                                : 'Jln. Gunung Saputan no.22X, Kecamatan Denpasar Barat'
-                                        }
-                                        id="outlined-basic"
-                                        className={classes.dialogInput}
-                                        size="small"
-                                        multiline
-                                    />
-                                </Box>
-                            </Box>
-                            <Box className={'dialogInnerContainerTwiceForm'}>
-                                <Box className={classes.dialogFormWrapper}>
-                                    <Typography className={'lable'}>*Kode Pos</Typography>
-                                    <TextField
-                                        placeholder={headerPage === 'Add New Address' ? '' : 'Kode Pos'}
-                                        variant="outlined"
-                                        className={classes.dialogInput}
-                                        size="small"
-                                    />
-                                </Box>
-                                <HorizontalSpacer widht={{ marginRight: '31px' }} />
-                                <Box className={classes.dialogFormWrapper}>
-                                    <Typography className={'lable'}>*Kota / Kabupaten</Typography>
-                                    <DropdownKabupaten />
-                                </Box>
-                            </Box>
-                            <Box className={'dialogInnerContainerTwiceForm'}>
-                                <Box className={classes.dialogFormWrapper}>
-                                    <Typography className={'lable'}>*No Telp</Typography>
-                                    <TextField
-                                        placeholder={headerPage === 'Add New Address' ? '' : 'Your number'}
-                                        variant="outlined"
-                                        className={classes.dialogInput}
-                                        size="small"
-                                    />
-                                </Box>
-                                <HorizontalSpacer widht={{ marginRight: '31px' }} />
-                                <Box className={classes.dialogFormWrapper}>
-                                    <Typography className={'lable'}>*Kecamatan</Typography>
-                                    <DropdownKabupaten />
-                                </Box>
-                            </Box>
-                            <Box className={classes.dialogBtnWrapper}>
-                                <MainBlackButton
-                                    onClick={() => setShowModal(false)}
-                                    innerContaunerStyle={style.btnBoxPrimaryOutline}
-                                    className="WhiteButton"
-                                    variant="outlined"
-                                >
-                                    Back
-                                </MainBlackButton>
-                                <HorizontalSpacer widht={{ marginRight: '15px' }} />
-                                <MainBlackButton
-                                    onClick={() => {}}
-                                    innerContaunerStyle={style.btnBoxPrimariContainer}
-                                    className="BlackButton"
-                                    variant="contained"
-                                >
-                                    Submit
-                                </MainBlackButton>
-                            </Box>
-                        </Dialog>
                     </>
                 )}
             </div>
+            <Dialog
+                open={showModal}
+                innerContainerStyle={{ width: '798px', left: '50%' }}
+                className={classes.dialogContainer}
+            >
+                <Typography id="modal-modal-title" className={'title'}>
+                    {headerPage}
+                </Typography>
+                <Box className={'dialogInnerContainerSigleForm'}>
+                    <Box className={classes.dialogFormWrapper}>
+                        <Typography className={'lable'}>*Name</Typography>
+                        <TextField
+                            id="outlined-basic"
+                            placeholder={headerPage === 'Add New Address' ? '' : 'Mia Artina'}
+                            variant="outlined"
+                            r
+                            className={classes.dialogInput}
+                            size="small"
+                        />
+                    </Box>
+                    <Box className={classes.dialogFormWrapper}>
+                        <Typography className={'lable'}>*Address</Typography>
+                        <TextField
+                            placeholder={
+                                headerPage === 'Add New Address'
+                                    ? ''
+                                    : 'Jln. Gunung Saputan no.22X, Kecamatan Denpasar Barat'
+                            }
+                            id="outlined-basic"
+                            className={classes.dialogInput}
+                            size="small"
+                            multiline
+                        />
+                    </Box>
+                </Box>
+                <Box className={'dialogInnerContainerTwiceForm'}>
+                    <Box className={classes.dialogFormWrapper}>
+                        <Typography className={'lable'}>*Provinsi</Typography>
+                        <DropdownProvinsi />
+                    </Box>
+                    <HorizontalSpacer widht={{ marginRight: '31px' }} />
+                    <Box className={classes.dialogFormWrapper}>
+                        <Typography className={'lable'}>*Kode Pos</Typography>
+                        <TextField
+                            placeholder={headerPage === 'Add New Address' ? '' : 'Kode Pos'}
+                            variant="outlined"
+                            className={classes.dialogInput}
+                            size="small"
+                        />
+                    </Box>
+                </Box>
+                <Box className={'dialogInnerContainerTwiceForm'}>
+                    <Box className={classes.dialogFormWrapper}>
+                        <Typography className={'lable'}>*Kota / Kabupaten</Typography>
+                        <DropdownKabupaten />
+                    </Box>
+                    <HorizontalSpacer widht={{ marginRight: '31px' }} />
+                    <Box className={classes.dialogFormWrapper}>
+                        <Typography className={'lable'}>*No Telp</Typography>
+                        <TextField
+                            placeholder={headerPage === 'Add New Address' ? '' : 'Your number'}
+                            variant="outlined"
+                            className={classes.dialogInput}
+                            size="small"
+                        />
+                    </Box>
+                </Box>
+                <Box className={'dialogInnerContainerTwiceForm'}>
+                    <Box className={classes.dialogFormWrapper}>
+                        <Typography className={'lable'}>*Kecamatan</Typography>
+                        <DropdownKecamatan />
+                    </Box>
+                    <HorizontalSpacer widht={{ marginRight: '31px' }} />
+                    <Box className={classes.dialogFormWrapper}></Box>
+                </Box>
+                <Box className={classes.dialogBtnWrapper}>
+                    <MainBlackButton
+                        onClick={() => setShowModal(false)}
+                        innerContaunerStyle={style.btnBoxPrimaryOutline}
+                        className="WhiteButton"
+                        variant="outlined"
+                    >
+                        Back
+                    </MainBlackButton>
+                    <HorizontalSpacer widht={{ marginRight: '15px' }} />
+                    <MainBlackButton
+                        onClick={() => {}}
+                        innerContaunerStyle={style.btnBoxPrimariContainer}
+                        className="BlackButton"
+                        variant="contained"
+                    >
+                        Submit
+                    </MainBlackButton>
+                </Box>
+            </Dialog>
         </div>
     );
 };

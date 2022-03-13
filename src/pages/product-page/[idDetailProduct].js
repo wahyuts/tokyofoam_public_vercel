@@ -13,6 +13,7 @@ import MainBlackButton from '../../utils/re-useable-components/buttons/MainBlack
 import SliderLocalSingleProduct from '../../utils/re-useable-components/slider-local-single-product';
 import HomeProductCardSixNewItemMobile from '../../components/mobile/home-product-card-six-new-item-mobile';
 import SliderBundlingProduct from '../../utils/re-useable-components/slider-bundling-product';
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
     main: {
@@ -43,6 +44,10 @@ const DetailProductPage = () => {
     const classes = useStyles();
     const { isMobile, isTablet, isDesktop } = ReactResponsiveHook();
     const { handleClickProductPage } = AllButtonFunctions();
+    const { productByName } = useSelector((state) => state.dataProduct);
+
+    const metaKey = productByName.meta_key;
+    const metaDesc = productByName.meta_Desc;
 
     let displayGalleryDesktop = (
         <div>
@@ -81,6 +86,7 @@ const DetailProductPage = () => {
         <div className={classes.main}>
             <Head>
                 <title>Tokyo Foam || Detail Product</title>
+                {/* <meta name="keywords" content="`${metaKey}`"> */}
             </Head>
 
             <ContentProductLayout>

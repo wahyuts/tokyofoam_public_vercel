@@ -33,7 +33,9 @@ import MailIcon from '@mui/icons-material/MailOutlineOutlined';
 // import AccountIcon from '@mui/icons-material/AccountCircle';
 import MenuDrawer from '../mobile/menu-drawer';
 import Avatars from '../avatars';
-import { logoutUser } from '../../redux/actions/userActions';
+import { logoutUser, getAllCommentar } from '../../redux/actions/userActions';
+import MyNotification from '../mynotification';
+import { getAllNotificationFunction } from '../../redux/actions/dataProductActions';
 
 const useStyles = makeStyles((theme) => ({
     navbar: {
@@ -140,7 +142,7 @@ const useStyles = makeStyles((theme) => ({
     contIconButton: {
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'space-evenly',
         width: '15%',
         [theme.breakpoints.down('mobile')]: {
             width: '15%',
@@ -197,6 +199,11 @@ const Headnav = () => {
                 null;
             }
         }
+    });
+
+    useEffect(() => {
+        dispatch(getAllCommentar());
+        dispatch(getAllNotificationFunction());
     });
 
     const [menuOpens, setMenuOpen] = useState(false);
@@ -316,7 +323,14 @@ const Headnav = () => {
     );
 
     let displayUIforMobile = (
-        <div style={{ display: 'flex', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
+        <div
+            style={{
+                display: 'flex',
+                alignItems: 'center',
+                width: '100%',
+                justifyContent: 'space-between'
+            }}
+        >
             {/* <MenuIcon className={classes.menuIcon} /> */}
             <MenuDrawer />
             <div>
@@ -336,7 +350,17 @@ const Headnav = () => {
     );
 
     let displayUIforDesktop = (
-        <div style={{ display: 'flex', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
+        <div
+            style={{
+                display: 'flex',
+                alignItems: 'center',
+                width: '95%',
+                justifyContent: 'space-between',
+                // backgroundColor: 'green',
+                marginLeft: 'auto',
+                marginRight: 'auto'
+            }}
+        >
             <div>
                 <Image src={Logo} alt="Logo" width={80} height={45} onClick={handleClickHome} />
             </div>
@@ -344,12 +368,13 @@ const Headnav = () => {
             {normalNav}
 
             <div className={classes.contIconButton}>
-                <MyIconButton tip="Notification">
+                <MyNotification />
+                {/* <MyIconButton tip="Notification">
                     <NotificationsIcon color="#545454" />
-                </MyIconButton>
-                <MyIconButton tip="Whistlist">
+                </MyIconButton> */}
+                {/* <MyIconButton tip="Whistlist">
                     <WhistlistIcon color="#545454" />
-                </MyIconButton>
+                </MyIconButton> */}
                 {bagIcon}
                 {/* <MyIconButton tip="Bag" onClick={handleClickCart}>
                     <BagIcon color="#545454" />

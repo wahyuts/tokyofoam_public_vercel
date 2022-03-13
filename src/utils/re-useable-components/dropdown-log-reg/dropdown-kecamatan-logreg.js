@@ -45,7 +45,7 @@ export default function DropdownKecamatanLogreg() {
             .catch((err) => console.log(err));
     }, [stateIdKotaLogreg]);
 
-    console.log('distrik coyy', cekDistric);
+    // console.log('distrik coyy', cekDistric);
 
     const arrDistric = cekDistric.map((el) => {
         return el.name;

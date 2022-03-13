@@ -8,7 +8,7 @@ import { makeStyles, withStyles } from '@mui/styles';
 import { Box } from '@mui/system';
 
 import MainBlackButton from '../../../utils/re-useable-components/buttons/MainBlackButton';
-import CardComponent from '../component/CardList';
+import CardComponent from '../component/CardOrderList';
 
 const styles = {
     btnBoxPrimariContainer: {
@@ -46,15 +46,18 @@ const useStyles = makeStyles((theme) => ({
             display: 'flex',
             width: '100%',
             flexDirection: 'column',
+
             alignItems: 'flex-start',
-            marginBottom: '30px',
+            marginBottom: '20px',
             marginTop: '20px',
-            backgroundColor: 'white',
             '& .desktop': {
-                display: 'none'
+                display: 'flex',
+                alignItems: 'flex-start',
+                flexDirection: 'column'
             },
             '& .mobile': {
-                display: 'flex'
+                display: 'flex',
+                marginTop: 80
             }
         }
     },
@@ -158,8 +161,8 @@ const Dashboard = () => {
                             </Typography>
                             <i className={`far fa-edit ${classes.editIcon}`}></i>
                         </div>
-                        <Typography mt={'22px'}>mia.artina@gmail.com</Typography>
-                        <Typography mt={'22px'} color="#FF7373">
+                        <Typography mt={'10px'}>mia.artina@gmail.com</Typography>
+                        <Typography mt={'10px'} color="#FF7373">
                             <u>Click to change password</u>
                         </Typography>
                     </div>

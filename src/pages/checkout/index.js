@@ -510,7 +510,7 @@ const Checkout = () => {
         setErrorEmptyFieldOtherAddress('');
     };
     // console.log('NAMA USER', nameMember);
-    // console.log('NAMA USER', otherNameMember);
+    // console.log('NAMA USER', otherNameMember);  TotalMustPay
 
     const handleClickConfirmOrderPayLater = () => {
         //fungsi buat post ke db pesanan
@@ -533,9 +533,10 @@ const Checkout = () => {
                     shipping_fee: shippingFee,
                     total_exclude_shipping: totalPrice,
                     potongan_benefit_membership: benefitMembership, // ini bukan di ambil dari reducer melainkan hanya variable biasa
-                    totalPrice_plus_shipping_minus_benefit_member: totalPrice_plus_shipping_minus_benefit_member,
+                    // totalPrice_plus_shipping_minus_benefit_member: totalPrice_plus_shipping_minus_benefit_member,
+                    totalPrice_plus_shipping_minus_benefit_member: TotalMustPay,
                     status_payment: 'Belum Diterima',
-                    cart: [dataProductOnBag]
+                    cart: dataProductOnBag
                 };
 
                 dispatch(
@@ -578,9 +579,10 @@ const Checkout = () => {
                     shipping_fee: shippingFee,
                     total_exclude_shipping: totalPrice,
                     potongan_benefit_membership: benefitMembership,
-                    totalPrice_plus_shipping_minus_benefit_member: totalPrice_plus_shipping_minus_benefit_member,
+                    // totalPrice_plus_shipping_minus_benefit_member: totalPrice_plus_shipping_minus_benefit_member,
+                    totalPrice_plus_shipping_minus_benefit_member: TotalMustPay,
                     status_payment: 'Belum Diterima',
-                    cart: [dataProductOnBag]
+                    cart: dataProductOnBag
                     // abis const data diatas baru disini fungsi post api nya
                 };
 
@@ -622,9 +624,10 @@ const Checkout = () => {
                     shipping_fee: shippingFee,
                     total_exclude_shipping: totalPrice,
                     potongan_benefit_membership: benefitMembership, // ini bukan di ambil dari reducer melainkan hanya variable biasa
-                    totalPrice_plus_shipping_minus_benefit_member: totalPrice_plus_shipping_minus_benefit_member,
+                    totalPrice_plus_shipping_minus_benefit_member: TotalMustPay,
+                    // totalPrice_plus_shipping_minus_benefit_member: totalPrice_plus_shipping_minus_benefit_member,
                     status_payment: 'Belum Diterima', // Aslinya Sudah Diterima
-                    cart: [dataProductOnBag]
+                    cart: dataProductOnBag
                 };
 
                 dispatch(
@@ -666,9 +669,10 @@ const Checkout = () => {
                     shipping_fee: shippingFee,
                     total_exclude_shipping: totalPrice,
                     potongan_benefit_membership: benefitMembership,
-                    totalPrice_plus_shipping_minus_benefit_member: totalPrice_plus_shipping_minus_benefit_member,
+                    totalPrice_plus_shipping_minus_benefit_member: TotalMustPay,
+                    // totalPrice_plus_shipping_minus_benefit_member: totalPrice_plus_shipping_minus_benefit_member,
                     status_payment: 'Belum Diterima', // Aslinya Sudah Diterima
-                    cart: [dataProductOnBag]
+                    cart: dataProductOnBag
                     // abis const data diatas baru disini fungsi post api nya
                 };
 
@@ -1333,10 +1337,10 @@ const Checkout = () => {
     let benefitMembership;
     // console.log('LEVEL USER', status_level_user);
 
-    if (status_level_user === 'reseller') {
+    if (status_level_user === 'Reseller') {
         benefitMembership = 25000;
         // console.log(benefitMembership);
-    } else if (status_level_user === 'distributor') {
+    } else if (status_level_user === 'Distributor') {
         benefitMembership = 50000;
         // console.log(benefitMembership);
     } else {
@@ -1345,6 +1349,9 @@ const Checkout = () => {
     }
 
     let TotalMustPay = totalPrice + shippingFee - benefitMembership;
+    console.log('TotalMustPay', TotalMustPay);
+    console.log('Status User', status_level_user);
+    console.log('Level', benefitMembership);
 
     let Total_Plus_Shipping = (
         <>

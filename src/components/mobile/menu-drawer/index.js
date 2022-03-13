@@ -538,7 +538,7 @@ export default function MenuDrawer() {
                         style={{ marginBottom: 15 }}
                     />
                     <TextField
-                        label="Alamat"
+                        label="Alamat lengkap (Sesuai KTP)"
                         size="small"
                         type="text"
                         value={regAlamat}

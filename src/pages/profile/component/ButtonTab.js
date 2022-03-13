@@ -1,23 +1,17 @@
+import { useState } from 'react';
 import { useRouter } from 'next/router';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Button } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Box } from '@mui/system';
 
-import { useDispatch, useSelector } from 'react-redux';
-
+import { SET_PROFILE_LOGOUT, SET_PROFILE_PROMO_AND_SALE, SET_PROFILE_WISHLIST } from '../../../types';
 import { setProfile } from '../../../redux/actions/urlOnProfileButtonTabAction';
-import {
-    SET_PROFILE_ADDRESS,
-    SET_PROFILE_DASHBOARD,
-    SET_PROFILE_LOGOUT,
-    SET_PROFILE_PROMO_AND_SALE,
-    SET_PROFILE_WISHLIST
-} from '../../../types';
-import Dialog from './dialog';
+import { logoutUser } from '../../../redux/actions/userActions';
 import MainBlackButton from '../../../utils/re-useable-components/buttons/MainBlackButton';
 import HorizontalSpacer from '../../../components/HorizontalSpacer';
-import { useState } from 'react';
+import Dialog from './dialog';
 
 const style = {
     btnSecondaryContained: {
@@ -126,9 +120,10 @@ const ButtonTab = () => {
                 <Box className={classes.btnContainer}>
                     <MainBlackButton
                         className={'BlackButton'}
-                        // onClick={ async ()=> {
-                        //     await dispatch(setAddressLabel(SET_HEADER_EDIT_ADDRESS))
-                        //     setShowModal(true)}}
+                        onClick={async () => {
+                            await dispatch(logoutUser());
+                            setShowModal(false);
+                        }}
                         innerContaunerStyle={style.btnSecondaryContained}
                     >
                         Ya

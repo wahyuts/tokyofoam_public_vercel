@@ -4,6 +4,16 @@ import Image from 'next/image';
 import { makeStyles } from '@mui/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import MainBlackButton from '../../../utils/re-useable-components/buttons/MainBlackButton';
+//For Modal Dialog
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+//For Date Mat UI
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DatePicker from '@mui/lab/DatePicker';
 import {
     deleteProduct,
     getProductById,
@@ -11,8 +21,11 @@ import {
     updateDeskripsiDataProduct,
     updateDetailSEO,
     updateDetailSpesifikasi,
-    uploadImage
+    uploadImage,
+    pushNotificationPost
 } from '../../../redux/actions/dataProductActions';
+import { Button, TextField } from '@mui/material';
+import dayjs from 'dayjs';
 
 const useStyles = makeStyles((theme) => ({
     fontSizepHere: {
@@ -160,9 +173,36 @@ const FormEditProduk = ({ defaultImage }) => {
     const [type, setType] = useState(productById.type);
     const [desc, setDesc] = useState(productById.desc);
     const [statusStok, setStatusStok] = useState(productById.status_stok);
+    // Untuk Notif
+    const [notifNamaProduct, setNotifNamaProduct] = useState(productById.title);
+    const [notifPromoPrice, setNotifPromoPrice] = useState(productById.promo_price);
+    const [notifNoted, setNotifNoted] = useState('');
+    // For Tanggal Promo Start dan end
+    let today = new Date();
+
+    const [valueStartDate, setValueStartDate] = React.useState(today);
+    const [valueEndDate, setValueEndDate] = React.useState(null);
+
+    let startPromoDate = dayjs(valueStartDate).format('DD MMMM YYYY'); // iNI YANG DIPAKE BUAT SEND POST KALO JADI
+    let endPromoDate = dayjs(valueEndDate).format('DD MMMM YYYY');
+    console.log('Promo Start Date', valueStartDate);
+    console.log('Month Long', startPromoDate);
+    console.log('End Date', endPromoDate);
 
     const [metaKey, setMetaKey] = useState(productById.meta_key);
     const [metaDesc, setMetaDesc] = useState(productById.meta_desc);
+
+    /*********For Modal*************************** */
+    const [open, setOpen] = React.useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+        setNotifNoted('');
+    };
+    /************************************** */
 
     useEffect(() => {
         setIdMongoDb(productById._id);
@@ -182,6 +222,9 @@ const FormEditProduk = ({ defaultImage }) => {
         setSizeWidthDiameter(productById.size.width_or_diameter);
         setRating(productById.rating);
         setStatusStok(productById.status_stok);
+        // Untuk Notif
+        setNotifNamaProduct(productById.title);
+        setNotifPromoPrice(productById.promo_price);
         //Untuk SEO
         setMetaKey(productById.meta_key);
         setMetaDesc(productById.meta_desc);
@@ -268,6 +311,20 @@ const FormEditProduk = ({ defaultImage }) => {
     };
 
     //***************************************************************************** */
+
+    /****************************Buat Fungsi Post Notif*************** */
+    const handlePostNotif = () => {
+        const DataNotif = {
+            product_id: idMongoDb,
+            nama_product: notifNamaProduct,
+            promo_price: notifPromoPrice,
+            note: notifNoted,
+            // tambahin 2 atribute dibawah ini kalo jadi
+            tanggal_start_promo: startPromoDate,
+            tanggal_end_promo: endPromoDate
+        };
+        dispatch(pushNotificationPost(DataNotif, setOpen, setNotifNoted));
+    };
 
     //****************Fungsi button setiap edit *********************************** */
     const handleEditInformasiUmum = () => {
@@ -369,6 +426,20 @@ const FormEditProduk = ({ defaultImage }) => {
         setMetaDesc(e.target.value);
     };
 
+    const handleChangeNotifNamaProduct = (e) => {
+        setNotifNamaProduct(e.target.value);
+    };
+
+    const handleChangeNotifPromoPrice = (e) => {
+        setNotifPromoPrice(e.target.value);
+    };
+
+    const handleChangeNotifNoted = (e) => {
+        setNotifNoted(e.target.value);
+    };
+
+    console.log('Noted', notifNoted);
+
     //************************************************************************************** */
 
     // console.log('PRICE', price);
@@ -381,6 +452,11 @@ const FormEditProduk = ({ defaultImage }) => {
                     <div style={{ width: 186, marginRight: 10, marginBottom: 10 }}>
                         <MainBlackButton className={'BlackButton'} onClick={buttonBack}>
                             Back
+                        </MainBlackButton>
+                    </div>
+                    <div style={{ width: 186, marginRight: 10, marginBottom: 10 }}>
+                        <MainBlackButton className={'RedButton'} onClick={handleClickOpen}>
+                            PUSH NOTIFICATION
                         </MainBlackButton>
                     </div>
                 </div>
@@ -706,6 +782,90 @@ const FormEditProduk = ({ defaultImage }) => {
                     </div>
                 </div>
             </div>
+
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>Notification</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Notification ini akan diberikan kepada seluruh pengunjung website tokyofoam
+                    </DialogContentText>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="notiff_nama_product"
+                        label="Nama Product"
+                        type="text"
+                        fullWidth
+                        variant="standard"
+                        value={notifNamaProduct}
+                        onChange={handleChangeNotifNamaProduct}
+                        disabled
+                    />
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="notif_promo_price"
+                        label="Promo Price"
+                        type="number"
+                        fullWidth
+                        variant="standard"
+                        value={notifPromoPrice}
+                        disabled
+                    />
+                    <div>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            <DatePicker
+                                label="Promo start"
+                                value={valueStartDate}
+                                onChange={(newValue) => {
+                                    setValueStartDate(newValue);
+                                }}
+                                renderInput={(params) => (
+                                    <TextField {...params} size="small" style={{ marginTop: 10, marginRight: 20 }} />
+                                )}
+                            />
+                        </LocalizationProvider>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            <DatePicker
+                                label="Promo End"
+                                value={valueEndDate}
+                                onChange={(newValue) => {
+                                    setValueEndDate(newValue);
+                                }}
+                                renderInput={(params) => (
+                                    <TextField {...params} size="small" style={{ marginTop: 10 }} />
+                                )}
+                            />
+                        </LocalizationProvider>
+                    </div>
+
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="notifikasi ke customer"
+                        label="Notif to Customer"
+                        type="text"
+                        fullWidth
+                        variant="standard"
+                        onChange={handleChangeNotifNoted}
+                        value={notifNoted}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <div style={{ width: 150, marginRight: 10, marginBottom: 10 }}>
+                        <MainBlackButton className={'BlackButton'} onClick={handleClose}>
+                            Cancel
+                        </MainBlackButton>
+                    </div>
+                    {/* <Button onClick={handleClose}>Cancel</Button> */}
+                    <div style={{ width: 150, marginRight: 10, marginBottom: 10 }}>
+                        <MainBlackButton className={'BorderBlueButton'} onClick={handlePostNotif}>
+                            Push
+                        </MainBlackButton>
+                    </div>
+                    {/* <Button onClick={handleClose}>Push</Button> */}
+                </DialogActions>
+            </Dialog>
         </>
     );
 };

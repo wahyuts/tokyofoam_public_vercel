@@ -25,7 +25,7 @@ const initialState = {
             name: 'Mia Pillow',
             date: '24/10/2021',
             qty: '1',
-            status: 'failed',
+            status: 'waiting for payment',
             price: '651.300'
         },
         {
@@ -36,7 +36,7 @@ const initialState = {
             name: 'Pillow',
             date: '24/10/2021',
             qty: '1',
-            status: 'failed',
+            status: 'complete',
             price: '651.300'
         },
         {

@@ -96,15 +96,40 @@ const useStyles = makeStyles(() => ({
         },
         '& .BorderWhiteButton:hover': {
             backgroundColor: '#FFFFFF'
+        },
+        '& .OrangeButton': {
+            backgroundColor: '#FF7373',
+            color: '#FFFFFF',
+            width: '100%',
+            fontWeight: 600,
+            textTransform: 'none',
+            marginTop: 15,
+            borderRadius: 5
+        },
+        '& .OrangeButton:hover': {
+            backgroundColor: '#FF7373'
+        },
+        '& .DisableButton': {
+            width: '100%',
+            fontWeight: 600,
+            textTransform: 'none',
+            marginTop: 15,
+            borderRadius: 5
         }
     }
 }));
 
-const MainBlackButton = ({ children, onClick, innerContaunerStyle, className, variant }) => {
+const MainBlackButton = ({ children, onClick, innerContaunerStyle, className, variant, disable }) => {
     const classes = useStyles();
     return (
         <div className={classes.ContBlackButton}>
-            <Button style={innerContaunerStyle} onClick={onClick} className={className} variant={variant}>
+            <Button
+                style={innerContaunerStyle}
+                onClick={onClick}
+                className={className}
+                variant={variant}
+                disabled={disable}
+            >
                 {children}
             </Button>
         </div>
