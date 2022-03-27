@@ -7,10 +7,8 @@ import { Box } from '@mui/system';
 
 import HorizontalSpacer from '../../../components/HorizontalSpacer';
 import MainBlackButton from '../../../utils/re-useable-components/buttons/MainBlackButton';
-// import { ButtonTab, Dialog } from '../component';
 import ButtonTab from '../component/ButtonTab';
 import Dialog from '../component/dialog';
-import DropdownKabupaten from '../../../utils/re-useable-components/dropdown/dropdown-kabupaten';
 import {
     LOCATION_PATH_ADDRESS_ADD_NEW_ADDRESS,
     SET_HEADER_ADD_NEW_ADDRESS,
@@ -24,8 +22,9 @@ import { setAddressLabel } from '../../../redux/actions/urlOnProfileButtonTabAct
 import Dashboard from './profile-dashboard';
 import Wishlist from './profile-wishlist';
 import PromoAndSale from './profile-promo-and-sale';
-import DropdownKecamatan from '../../../utils/re-useable-components/dropdown/dropdown-kecamatan';
-import DropdownProvinsi from '../../../utils/re-useable-components/dropdown/dropdown-provinsi';
+import AutoCompleteProvinceLogreg from '../../../utils/re-useable-components/dropdown-log-reg/AutoComplete-Province-Logreg';
+import DropdownKabupatenLogreg from '../../../utils/re-useable-components/dropdown-log-reg/dropdown-kabupaten-logreg';
+import DropdownKecamatanLogreg from '../../../utils/re-useable-components/dropdown-log-reg/dropdown-kecamatan-logreg';
 
 const style = {
     btnPrimaryContained: {
@@ -197,6 +196,7 @@ const Address = (params) => {
     const [showModal, setShowModal] = useState(false);
     const [age, setAge] = useState('');
     const { headerPage, show_label_profile } = useSelector((state) => state.url_profile);
+    const { credentials } = useSelector((state) => state.user);
 
     const handleChange = (event) => {
         setAge(event.target.value);
@@ -209,19 +209,19 @@ const Address = (params) => {
                 {show_label_profile === SET_PROFILE_ADDRESS && (
                     <>
                         <p className={'title'}>{show_label_profile}</p>
-                        <div className={'blackButton-desktop'}>
+                        {/* <div className={'blackButton-desktop'}>
                             <MainBlackButton
                                 className={'BlackButton'}
                                 innerContaunerStyle={style.btnPrimaryContained}
                                 onClick={async () => {
-                                    await dispatch(setAddressLabel(SET_HEADER_ADD_NEW_ADDRESS));
+                                    // await dispatch(setAddressLabel(SET_HEADER_ADD_NEW_ADDRESS));
                                     setShowModal(true);
                                 }}
                             >
                                 Add New Address
                             </MainBlackButton>
-                        </div>
-                        <div className={'blackButton-mobile'}>
+                        </div> */}
+                        {/* <div className={'blackButton-mobile'}>
                             <MainBlackButton
                                 className={'BlackButton'}
                                 innerContaunerStyle={style.btnPrimaryContained}
@@ -232,15 +232,12 @@ const Address = (params) => {
                             >
                                 Add New Address
                             </MainBlackButton>
-                        </div>
+                        </div> */}
                         <Box className={classes.addressContainer}>
                             <Box className={'information'}>
                                 <p style={{ fontSize: '20px', fontWeight: '500' }}>Default Address</p>
-                                <p className={'username'}>Mia Artina</p>
-                                <p style={{ marginBottom: '10px', textAlign: 'center' }}>
-                                    Jln. Gunung Saputan no.22X, Kecamatan Denpasar Barat
-                                </p>
-                                <p>Denpasar</p>
+                                <p className={'username'}>{credentials?.nama}</p>
+                                <p style={{ marginBottom: '10px', textAlign: 'center' }}>{credentials?.alamat}</p>
                             </Box>
                             <Box className={'btnDesktop'}>
                                 <MainBlackButton
@@ -283,7 +280,7 @@ const Address = (params) => {
                                 </MainBlackButton>
                             </Box>
                         </Box>
-                        <Box className={classes.addressContainer}>
+                        {/* <Box className={classes.addressContainer}>
                             <Box className={'information'}>
                                 <p>Address 2</p>
                                 <p style={{ marginTop: '35px', marginBottom: '10px' }}>Mia Artina</p>
@@ -334,7 +331,7 @@ const Address = (params) => {
                                     Delete
                                 </MainBlackButton>
                             </Box>
-                        </Box>
+                        </Box> */}
                     </>
                 )}
             </div>
@@ -376,7 +373,7 @@ const Address = (params) => {
                 <Box className={'dialogInnerContainerTwiceForm'}>
                     <Box className={classes.dialogFormWrapper}>
                         <Typography className={'lable'}>*Provinsi</Typography>
-                        <DropdownProvinsi />
+                        <AutoCompleteProvinceLogreg />
                     </Box>
                     <HorizontalSpacer widht={{ marginRight: '31px' }} />
                     <Box className={classes.dialogFormWrapper}>
@@ -392,7 +389,7 @@ const Address = (params) => {
                 <Box className={'dialogInnerContainerTwiceForm'}>
                     <Box className={classes.dialogFormWrapper}>
                         <Typography className={'lable'}>*Kota / Kabupaten</Typography>
-                        <DropdownKabupaten />
+                        <DropdownKabupatenLogreg />
                     </Box>
                     <HorizontalSpacer widht={{ marginRight: '31px' }} />
                     <Box className={classes.dialogFormWrapper}>
@@ -408,7 +405,7 @@ const Address = (params) => {
                 <Box className={'dialogInnerContainerTwiceForm'}>
                     <Box className={classes.dialogFormWrapper}>
                         <Typography className={'lable'}>*Kecamatan</Typography>
-                        <DropdownKecamatan />
+                        <DropdownKecamatanLogreg />
                     </Box>
                     <HorizontalSpacer widht={{ marginRight: '31px' }} />
                     <Box className={classes.dialogFormWrapper}></Box>

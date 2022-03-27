@@ -3,10 +3,7 @@ import { makeStyles } from '@mui/styles';
 import { Button, Card } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import Image from 'next/image';
-import CameraImage from '../../../../../public/assets/images/CameraImage.png';
-import FirstImage from './HomeSubBannerComp/FirstImage';
-import SecondImage from './HomeSubBannerComp/SecondImage';
-import ThirdImage from './HomeSubBannerComp/ThirdImage';
+import CameraImage from '../../../../../../public/assets/images/CameraImage.png';
 
 const useStyles = makeStyles((theme) => ({
     Container: {
@@ -29,12 +26,9 @@ const useStyles = makeStyles((theme) => ({
         paddingRight: 29,
         columnGap: 20,
         display: 'flex',
+        alignItems: 'center',
         justifyContent: 'space-between',
         [theme.breakpoints.down('tablet')]: {
-            flexDirection: 'column',
-            rowGap: 20
-        },
-        [theme.breakpoints.down('desktopHD')]: {
             flexDirection: 'column',
             rowGap: 20
         }
@@ -82,7 +76,7 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
         textAlign: 'center',
-        width: 240.48,
+        // width: 240.48,
         height: 112.73,
         background: 'rgba(211, 226, 255, 0.1)',
         border: '1px dashed #9e9e9e',
@@ -92,13 +86,11 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const HomeSubBanner = () => {
+export default function ThirdImage() {
     const classes = useStyles();
     const fileSelect = useRef(null);
-    const fileSelect2 = useRef(null);
 
     const [image, setImage] = useState('');
-    const [image2, setImage2] = useState('');
     const [showNoImage, setShowNoImage] = useState(true);
     const [photoName, setPhotoName] = useState('');
     const [progress, setProgress] = useState(0);
@@ -122,9 +114,7 @@ const HomeSubBanner = () => {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 const response = JSON.parse(xhr.responseText);
                 const response2 = JSON.parse(xhr.responseText);
-
                 setImage(response.secure_url);
-                setImage2(response2.secure_url);
                 setShowNoImage(false);
                 console.log('seputar image', response.secure_url);
                 // const formData = {
@@ -140,54 +130,10 @@ const HomeSubBanner = () => {
         fd.append('file', files);
         xhr.send(fd);
     };
-    const uploadFile2 = (files) => {
-        // const url = `https://tokyofoam.herokuapp.com/api/product/updatePhotoProduct/${idMongoDb}`;
-        const url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUDNAME}/upload`;
-        const xhr = new XMLHttpRequest();
-        const fd = new FormData();
-        xhr.open('POST', url, true);
-        // xhr.open('POST', url, true);
-        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-
-        // Update progress (can be used to show progress indicator)
-        xhr.upload.addEventListener('progress', (e) => {
-            setProgress(Math.round((e.loaded * 100.0) / e.total));
-            console.log(Math.round((e.loaded * 100.0) / e.total));
-        });
-
-        xhr.onreadystatechange = (e) => {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                const response2 = JSON.parse(xhr.responseText);
-
-                setImage2(response2.secure_url);
-                setShowNoImage(false);
-                console.log('seputar image', response2.secure_url);
-                // const formData = {
-                //     photo: response.secure_url
-                // };
-                // dispatch(uploadImage(formData, idMongoDb));
-                // console.log('seputar image', image);
-            }
-        };
-
-        fd.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_UNSIGNED_UPLOAD_PRESET);
-        fd.append('tags', 'browser_upload');
-        fd.append('file', files);
-        xhr.send(fd);
-    };
-
     function handleFiles(files) {
         for (let i = 0; i < files.length; i++) {
             console.log(files[i]);
             uploadFile(files[i]);
-            // handleImage(files[i]);
-            setPhotoName(files[i].name);
-        }
-    }
-    function handleFiles2(files) {
-        for (let i = 0; i < files.length; i++) {
-            console.log(files[i]);
-            uploadFile2(files[i]);
             // handleImage(files[i]);
             setPhotoName(files[i].name);
         }
@@ -201,35 +147,56 @@ const HomeSubBanner = () => {
         }
     };
 
-    const handleEditPicture2 = () => {
-        // const fileinput = document.getElementById('imageInput');
-        // fileinput.click();
-        if (fileSelect2) {
-            fileSelect2.current.click();
-        }
-    };
     console.log(image, 'cek image');
-    console.log(image2, 'cek image 2');
-
     return (
-        <Card>
-            <div className={classes.Container}>
-                <div className={classes.ItemHeader}>
-                    <span className={classes.TextHeader}>Home - Sub Banner</span>
-                </div>
-                <div style={{ width: '100%', border: '1.5px solid #DFE0EB' }}></div>
-                <div className={classes.WrapperItemMain}>
-                    <div className={classes.ItemLeft}>
-                        <FirstImage />
-                    </div>
-                    <div className={classes.ItemRight}>
-                        <SecondImage />
-                        <ThirdImage />
+        <div>
+            {showNoImage === true ? (
+                <div style={{ width: '100%' }}>
+                    <div className={classes.ImageRight2} onClick={handleEditPicture}>
+                        <Image src={CameraImage} alt="Camera Pict" />
                     </div>
                 </div>
-            </div>
-        </Card>
-    );
-};
+            ) : (
+                <div
+                    style={{
+                        width: '100%',
+                        overflow: 'hidden',
+                        borderRadius: 8
+                    }}
+                >
+                    <Image
+                        src={image}
+                        alt="Product Image"
+                        width={240}
+                        height={112}
+                        priority="true"
+                        layout="responsive"
+                    />
+                </div>
+            )}
 
-export default HomeSubBanner;
+            <input
+                type="file"
+                id="imageInput"
+                ref={fileSelect}
+                hidden="hidden"
+                onChange={(e) => handleFiles(e.target.files)}
+            />
+            <div style={{ paddingTop: 10 }}>
+                <Button
+                    style={{
+                        width: 179,
+                        height: 37,
+                        background: '#673AB7',
+                        borderRadius: 12,
+                        textTransform: 'none'
+                    }}
+                    // onClick={() => uploadImage()}
+                    onClick={handleEditPicture}
+                >
+                    <span style={{ fontSize: 14, fontWeight: 600, color: '#FFFFFF' }}>Save</span>
+                </Button>
+            </div>
+        </div>
+    );
+}

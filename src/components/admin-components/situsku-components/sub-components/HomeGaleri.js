@@ -92,7 +92,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const HomeSubBanner = () => {
+const HomeGaleri = () => {
     const classes = useStyles();
     const fileSelect = useRef(null);
     const fileSelect2 = useRef(null);
@@ -215,7 +215,7 @@ const HomeSubBanner = () => {
         <Card>
             <div className={classes.Container}>
                 <div className={classes.ItemHeader}>
-                    <span className={classes.TextHeader}>Home - Sub Banner</span>
+                    <span className={classes.TextHeader}>Home - Galeri</span>
                 </div>
                 <div style={{ width: '100%', border: '1.5px solid #DFE0EB' }}></div>
                 <div className={classes.WrapperItemMain}>
@@ -232,4 +232,4 @@ const HomeSubBanner = () => {
     );
 };
 
-export default HomeSubBanner;
+export default HomeGaleri;

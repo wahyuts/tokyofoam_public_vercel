@@ -64,6 +64,7 @@ function MyApp(props) {
         currentPath === '/admin/customer/detail-ulasan' ||
         currentPath === '/admin/customer/detail-riwayat' ||
         currentPath === '/admin/pesanan' ||
+        currentPath === '/admin/pesanan/rincian-pesanan' ||
         currentPath === '/admin/produk' ||
         currentPath === '/admin/produk/EditProduct' ||
         currentPath === '/admin/produk/tambah-produk' ||

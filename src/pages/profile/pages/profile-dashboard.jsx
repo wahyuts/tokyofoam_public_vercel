@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Container, Typography } from '@mui/material';
 import { makeStyles, withStyles } from '@mui/styles';
 import { Box } from '@mui/system';
+import { getListOrderUserOnUserDashboard } from '../../../redux/actions/dataProductActions';
 
 import MainBlackButton from '../../../utils/re-useable-components/buttons/MainBlackButton';
 import CardComponent from '../component/CardOrderList';
@@ -33,9 +34,6 @@ const useStyles = makeStyles((theme) => ({
             alignItems: 'center',
             flexDirection: 'column'
         },
-        '& .mobile': {
-            display: 'none'
-        },
         '& .username': {
             display: 'flex',
             flexDirection: 'row',
@@ -45,20 +43,24 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.down('mobile')]: {
             display: 'flex',
             width: '100%',
-            flexDirection: 'column',
-
-            alignItems: 'flex-start',
+            alignItems: '',
+            flexDirection: 'center',
             marginBottom: '20px',
             marginTop: '20px',
             '& .desktop': {
                 display: 'flex',
-                alignItems: 'flex-start',
+                alignItems: 'center',
                 flexDirection: 'column'
-            },
-            '& .mobile': {
-                display: 'flex',
-                marginTop: 80
             }
+        }
+    },
+    mobileLabel: {
+        display: 'none',
+        [theme.breakpoints.down('mobile')]: {
+            display: 'flex',
+            alignItems: 'flex-start',
+            marginTop: 55,
+            marginBottom: '40px'
         }
     },
     icon: {
@@ -124,14 +126,17 @@ let arrayForHoldingPosts = [];
 
 const Dashboard = () => {
     const classes = useStyles();
-    const { data_history_order } = useSelector((state) => state.data_history_order);
+    const dispatch = useDispatch();
+    const router = useRouter();
+    const { credentials } = useSelector((state) => state.user);
+    const { listOrderUserInUserDashboard } = useSelector((state) => state.dataProduct);
 
     const [dataToShow, setDataToShow] = useState([]);
     const [next, setNext] = useState(3);
     const [countData, setCountData] = useState(3);
 
     const loopWithSlice = (start, end) => {
-        const slicedPosts = data_history_order?.slice(start, end);
+        const slicedPosts = listOrderUserInUserDashboard?.slice(start, end);
         arrayForHoldingPosts = [...arrayForHoldingPosts, ...slicedPosts];
         setDataToShow(arrayForHoldingPosts);
     };
@@ -145,7 +150,11 @@ const Dashboard = () => {
         setNext(next + postsPerPage);
         setCountData(countData + 3);
     };
+    const handleClickChangePassword = () => {
+        router.push('/change-password-user');
+    };
 
+    useEffect(() => {}, [countData, arrayForHoldingPosts, listOrderUserInUserDashboard]);
     return (
         <article>
             <Head>
@@ -157,24 +166,29 @@ const Dashboard = () => {
                         <div className={'username'}>
                             <Typography>
                                 {' '}
-                                Hello, <u>Mia Artina</u>
+                                Hello, <u>{credentials.nama}</u>
                             </Typography>
                             <i className={`far fa-edit ${classes.editIcon}`}></i>
                         </div>
-                        <Typography mt={'10px'}>mia.artina@gmail.com</Typography>
-                        <Typography mt={'10px'} color="#FF7373">
+                        <Typography mt={'10px'}>{credentials.email}</Typography>
+                        <Typography
+                            mt={'10px'}
+                            color="#FF7373"
+                            style={{ cursor: 'pointer' }}
+                            onClick={handleClickChangePassword}
+                        >
                             <u>Click to change password</u>
                         </Typography>
                     </div>
-                    <div className={'mobile'}>
-                        <p style={{ fontSize: '18px', fontWeight: '600' }}>History</p>
-                    </div>
                 </Box>
+                <div className={classes.mobileLabel}>
+                    <p style={{ fontSize: '18px', fontWeight: '600' }}>History</p>
+                </div>
             </Container>
 
-            <CardComponent dataToRender={dataToShow} />
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-                {countData !== data_history_order.length - 1 && (
+            <CardComponent dataToRender={listOrderUserInUserDashboard} />
+            {/* <div style={{ display: 'flex', justifyContent: 'center' }}>
+                {countData !== listOrderUserInUserDashboard?.length && listOrderUserInUserDashboard?.length > 3 && (
                     <MainBlackButton
                         onClick={() => handleShowMorePosts()}
                         innerContaunerStyle={styles.btnBoxPrimariContainer}
@@ -184,7 +198,7 @@ const Dashboard = () => {
                         Load more
                     </MainBlackButton>
                 )}
-            </div>
+            </div> */}
         </article>
     );
 };

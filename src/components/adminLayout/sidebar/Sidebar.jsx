@@ -41,12 +41,7 @@ export default function Sidebar(props) {
     return (
         <div className={Styles.Sidebar}>
             <div className={Styles.SidebarLogo}>
-                <Image
-                    src={logo}
-                    alt="company logo"
-                    className={Styles.LogoClick}
-                    onClick={() => router.push('/admin')}
-                />
+                <Image src={logo} alt="company logo" className={Styles.LogoClick} onClick={() => router.push('/')} />
             </div>
             <div className={Styles.SidebarItem}>
                 <ul className={Styles.SidebarList}>

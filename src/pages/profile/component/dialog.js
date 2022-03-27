@@ -5,13 +5,14 @@ import { makeStyles } from '@mui/styles';
 
 const style = {
     position: 'absolute',
-    top: '50%',
+    top: '40%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
     bgcolor: 'background.paper',
     p: 3,
     boxShadow: 24,
-    borderRadius: '10px'
+    borderRadius: '10px',
+    minWidth: 600
 };
 
 const useStyles = makeStyles((theme) => ({}));

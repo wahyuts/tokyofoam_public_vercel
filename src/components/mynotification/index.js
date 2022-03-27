@@ -67,7 +67,7 @@ export default function MyNotification() {
 
     const { all_notifications } = useSelector((state) => state.theNotifications);
     const reverseNotif = all_notifications.reverse();
-    console.log('rerer', reverseNotif);
+    // console.log('rerer', reverseNotif);
 
     // const handleClickProfilePage = (e) => {
     //     dispatch(setMainURL('Profile'));
@@ -102,7 +102,7 @@ export default function MyNotification() {
             <div className={classes.mainPopOverShowNotif}>
                 <div className={classes.innerDivContNotif}>
                     <Scroll>
-                        {reverseNotif.map((notify, i) => {
+                        {all_notifications.map((notify, i) => {
                             return (
                                 <div key={i} className="eachDivNotif">
                                     {/* <p style={{ fontSize: 15, color: 'green' }}>{notify.note}</p> */}

@@ -129,7 +129,7 @@ export default function Topbar() {
             <MenuItem onClick={handleMenuClose}>My account</MenuItem>
         </Menu>
     );
-
+    useEffect(() => {}, [credentials.nama]);
     return (
         <div className={Styles.TopNav}>
             <div className={Styles.TopNavSearch}>
@@ -137,7 +137,7 @@ export default function Topbar() {
                 <i className="bx bx-search"></i>
             </div>
             <div className={Styles.WrapperTopNavRight}>
-                <div className={Styles.DropdownBell}>
+                {/* <div className={Styles.DropdownBell}>
                     <Tooltip title="">
                         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                             <Badge badgeContent={17} color="error">
@@ -170,7 +170,7 @@ export default function Topbar() {
                             );
                         })}
                     </Menu>
-                </div>
+                </div> */}
                 <div className={Styles.DropdownBlueCog}>
                     {authenticated ? (
                         <Avatar src={credentials.nama} alt={credentials.nama} className={Styles.LogoAvatar} />

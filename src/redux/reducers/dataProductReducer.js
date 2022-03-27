@@ -9,6 +9,7 @@ import {
     GET_PRODUCT_BY_NAME,
     GET_PRODUCT_BY_ID,
     LOADING_PRODUCT,
+    SET_GET_DATA_USER_ORDER_IN_USER_DASHBOARD,
     SET_CHANGEABLE_PRODUCT_NAME,
     SET_POTONGAN_MEMBERSHIP
 } from '../type';
@@ -22,6 +23,7 @@ const initialState = {
     dataSemuaProductBundling: [],
     dataProductBundlingByPage: [],
     changeable_Product_Name: {},
+    listOrderUserInUserDashboard: [],
     productByName: {},
     productById: {},
     potonganMembership: 0,
@@ -69,6 +71,11 @@ export default function dataProductReducer(state = initialState, action) {
             return {
                 ...state,
                 changeable_Product_Name: action.payload
+            };
+        case SET_GET_DATA_USER_ORDER_IN_USER_DASHBOARD:
+            return {
+                ...state,
+                listOrderUserInUserDashboard: action.payload
             };
         case GET_PRODUCT_BY_NAME:
             return {

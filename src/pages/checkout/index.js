@@ -536,6 +536,8 @@ const Checkout = () => {
                     // totalPrice_plus_shipping_minus_benefit_member: totalPrice_plus_shipping_minus_benefit_member,
                     totalPrice_plus_shipping_minus_benefit_member: TotalMustPay,
                     status_payment: 'Belum Diterima',
+                    no_resi: 'Belum Terinput',
+                    tanggal_start_pengiriman: '',
                     cart: dataProductOnBag
                 };
 
@@ -582,6 +584,8 @@ const Checkout = () => {
                     // totalPrice_plus_shipping_minus_benefit_member: totalPrice_plus_shipping_minus_benefit_member,
                     totalPrice_plus_shipping_minus_benefit_member: TotalMustPay,
                     status_payment: 'Belum Diterima',
+                    no_resi: 'Belum Terinput',
+                    tanggal_start_pengiriman: '',
                     cart: dataProductOnBag
                     // abis const data diatas baru disini fungsi post api nya
                 };
@@ -627,6 +631,8 @@ const Checkout = () => {
                     totalPrice_plus_shipping_minus_benefit_member: TotalMustPay,
                     // totalPrice_plus_shipping_minus_benefit_member: totalPrice_plus_shipping_minus_benefit_member,
                     status_payment: 'Belum Diterima', // Aslinya Sudah Diterima
+                    no_resi: 'Belum Terinput',
+                    tanggal_start_pengiriman: '',
                     cart: dataProductOnBag
                 };
 
@@ -672,6 +678,8 @@ const Checkout = () => {
                     totalPrice_plus_shipping_minus_benefit_member: TotalMustPay,
                     // totalPrice_plus_shipping_minus_benefit_member: totalPrice_plus_shipping_minus_benefit_member,
                     status_payment: 'Belum Diterima', // Aslinya Sudah Diterima
+                    no_resi: 'Belum Terinput',
+                    tanggal_start_pengiriman: '',
                     cart: dataProductOnBag
                     // abis const data diatas baru disini fungsi post api nya
                 };

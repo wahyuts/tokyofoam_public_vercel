@@ -170,7 +170,7 @@ export default function CustomerTable() {
     };
 
     const filteredUsers = applySortFilter(usersDataAll, getComparator(order, orderBy), filterName);
-    // console.log(filteredUsers[5]._id, 'filtered users ')
+    // console.log(filteredUsers, 'filtered users ')
 
     // const handleFilterDate = (createdAt, field) => {
     //     const filteredUsersData = usersDataAll.filter((item) => {
@@ -263,9 +263,9 @@ export default function CustomerTable() {
                                                 key={el}
                                                 tabIndex={-1}
                                                 onClick={() => {
-                                                    dispatch(getDataOrdersById(users._id));
-                                                    console.log(users._id, 'cek id <<<');
-                                                    router.push('/admin/customer/customer-detail');
+                                                    dispatch(getDataOrdersById(users._id, router));
+                                                    console.log(users._id, 'cek id terlempar');
+                                                    // router.push('/admin/customer/customer-detail');
                                                 }}
                                                 style={{ cursor: 'pointer' }}
                                             >

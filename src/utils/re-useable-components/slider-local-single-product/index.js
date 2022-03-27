@@ -64,7 +64,7 @@ const SliderLocalSingleProduct = () => {
 
     const singleProduct2 =
         // <div className={styles.embla__container}>
-        dataProductSingle.map((single, i) => (
+        dataProductSingle?.map((single, i) => (
             <div className={styles.embla__slide} key={i}>
                 <div
                     className={styles.embla__slide__inner}

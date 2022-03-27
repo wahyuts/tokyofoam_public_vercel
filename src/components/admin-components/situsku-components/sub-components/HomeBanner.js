@@ -1,11 +1,12 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { Button, Card } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { useDropzone } from 'react-dropzone';
 import Image from 'next/image';
 import CameraImage from '../../../../../public/assets/images/CameraImage.png';
 import EditIcon from '@mui/icons-material/Edit';
-import { getFontDefinitionFromManifest } from 'next/dist/server/font-utils';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
     Container: {
@@ -23,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
         color: '#474747'
     },
     ItemMain: {
-        position: 'relative',
+        // position: 'relative',
         paddingInline: 44,
         paddingBlock: 12,
         cursor: 'pointer',
@@ -101,30 +102,32 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
         textAlign: 'center',
-        width: 459,
+        width: '100%',
+        // width: 459,
         height: 191,
         background: 'rgba(211, 226, 255, 0.1)',
         border: '1px dashed #9e9e9e',
         borderRadius: 8,
         cursor: 'pointer',
-        position: 'relative',
-        [theme.breakpoints.down('tablet')]: {
-            width: 350
-        }
+        position: 'relative'
+        // [theme.breakpoints.down('tablet')]: {
+        //     width: 350
+        // }
     },
     WrapperUploadDone: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         textAlign: 'center',
-        width: 459,
+        width: '100%',
+        // width: 459,
         height: 191,
         borderRadius: 8,
         cursor: 'pointer',
-        position: 'relative',
-        [theme.breakpoints.down('tablet')]: {
-            width: 350
-        }
+        position: 'relative'
+        // [theme.breakpoints.down('tablet')]: {
+        //     width: 350
+        // }
     },
     BoxInputImageUpload: {
         position: 'relative'
@@ -200,45 +203,136 @@ const useStyles = makeStyles((theme) => ({
     },
     // for image Preview
     ImagePreviewCont: {
-        width: 459,
+        width: '100%',
         height: 191,
         borderRadius: 8,
-        objectFit: 'cover'
+        objectFit: 'fill'
     }
 }));
 const HomeBanner = () => {
+    const fileSelect = useRef(null);
+    const { credentials } = useSelector((state) => state.user);
+    console.log(credentials, 'cek credentials');
     const classes = useStyles();
     const [files, setFiles] = useState([]);
     const [valueTitle, setValueTitle] = useState();
     const [valueSubTitle, setValueSubTitle] = useState();
     const [valueLink, setValueLink] = useState();
-
-    const onDrop = useCallback((acceptedFiles, rejectFiles) => {
+    const [image, setImage] = useState('');
+    const [showNoImage, setShowNoImage] = useState(true);
+    const [photoName, setPhotoName] = useState('');
+    const [progress, setProgress] = useState(0);
+    //fungsi buat setor upload image ke server via HTML Request ke cloudinary langsung
+    const uploadFile = (files) => {
+        // const url = `https://tokyofoam.herokuapp.com/api/product/updatePhotoProduct/${idMongoDb}`;
         const url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUDNAME}/upload`;
-        acceptedFiles.forEach(async (acceptedFile) => {
-            const formData = new FormData();
-            formData.append('file', acceptedFile);
-            formData.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET);
-            const response = await fetch(url, {
-                method: 'post',
-                body: formData
-            });
-            const data = await response.json();
-            console.log(data, 'cek data');
+        const xhr = new XMLHttpRequest();
+        const fd = new FormData();
+        xhr.open('POST', url, true);
+        // xhr.open('POST', url, true);
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
-            setFiles(
-                acceptedFiles.map((file) =>
-                    Object.assign(file, {
-                        preview: URL.createObjectURL(file)
-                    })
-                )
-            );
+        // Update progress (can be used to show progress indicator)
+        xhr.upload.addEventListener('progress', (e) => {
+            setProgress(Math.round((e.loaded * 100.0) / e.total));
+            console.log(Math.round((e.loaded * 100.0) / e.total));
         });
-    }, []);
+
+        xhr.onreadystatechange = (e) => {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+
+                setImage(response.secure_url);
+                setShowNoImage(false);
+                console.log('seputar image', response.secure_url);
+                // const formData = {
+                //     photo: response.secure_url
+                // };
+                // dispatch(uploadImage(formData, idMongoDb));
+                // console.log('seputar image', image);
+            }
+        };
+
+        fd.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_UNSIGNED_UPLOAD_PRESET);
+        fd.append('tags', 'browser_upload');
+        fd.append('file', files);
+        xhr.send(fd);
+    };
+
+    function handleFiles(files) {
+        for (let i = 0; i < files.length; i++) {
+            console.log(files[i]);
+            uploadFile(files[i]);
+            // handleImage(files[i]);
+            setPhotoName(files[i].name);
+        }
+    }
+
+    const handleEditPicture = () => {
+        // const fileinput = document.getElementById('imageInput');
+        // fileinput.click();
+        if (fileSelect) {
+            fileSelect.current.click();
+        }
+    };
+    console.log(image, 'cek image');
+
+    // const onDrop = useCallback((acceptedFiles, rejectFiles) => {
+    //     const url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUDNAME}/upload`;
+    //     const uploadPreset=  'process.env.NEXT_PUBLIC_CLOUDINARY_UNSIGNED_UPLOAD_PRESET';
+    //     acceptedFiles.forEach(async (acceptedFile) => {
+    //         const formData = new FormData();
+    //         formData.append('file', acceptedFile);
+    //         formData.append('upload_preset', uploadPreset);
+    //         const response = await fetch(url, {
+    //             method: 'post',
+    //             body: formData
+    //         });
+    //         const data = await response.json();
+    //         console.log(data, 'cek data');
+
+    //         setFiles(
+    //             acceptedFiles.map((file) =>
+    //                 Object.assign(file, {
+    //                     preview: URL.createObjectURL(file)
+    //                 })
+    //             )
+    //         );
+    //     });
+    // }, []);
+
+    const onDrop = (acceptedFiles) => {
+        setFiles(
+            acceptedFiles.map((file) =>
+                Object.assign(file, {
+                    preview: URL.createObjectURL(file)
+                })
+            )
+        );
+    };
+    const uploadImage = () => {
+        const url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUDNAME}/upload`;
+        const uploadPreset = 'process.env.NEXT_PUBLIC_CLOUDINARY_UNSIGNED_UPLOAD_PRESET';
+
+        files.forEach((file) => {
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', uploadPreset);
+            axios({
+                url: url,
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                data: formData
+            })
+                .then((res) => console.log(res))
+                .catch((err) => console.log(err));
+        });
+    };
 
     const { getRootProps, getInputProps } = useDropzone({
         onDrop,
-        // accept: 'image/webp,image/png',
         accept: 'image/*',
         multiple: false
     });
@@ -277,31 +371,57 @@ const HomeBanner = () => {
                 </div>
                 <div style={{ width: '100%', border: '1.5px solid #DFE0EB' }}></div>
                 <div className={classes.WrapperItemMain}>
-                    {images.length ? (
-                        <div {...getRootProps()} className={classes.ContainerUpload} key={images.id}>
-                            <div className={classes.WrapperUploadDone} {...getRootProps()}>
-                                <input type="text" {...getInputProps()} />
-                                <div className={classes.BoxInputImage}>
-                                    <Image src={CameraImage} alt="Camera Pict" />
-                                    <div>{images}</div>
-                                </div>
-                                {/* <div className={classes.BoxInputImageUpload}>
-                                    <Image src={CameraImage} alt="Camera Pict" className={classes.ImagePreview} />
-                                    <div>{images}</div>
-                                </div> */}
-                            </div>
-                        </div>
-                    ) : (
-                        <div className={classes.ContainerUpload}>
-                            <div className={classes.WrapperUpload} {...getRootProps()}>
-                                <input type="text" {...getInputProps()} />
-                                <div className={classes.BoxInputImage}>
-                                    <Image src={CameraImage} alt="Camera Pict" />
-                                    <div>{images}</div>
+                    <div>
+                        {showNoImage === true ? (
+                            <div style={{ width: '100%' }}>
+                                <div className={classes.ContainerUpload}>
+                                    <div className={classes.WrapperUpload} onClick={handleEditPicture}>
+                                        <Image src={CameraImage} alt="Camera Pict" />
+                                    </div>
                                 </div>
                             </div>
+                        ) : (
+                            <div
+                                style={{
+                                    width: '100%',
+                                    overflow: 'hidden',
+                                    borderRadius: 8
+                                }}
+                            >
+                                <Image
+                                    src={image}
+                                    alt="Product Image"
+                                    width={459}
+                                    height={191}
+                                    priority="true"
+                                    layout="responsive"
+                                />
+                            </div>
+                        )}
+                        <input
+                            type="file"
+                            id="imageInput"
+                            ref={fileSelect}
+                            hidden="hidden"
+                            onChange={(e) => handleFiles(e.target.files)}
+                        />
+                        <div style={{ paddingTop: 10 }}>
+                            <Button
+                                style={{
+                                    width: 179,
+                                    height: 37,
+                                    background: '#673AB7',
+                                    borderRadius: 12,
+                                    textTransform: 'none'
+                                }}
+                                // onClick={() => uploadImage()}
+                                onClick={handleEditPicture}
+                            >
+                                <span style={{ fontSize: 14, fontWeight: 600, color: '#FFFFFF' }}>Save</span>
+                            </Button>
                         </div>
-                    )}
+                    </div>
+
                     <form className={classes.FormControlGroup}>
                         <div className={classes.FormControl}>
                             <div className={classes.ItemTopTitle}>
@@ -354,6 +474,37 @@ const HomeBanner = () => {
                                 required
                             />
                         </div>
+                        <div className={classes.FormControl}>
+                            {/* <div className={classes.ItemTopTitle}>
+                                <span className={classes.TextLink}>Link</span>
+                                <Button style={{ color: 'white' }}>
+                                    <EditIcon sx={{ width: 16, height: 16, color: '#ADADAD' }} />
+                                </Button>
+                            </div>
+                            <textarea
+                                className={classes.InputForm}
+                                style={{ fontSize: 14, fontWeight: 400, color: '#252733' }}
+                                type="text"
+                                value={valueLink}
+                                onChange={(e) => setValueLink(e.target.value)}
+                                placeholder="www.tokyofoam.com/produk?id=12"
+                                required
+                            /> */}
+                        </div>
+                        {/* <div style={{ paddingTop: 20}}>
+                            <Button
+                                style={{
+                                    width: 179,
+                                    height: 37,
+                                    background: '#2C2C2C',
+                                    borderRadius: 12,
+                                    textTransform: 'none'
+                                }}
+                                type="submit"
+                            >
+                                <span style={{ fontSize: 14, fontWeight: 600, color: '#FFFFFF' }}>Save</span>
+                            </Button>
+                        </div> */}
                     </form>
                 </div>
             </div>
@@ -362,3 +513,26 @@ const HomeBanner = () => {
 };
 
 export default HomeBanner;
+
+// {images.length ? (
+//     <div className={classes.ContainerUpload} key={images.id}>
+//         <div className={classes.WrapperUploadDone} {...getRootProps()}>
+//             <input type="text" {...getInputProps()} />
+//             <div className={classes.BoxInputImage}>
+
+//                 <div>{images}</div>
+//             </div>
+
+//         </div>
+//     </div>
+// ) : (
+//     <div className={classes.ContainerUpload}>
+//         <div className={classes.WrapperUpload} {...getRootProps()}>
+//             <input type="text" {...getInputProps()} />
+//             <div className={classes.BoxInputImage}>
+//                 <Image src={CameraImage} alt="Camera Pict" />
+//                 <div>{images}</div>
+//             </div>
+//         </div>
+//     </div>
+// )}

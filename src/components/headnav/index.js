@@ -269,7 +269,8 @@ const Headnav = () => {
         currentPath === '/about-us' || currentPath === '/' ? null : currentPath === '/cart' ||
           currentPath === '/checkout' ||
           currentPath === '/profile' ||
-          currentPath === '/reset-password' ? (
+          currentPath === '/reset-password' ||
+          currentPath === '/change-password-user' ? (
             <div className={classes.slightlyBelowNavbar}>
                 <div className={classes.phoneNumber}>
                     <p className="textURL" style={{ cursor: 'pointer' }} onClick={handleClickHome}>
@@ -342,9 +343,10 @@ const Headnav = () => {
                 {/* <MyIconButton tip="Bag" onClick={handleClickCart}>
                     <BagIcon color="#545454" />
                 </MyIconButton> */}
-                <MyIconButton tip="Notification">
+                {/* <MyIconButton tip="Notification">
                     <NotificationsIcon color="#545454" />
-                </MyIconButton>
+                </MyIconButton> */}
+                <MyNotification />
             </div>
         </div>
     );

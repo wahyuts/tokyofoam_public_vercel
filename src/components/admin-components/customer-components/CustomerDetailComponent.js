@@ -3,25 +3,9 @@ import { makeStyles } from '@mui/styles';
 import crown_logo from '../../../../public/assets/images/Crown.png';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
-
 // mat ui stuff
-import {
-    Card,
-    Table,
-    Stack,
-    Avatar,
-    Button,
-    Checkbox,
-    TableRow,
-    TableBody,
-    TableCell,
-    Container,
-    Typography,
-    TableContainer,
-    TablePagination
-} from '@mui/material';
-import Image from 'next/image';
-import { getAllUsers, getDataOrdersById } from '../../../redux/actions/userActions';
+import { Card, Button, Container } from '@mui/material';
+import { getDataOrdersById } from '../../../redux/actions/userActions';
 
 const useStyles = makeStyles((theme) => ({
     CardTop: {
@@ -158,9 +142,12 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CustomerDetailComponent() {
     const { detailUserOrder } = useSelector((state) => state.user);
+    console.log('LIHHHHHHAT INI', detailUserOrder);
     const { userDataAll } = useSelector((state) => state.user);
-    const [valueNama, setValueNama] = useState(detailUserOrder.nama);
-    const [valueEmail, setValueEmail] = useState(detailUserOrder.email);
+    const dispatch = useDispatch();
+    const classes = useStyles();
+    const [valueNama, setValueNama] = useState(detailUserOrder?.nama);
+    const [valueEmail, setValueEmail] = useState(detailUserOrder?.email);
     const [valueType, setValueType] = useState('');
     const [valueNohp, setValueNohp] = useState('');
     const [valueAlamat, setValueAlamat] = useState('');
@@ -168,12 +155,21 @@ export default function CustomerDetailComponent() {
     const [valueBanyakProduk, setValueBanyakProduk] = useState('');
     const [valueTotalBelanja, setValueTotalBelanja] = useState('');
     const [valueUlasan, setValueUlasan] = useState('');
-    const dispatch = useDispatch();
-    const classes = useStyles();
+    const router = useRouter();
 
-    console.log(detailUserOrder, 'detailUserORder <<<,');
-    console.log(userDataAll, 'userDataAll');
+    const handleClickKembali = () => {
+        router.push('/admin/customer');
+    };
+    const handleClickUlasan = () => {
+        router.push('/admin/customer/detail-ulasan');
+    };
+    const handleClickRiwayat = () => {
+        // dispatch(getDataOrdersById(id))
+        router.push('/admin/customer/detail-riwayat');
+    };
 
+    // Updte function
+    const handleUpdateNama = () => {};
     useEffect(() => {
         setValueNama(detailUserOrder.nama);
         setValueEmail(detailUserOrder.email);
@@ -193,20 +189,7 @@ export default function CustomerDetailComponent() {
         detailUserOrder.total_product,
         detailUserOrder.total_pembelanjaan
     ]);
-
-    const router = useRouter();
-    const handleClickKembali = () => {
-        router.push('/admin/customer');
-    };
-    const handleClickUlasan = () => {
-        router.push('/admin/customer/detail-ulasan');
-    };
-    const handleClickRiwayat = () => {
-        router.push('/admin/customer/detail-riwayat');
-    };
-
-    // Updte function
-    const handleUpdateNama = () => {};
+    console.log(detailUserOrder, 'detailUserORder <<<,');
     return (
         <Container>
             <Card className={classes.CardTop}>
@@ -253,9 +236,16 @@ export default function CustomerDetailComponent() {
                                 type="text"
                                 name="Nama"
                                 placeholder="Maria L"
-                                style={{ fontSize: 14, fontWeight: 600, color: '#252733', border: 'none' }}
+                                style={{
+                                    fontSize: 14,
+                                    fontWeight: 600,
+                                    color: '#252733',
+                                    border: 'none',
+                                    backgroundColor: 'white'
+                                }}
                                 value={valueNama}
                                 onChange={(e) => setValueNama(e.target.value)}
+                                disabled
                             />
                         </div>
                         <div className={classes.ItemType}>
@@ -270,8 +260,10 @@ export default function CustomerDetailComponent() {
                                         fontWeight: 600,
                                         color: '#252733',
                                         border: 'none',
-                                        width: 150
+                                        width: 150,
+                                        backgroundColor: 'white'
                                     }}
+                                    disabled
                                     value={valueType}
                                     onChange={(e) => setValueType(e.target.value)}
                                 />
@@ -285,9 +277,16 @@ export default function CustomerDetailComponent() {
                             type="text"
                             name="Email"
                             placeholder="Maria@gmail.com"
-                            style={{ fontSize: 14, fontWeight: 600, color: '#252733', border: 'none' }}
+                            style={{
+                                fontSize: 14,
+                                fontWeight: 600,
+                                color: '#252733',
+                                border: 'none',
+                                backgroundColor: 'white'
+                            }}
                             value={valueEmail}
                             onChange={(e) => setValueEmail(e.target.value)}
+                            disabled
                         />
                     </div>
                     <div className={classes.ItemNoHp}>
@@ -296,9 +295,16 @@ export default function CustomerDetailComponent() {
                             type="text"
                             placeholder="+6281236006789"
                             name="No Hp"
-                            style={{ fontSize: 14, fontWeight: 600, color: '#252733', border: 'none' }}
+                            style={{
+                                fontSize: 14,
+                                fontWeight: 600,
+                                color: '#252733',
+                                border: 'none',
+                                backgroundColor: 'white'
+                            }}
                             value={valueNohp}
                             onChange={(e) => setValueNohp(e.target.value)}
+                            disabled
                         />
                     </div>
                 </Card>
@@ -310,11 +316,11 @@ export default function CustomerDetailComponent() {
                                 Alamat default
                             </span>
                         </div>
-                        <div className={classes.ItemMiddleRight}>
-                            <Button style={{ width: 114, height: 24.52, background: '#2C2C2C', borderRadius: 5 }}>
+                        {/* <div className={classes.ItemMiddleRight}>
+                            <Button style={{ width: 114, height: 24.52, background: '#2C2C2C', borderRadius: 5 ,}}>
                                 <span className={classes.TextEdit}>Edit & Save</span>
                             </Button>
-                        </div>
+                        </div> */}
                     </div>
                     <hr style={{ width: '100%' }} />
                     <div className={classes.ItemMiddleBottomRight}>
@@ -324,9 +330,18 @@ export default function CustomerDetailComponent() {
                                 input="text"
                                 name="nama"
                                 placeholder="Maria L"
-                                style={{ fontSize: 14, fontWeight: 600, color: '#252733', border: 'none', width: 50 }}
+                                style={{
+                                    fontSize: 14,
+                                    fontWeight: 600,
+                                    color: '#252733',
+                                    border: 'none',
+                                    width: 50,
+                                    backgroundColor: 'white',
+                                    width: 200
+                                }}
                                 value={valueNama}
                                 onChange={(e) => setValueNama(e.target.value)}
+                                disabled
                             />
                         </div>
                         <div className={classes.ItemType} style={{ wordWrap: 'break-word' }}>
@@ -396,7 +411,8 @@ export default function CustomerDetailComponent() {
                                         fontWeight: 600,
                                         color: '#252733',
                                         border: 'none',
-                                        width: 30
+                                        width: 30,
+                                        backgroundColor: 'white'
                                     }}
                                     disabled
                                     value={valueTotalBelanja}
@@ -412,7 +428,13 @@ export default function CustomerDetailComponent() {
                                     IDR
                                 </span>
                                 <input
-                                    style={{ fontSize: 14, fontWeight: 600, color: '#252733', border: 'none' }}
+                                    style={{
+                                        fontSize: 14,
+                                        fontWeight: 600,
+                                        color: '#252733',
+                                        border: 'none',
+                                        backgroundColor: 'white'
+                                    }}
                                     value={valueTelahBelanja}
                                     onChange={(e) => setValueTelahBelanja(e.target.value)}
                                     placeholder="31.000.000"
@@ -498,7 +520,7 @@ export default function CustomerDetailComponent() {
                     </div> */}
                 </Card>
             </form>
-            <div className={classes.ContainerCardMiddle}>
+            {/* <div className={classes.ContainerCardMiddle}>
                 <Card className={classes.CardMiddleLeft}>
                     <div className={classes.MainBoxMiddle}>
                         <div className={classes.ItemBottom}>
@@ -509,7 +531,7 @@ export default function CustomerDetailComponent() {
                         </div>
                     </div>
                 </Card>
-            </div>
+            </div> */}
         </Container>
     );
 }

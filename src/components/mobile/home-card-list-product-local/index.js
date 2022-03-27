@@ -205,7 +205,7 @@ const HomeCardListProductLocal = () => {
                 style={{ width: '90%', marginLeft: 'auto', marginRight: 'auto', justifyContent: 'space-between' }}
             >
                 {/* {dataProduct.map((dataSP) => ( */}
-                {dataProductSingleByPage.map((single) => (
+                {dataProductSingleByPage?.map((single) => (
                     <div className={classes.embla__slide} key={single._id}>
                         <div
                             className={classes.embla__slide__inner}

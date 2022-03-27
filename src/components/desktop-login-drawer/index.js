@@ -362,219 +362,221 @@ const DesktopLoginDrawer = ({ menuOpens, setMenuOpen }) => {
     };
 
     let LoginForm = (
-        <List>
-            <ListItem className={classes.containerLogin}>
-                <p className={classes.text}>Login</p>
-            </ListItem>
-            {/* <form onSubmit={klikLogin}> */}
-            <div className={classes.EmailPassword}>
-                <TextField
-                    label="Email Anda"
-                    size="small"
-                    value={email}
-                    onChange={handleChangeEmail}
-                    fullWidth
-                    style={{ marginBottom: 15 }}
-                />
-                <TextField
-                    label="Masukan Password Anda"
-                    size="small"
-                    type="password"
-                    value={password}
-                    onChange={handleChangePassword}
-                    fullWidth
-                    style={{ marginBottom: 15 }}
-                />
-            </div>
-
-            <div className={classes.checkbox}>
-                <Checkbox style={{ color: '#111' }} />
-                <p> Remember Me</p>
-            </div>
-            <div>
-                <p style={{ fontSize: 15, color: '#FF7373', marginLeft: 20, marginTop: 10 }}>{errors}</p>
-            </div>
-            {loading ? (
-                <div className={classes.loginButton}>
-                    {' '}
-                    <MainBlackButton className={'BlackButton'}> Loading </MainBlackButton>
+        <form onSubmit={klikLogin}>
+            <List>
+                <ListItem className={classes.containerLogin}>
+                    <p className={classes.text}>Login</p>
+                </ListItem>
+                <div className={classes.EmailPassword}>
+                    <TextField
+                        label="Email Anda"
+                        size="small"
+                        value={email}
+                        onChange={handleChangeEmail}
+                        fullWidth
+                        style={{ marginBottom: 15 }}
+                    />
+                    <TextField
+                        label="Masukan Password Anda"
+                        size="small"
+                        type="password"
+                        value={password}
+                        onChange={handleChangePassword}
+                        fullWidth
+                        style={{ marginBottom: 15 }}
+                    />
                 </div>
-            ) : (
-                <div className={classes.loginButton}>
-                    {' '}
-                    <Button
-                        style={{
-                            backgroundColor: '#2C2C2C',
-                            color: '#FFFFFF',
-                            width: '100%',
-                            fontWeight: 600,
-                            textTransform: 'none',
-                            marginTop: 15,
-                            borderRadius: 5
-                        }}
-                        onClick={klikLogin}
-                        // type="submit"
-                    >
-                        LOGIN
-                    </Button>
-                    {/* <MainBlackButton className={'BlackButton'} onClick={klikLogin}>
+
+                <div className={classes.checkbox}>
+                    <Checkbox style={{ color: '#111' }} />
+                    <p> Remember Me</p>
+                </div>
+                <div>
+                    <p style={{ fontSize: 15, color: '#FF7373', marginLeft: 20, marginTop: 10 }}>{errors}</p>
+                </div>
+                {loading ? (
+                    <div className={classes.loginButton}>
+                        {' '}
+                        <MainBlackButton className={'BlackButton'}> Loading </MainBlackButton>
+                    </div>
+                ) : (
+                    <div className={classes.loginButton}>
+                        {' '}
+                        <Button
+                            style={{
+                                backgroundColor: '#2C2C2C',
+                                color: '#FFFFFF',
+                                width: '100%',
+                                fontWeight: 600,
+                                textTransform: 'none',
+                                marginTop: 15,
+                                borderRadius: 5
+                            }}
+                            onClick={klikLogin}
+                            type="submit"
+                        >
+                            LOGIN
+                        </Button>
+                        {/* <MainBlackButton className={'BlackButton'} onClick={klikLogin}>
                         {' '}
                         LOGIN{' '}
                     </MainBlackButton> */}
-                </div>
-            )}
+                    </div>
+                )}
 
-            <div className={classes.textAcc}>
-                <p>
-                    Dont have account ?
-                    <span>
-                        <a className="textColorRed" onClick={onRegisterClick}>
-                            {' '}
-                            <u>Register </u>{' '}
-                        </a>
-                    </span>{' '}
-                </p>
-                <p>
-                    {' '}
-                    Forgot Password?{' '}
-                    <span>
-                        <a className="textColorRed" onClick={onForgotPass}>
-                            <u> Click</u>
-                        </a>
-                    </span>
-                </p>
-            </div>
-            {/* </form> */}
-        </List>
+                <div className={classes.textAcc}>
+                    <p>
+                        Dont have account ?
+                        <span>
+                            <a className="textColorRed" onClick={onRegisterClick}>
+                                {' '}
+                                <u>Register </u>{' '}
+                            </a>
+                        </span>{' '}
+                    </p>
+                    <p>
+                        {' '}
+                        Forgot Password?{' '}
+                        <span>
+                            <a className="textColorRed" onClick={onForgotPass}>
+                                <u> Click</u>
+                            </a>
+                        </span>
+                    </p>
+                </div>
+            </List>
+        </form>
     );
 
     let RegisterForm = (
-        <List>
-            <ListItem className={classes.containerLogin}>
-                <p className={classes.text}>Register</p>
-            </ListItem>
-            {/* <form onSubmit={klikRegister}> */}
-            <div className={classes.EmailPassword}>
-                <TextField
-                    label="Nama"
-                    size="small"
-                    type="text"
-                    value={namaUser}
-                    onChange={handleChangeNamaUser}
-                    fullWidth
-                    style={{ marginBottom: 15 }}
-                />
-                <TextField
-                    label="Alamat lengkap (sesuai KTP)"
-                    size="small"
-                    type="text"
-                    value={regAlamat}
-                    onChange={handleChangeRegAlamat}
-                    fullWidth
-                    style={{ marginBottom: 15 }}
-                />
-                <TextField
-                    label="No Telp"
-                    size="small"
-                    type="number"
-                    value={regNoHandphone}
-                    onChange={handleChangeRegNoHandphone}
-                    fullWidth
-                    style={{ marginBottom: 15 }}
-                />
-                <div style={{ marginBottom: 15 }}>
-                    {/* <AutoCompleteProvince /> */}
-                    <AutoCompleteProvinceLogreg />
-                </div>
-                <div style={{ marginBottom: 15 }}>
-                    {/* <DropdownKabupaten /> */}
-                    <DropdownKabupatenLogreg />
-                </div>
-                <div style={{ marginBottom: 15 }}>
-                    <DropdownKecamatanLogreg />
-                </div>
-                <TextField
-                    label="Email"
-                    size="small"
-                    type="text"
-                    value={regEmail}
-                    onChange={handleChangeRegEmail}
-                    fullWidth
-                    style={{ marginBottom: 15 }}
-                />
-                <TextField
-                    label="Password"
-                    size="small"
-                    type="password"
-                    value={regPassword}
-                    onChange={handleChangeRegPassword}
-                    fullWidth
-                    style={{ marginBottom: 15 }}
-                />
-                <TextField
-                    label="Confirm Password"
-                    size="small"
-                    type="password"
-                    value={confirmPassword}
-                    onChange={handleChangeConfirmPassword}
-                    fullWidth
-                    style={{ marginBottom: 15 }}
-                />
-            </div>
-            {/* </form> */}
-            <div>
-                <p style={{ fontSize: 15, color: '#FF7373', marginLeft: 20, marginTop: 10 }}>{errors_register}</p>
-            </div>
+        <form onSubmit={klikRegister}>
+            <List>
+                <ListItem className={classes.containerLogin}>
+                    <p className={classes.text}>Register</p>
+                </ListItem>
+                <div className={classes.EmailPassword}>
+                    <TextField
+                        label="Nama"
+                        size="small"
+                        type="text"
+                        value={namaUser}
+                        onChange={handleChangeNamaUser}
+                        fullWidth
+                        style={{ marginBottom: 15 }}
+                    />
+                    <TextField
+                        label="Alamat"
+                        size="small"
+                        type="text"
+                        value={regAlamat}
+                        onChange={handleChangeRegAlamat}
+                        fullWidth
+                        style={{ marginBottom: 15 }}
+                    />
+                    <TextField
+                        label="No Telp"
+                        size="small"
+                        type="number"
+                        value={regNoHandphone}
+                        onChange={handleChangeRegNoHandphone}
+                        fullWidth
+                        style={{ marginBottom: 15 }}
+                    />
+                    <div style={{ marginBottom: 15 }}>
+                        {/* <AutoCompleteProvince /> */}
+                        <AutoCompleteProvinceLogreg />
+                    </div>
+                    <div style={{ marginBottom: 15 }}>
+                        {/* <DropdownKabupaten /> */}
+                        <DropdownKabupatenLogreg />
+                    </div>
+                    <div style={{ marginBottom: 15 }}>
+                        <DropdownKecamatanLogreg />
+                    </div>
 
-            {loading ? (
-                <div className={classes.loginButton}>
-                    {' '}
-                    <MainBlackButton className={'BlackButton'}> Loading </MainBlackButton>
+                    <TextField
+                        label="Email"
+                        size="small"
+                        type="text"
+                        value={regEmail}
+                        onChange={handleChangeRegEmail}
+                        fullWidth
+                        style={{ marginBottom: 15 }}
+                    />
+                    <TextField
+                        label="Password"
+                        size="small"
+                        type="password"
+                        value={regPassword}
+                        onChange={handleChangeRegPassword}
+                        fullWidth
+                        style={{ marginBottom: 15 }}
+                    />
+                    <TextField
+                        label="Confirm Password"
+                        size="small"
+                        type="password"
+                        value={confirmPassword}
+                        onChange={handleChangeConfirmPassword}
+                        fullWidth
+                        style={{ marginBottom: 15 }}
+                    />
                 </div>
-            ) : (
-                <div className={classes.loginButton}>
-                    {' '}
-                    <Button
-                        style={{
-                            backgroundColor: '#2C2C2C',
-                            color: '#FFFFFF',
-                            width: '100%',
-                            fontWeight: 600,
-                            textTransform: 'none',
-                            marginTop: 15,
-                            borderRadius: 5
-                        }}
-                        onClick={klikRegister}
-                    >
-                        REGISTER
-                    </Button>
-                    {/* <MainBlackButton className={'BlackButton'} onClick={klikRegister}>
+                <div>
+                    <p style={{ fontSize: 15, color: '#FF7373', marginLeft: 20, marginTop: 10 }}>{errors_register}</p>
+                </div>
+
+                {loading ? (
+                    <div className={classes.loginButton}>
+                        {' '}
+                        <MainBlackButton className={'BlackButton'}> Loading </MainBlackButton>
+                    </div>
+                ) : (
+                    <div className={classes.loginButton}>
+                        {' '}
+                        <Button
+                            style={{
+                                backgroundColor: '#2C2C2C',
+                                color: '#FFFFFF',
+                                width: '100%',
+                                fontWeight: 600,
+                                textTransform: 'none',
+                                marginTop: 15,
+                                borderRadius: 5
+                            }}
+                            type="submit"
+                            onClick={klikRegister}
+                        >
+                            Submit
+                        </Button>
+                        {/* <MainBlackButton className={'BlackButton'} onClick={klikRegister}>
                         {' '}
                         REGISTER{' '}
                     </MainBlackButton> */}
-                </div>
-            )}
+                    </div>
+                )}
 
-            {/* <div className={classes.loginButton}>
+                {/* <div className={classes.loginButton}>
                 {' '}
                 <MainBlackButton className={'BlackButton'} onClick={klikRegister}>
-                    {' '}
-                    REGISTER{' '}
+                {' '}
+                REGISTER{' '}
                 </MainBlackButton>
             </div> */}
-            <div className={classes.textAcc}>
-                <p>
-                    {' '}
-                    Have an account ?
-                    <span>
-                        <a className="textColorRed" onClick={() => setRegister(false)}>
-                            {' '}
-                            <u>Login</u>{' '}
-                        </a>
-                    </span>{' '}
-                </p>
-            </div>
-        </List>
+                <div className={classes.textAcc}>
+                    <p>
+                        {' '}
+                        Have an account ?
+                        <span>
+                            <a className="textColorRed" onClick={() => setRegister(false)}>
+                                {' '}
+                                <u>Login</u>{' '}
+                            </a>
+                        </span>{' '}
+                    </p>
+                </div>
+            </List>
+        </form>
     );
 
     let ChangePassword = (

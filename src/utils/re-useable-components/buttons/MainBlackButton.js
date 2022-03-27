@@ -66,6 +66,17 @@ const useStyles = makeStyles(() => ({
             marginTop: 15,
             borderRadius: 5
         },
+        '& .BorderWhiteButton2': {
+            backgroundColor: '#FFFFFF',
+            border: '1px solid #474747',
+            borderWidht: '1px',
+            color: '#2C2C2C',
+            width: '100%',
+            fontWeight: 600,
+            textTransform: 'none',
+            marginTop: 15,
+            borderRadius: 5
+        },
 
         '& .BorderBlueButton': {
             backgroundColor: '#FFFFFF',

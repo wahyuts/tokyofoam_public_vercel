@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
 import {
     Paper,
     Stack,
@@ -16,8 +17,24 @@ import { makeStyles } from '@mui/styles';
 
 import ButtonComponent from './component/button';
 import setPesanan from './redux/action/simple-action';
+import MainBlackButton from '../../../utils/re-useable-components/buttons/MainBlackButton';
+import { getAllOrderForAdminDashboard } from '../../../redux/actions/dataHistoryOrderAction';
 
-const useStyles = makeStyles((theme) => ({}));
+const useStyles = makeStyles((theme) => ({
+    table: {
+        minWidth: 650
+    },
+    tableContainer: {
+        // borderRadius: 15,
+        marginTop: 10,
+        marginBottom: 10
+    },
+    tableHeaderCell: {
+        fontWeight: 'bold',
+        backgroundColor: '#5E35B1',
+        color: 'white'
+    }
+}));
 
 const columns = [
     { id: 'no_pesanan', label: 'No Pesanan', minWidth: 170 },
@@ -195,9 +212,13 @@ const rows = [
 
 export default function Pesanan() {
     const classes = useStyles();
+    const router = useRouter();
     const dispatch = useDispatch();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const { all_order_for_admin } = useSelector((state) => state.data_history_order);
+
+    console.log('all ORDER FOR ADMIN', all_order_for_admin);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -207,6 +228,10 @@ export default function Pesanan() {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
+
+    React.useEffect(() => {
+        dispatch(getAllOrderForAdminDashboard());
+    }, [dispatch]);
 
     return (
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
@@ -224,43 +249,91 @@ export default function Pesanan() {
                     <ButtonComponent variant="contained" label="Tambah" color="#673AB7" textColor="#ffffff" />
                 </Stack>
             </div>
-            <TableContainer sx={{ maxHeight: 440 }}>
-                <Table stickyHeader aria-label="sticky table">
-                    <TableHead>
-                        <TableRow>
-                            {columns.map((column) => (
-                                <TableCell key={column.id} align={column.align} style={{ minWidth: column.minWidth }}>
-                                    {column.label}
+
+            <TableContainer className={classes.tableContainer} component={Paper}>
+                {/* <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
+                    <div style={{ width: 186, marginTop: 10, marginRight: 10 }}>
+                        <MainBlackButton className={'PurpleButton'}>Tambah</MainBlackButton>
+                        <hr style={{ border: 'none', height: 20 }} />
+                    </div>
+                </div> */}
+
+                <div>
+                    <Table className={classes.table} aria-label="simple table">
+                        {/**Table Head menggambarkan header dari tabelnya (hanya 1 baris dan 1 kolom) */}
+                        <TableHead>
+                            {/**TableRow sama dengan barisnya */}
+                            {/**TableCell sama dengan kolomnya */}
+                            {/**Arti TableCell didlam satu table row ini adalah... dalam 1 baris mempunyaii 7 kolom(karena cell ada 7) */}
+                            <TableRow>
+                                <TableCell className={classes.tableHeaderCell}>
+                                    <p style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }}>No Pesanan</p>
                                 </TableCell>
-                            ))}
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                            return (
-                                <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                                    {columns.map((column) => {
-                                        const value = row[column.id];
-                                        return (
-                                            <TableCell key={column.id} align={column.align}>
-                                                <div onClick={() => dispatch(setPesanan('rincianPesanan'))}>
-                                                    {column.format && typeof value === 'number'
-                                                        ? column.format(value)
-                                                        : value}
-                                                </div>
-                                            </TableCell>
-                                        );
-                                    })}
-                                </TableRow>
-                            );
-                        })}
-                    </TableBody>
-                </Table>
+                                <TableCell className={classes.tableHeaderCell}>
+                                    <p style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }}>Nama Pembeli</p>
+                                </TableCell>
+                                <TableCell className={classes.tableHeaderCell}>
+                                    <p style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }}>
+                                        Tanggal Pembelian
+                                    </p>
+                                </TableCell>
+                                <TableCell className={classes.tableHeaderCell}>
+                                    <p style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }}>Expedisi</p>
+                                </TableCell>
+                                <TableCell className={classes.tableHeaderCell}>
+                                    <p style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }}>Ho Handphone</p>
+                                </TableCell>
+                                <TableCell className={classes.tableHeaderCell}>
+                                    <p style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }}>Total Bayar</p>
+                                </TableCell>
+                                <TableCell className={classes.tableHeaderCell}>
+                                    <p style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }}>Status Payment</p>
+                                </TableCell>
+                                <TableCell className={classes.tableHeaderCell}>
+                                    <p style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }}>No Resi</p>
+                                </TableCell>
+                            </TableRow>
+                        </TableHead>
+                        {/**TableBody menggambarkan content tabelnya (bawahnya header tabel) */}
+                        {/*dataProduct*/}
+                        {/**  router.push(`/product-page/${single.title}`); */}
+                        <TableBody>
+                            {all_order_for_admin
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((row) => (
+                                    // {dataProduct.map((row) => (
+                                    <TableRow
+                                        key={row._id}
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                        style={{ cursor: 'pointer' }}
+                                        onClick={() => {
+                                            console.log('IDDDDD', row._id);
+                                            // dispatch(getProductById(row._id));
+                                            // router.push(`/admin/pesanan/rincian-pesanan`);
+                                            dispatch(setPesanan('rincianPesanan'));
+                                        }}
+                                    >
+                                        {/**Avatar ini nanti ganti sama image */}
+                                        <TableCell>{row._id}</TableCell>
+                                        <TableCell>{row.nama_pembeli}</TableCell>
+                                        <TableCell>{row.tanggal_pembelian}</TableCell>
+                                        <TableCell>{row.expedisi}</TableCell>
+                                        <TableCell>{row.no_handphone}</TableCell>
+                                        <TableCell>{row.totalPrice_plus_shipping_minus_benefit_member}</TableCell>
+                                        <TableCell>{row.status_payment}</TableCell>
+                                        <TableCell>
+                                            <p>Ini ro resi harusnya</p>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                        </TableBody>
+                    </Table>
+                </div>
             </TableContainer>
             <TablePagination
                 rowsPerPageOptions={[10, 25, 100]}
                 component="div"
-                count={rows.length}
+                count={all_order_for_admin.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}

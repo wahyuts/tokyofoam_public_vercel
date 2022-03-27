@@ -7,6 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import { useDispatch, useSelector } from 'react-redux';
 import { setProfile } from '../../../redux/actions/urlOnProfileButtonTabAction';
+import { SET_PROFILE_LOGOUT } from '../../../types';
 
 function stringToColor(string) {
     let hash = 0;
@@ -33,13 +34,15 @@ function stringAvatar(name) {
         sx: {
             bgcolor: stringToColor(name)
         },
-        children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`
+        // children: `${name?.split(' ')[0][0]}${name?.split(' ')[1]?[0] ? name?.split(' ')[1][0] : ''}
+        children: `${name?.split(' ')[0][0]}`
     };
 }
 
 export default function AccountMenu() {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const { tab_menu_list } = useSelector((state) => state.url_profile);
+    const { credentials } = useSelector((state) => state.user);
     const dispatch = useDispatch();
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -48,6 +51,8 @@ export default function AccountMenu() {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    console.log(credentials);
     return (
         <React.Fragment>
             <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
@@ -60,7 +65,7 @@ export default function AccountMenu() {
                         aria-haspopup="true"
                         aria-expanded={open ? 'true' : undefined}
                     >
-                        <Avatar {...stringAvatar('Mia Artina')} />
+                        <Avatar {...stringAvatar(credentials?.nama ? credentials?.nama : 'user')} />
                     </IconButton>
                 </Tooltip>
             </Box>
@@ -103,6 +108,7 @@ export default function AccountMenu() {
                         {`${item.label}`}
                     </MenuItem>
                 ))}
+                <MenuItem onClick={() => dispatch(setProfile(SET_PROFILE_LOGOUT))}>{`${SET_PROFILE_LOGOUT}`}</MenuItem>
             </Menu>
         </React.Fragment>
     );

@@ -4,6 +4,7 @@ import Rating from '@mui/material/Rating';
 import { useSelector } from 'react-redux';
 
 import { makeStyles } from '@mui/styles';
+import dayjs from 'dayjs';
 
 const useStyles = makeStyles((theme) => ({
     ContainerCard: {
@@ -48,6 +49,7 @@ const useStyles = makeStyles((theme) => ({
     },
     ReviewText: {
         paddingLeft: 10,
+        minHeight: 80,
         display: 'flex',
         flexDirection: 'column'
     },
@@ -74,93 +76,38 @@ export default function TabCard() {
     const { review_comment } = useSelector((state) => state.theComment);
 
     // NANTI MAPPING NYA PAKE YANG Variable threeTopComment
-    const threeTopComment = review_comment.slice(0, 2);
-    console.log('review', review_comment);
-    console.log('review TERATAS', threeTopComment);
+    const threeTopComment = review_comment.slice(0, 3);
+    // console.log('review', review_comment);
+    // console.log('review TERATAS', threeTopComment);
 
     return (
         <div className={classes.ContainerCard}>
             <div className={classes.WrapperCard}>
-                <div className={classes.CardItem}>
-                    <div className={classes.ReviewName}>
-                        <Avatar>MI</Avatar>
-                        <span className={classes.TextRectangleInside}> Mika Liana </span>
-                    </div>
-                    <hr style={{ border: 'none', marginBottom: 15 }} />
-                    {/* <div className={classes.RatingReview}>
-                        <Rating
-                            size="small"
-                            value={value}
-                            onChange={(event, newValues) => {
-                                setValue(newValues);
-                            }}
-                        />
-                    </div> */}
-                    <div className={classes.ReviewText}>
-                        <label className={classes.TextLabel}>Lorem Ipsum</label>
-                        <span className={classes.TextSpan}>Lorem ipsum dolor sit amet</span>
-                    </div>
-                    <div style={{ width: '100%', marginTop: 15 }}>
-                        <hr />
-                    </div>
-                    <div className={classes.ReviewText}>
-                        <span className={classes.TextMonth}>1 Month ago</span>
-                    </div>
-                </div>
-                <div className={classes.CardItem}>
-                    <div className={classes.ReviewName}>
-                        <Avatar>JL</Avatar>
-                        <span className={classes.TextRectangleInside}> Joshua Telderon </span>
-                    </div>
-                    <hr style={{ border: 'none', marginBottom: 15 }} />
+                {threeTopComment.map((theComment, i) => {
+                    return (
+                        <div className={classes.CardItem} key={i}>
+                            <div className={classes.ReviewName}>
+                                <Avatar alt={theComment.nama_user} src="." />
 
-                    {/* <div className={classes.RatingReview}>
-                        <Rating
-                            size="small"
-                            value={value}
-                            onChange={(event, newValues) => {
-                                setValue(newValues);
-                            }}
-                        />
-                    </div> */}
-                    <div className={classes.ReviewText}>
-                        <label className={classes.TextLabel}>Lorem Ipsum</label>
-                        <span className={classes.TextSpan}>Lorem ipsum dolor sit amet</span>
-                    </div>
-                    <div style={{ width: '100%', marginTop: 15 }}>
-                        <hr />
-                    </div>
-                    <div className={classes.ReviewText}>
-                        <span className={classes.TextMonth}>1 Month ago</span>
-                    </div>
-                </div>
-                <div className={classes.CardItem}>
-                    <div className={classes.ReviewName}>
-                        <Avatar>KW</Avatar>
-                        <span className={classes.TextRectangleInside}> Kwang Soo </span>
-                    </div>
-                    <hr style={{ border: 'none', marginBottom: 15 }} />
+                                <span className={classes.TextRectangleInside}> {`${theComment.nama_user}`} </span>
+                            </div>
+                            <hr style={{ border: 'none', marginBottom: 15 }} />
 
-                    {/* <div className={classes.RatingReview}>
-                        <Rating
-                            size="small"
-                            value={value}
-                            onChange={(event, newValues) => {
-                                setValue(newValues);
-                            }}
-                        />
-                    </div> */}
-                    <div className={classes.ReviewText}>
-                        <label className={classes.TextLabel}>Lorem Ipsum</label>
-                        <span className={classes.TextSpan}>Lorem ipsum dolor sit amet</span>
-                    </div>
-                    <div style={{ width: '100%', marginTop: 15 }}>
-                        <hr />
-                    </div>
-                    <div className={classes.ReviewText}>
-                        <span className={classes.TextMonth}>1 Month ago</span>
-                    </div>
-                </div>
+                            <div className={classes.ReviewText}>
+                                {/* <label className={classes.TextLabel}>Lorem Ipsum</label> */}
+                                <span className={classes.TextSpan}>{`${theComment.comment}`}</span>
+                            </div>
+                            <div style={{ width: '100%', marginTop: 15 }}>
+                                <hr />
+                            </div>
+                            <div className={classes.ReviewText}>
+                                <span className={classes.TextMonth}>
+                                    {dayjs(theComment.createdAt).format('DD MMMM YYYY')}
+                                </span>
+                            </div>
+                        </div>
+                    );
+                })}
             </div>
         </div>
     );

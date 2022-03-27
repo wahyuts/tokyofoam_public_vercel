@@ -14,6 +14,7 @@ import { makeStyles } from '@mui/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import MainBlackButton from '../../../utils/re-useable-components/buttons/MainBlackButton';
 import { getProductById, goToDetailProductPageLocal } from '../../../redux/actions/dataProductActions';
+import { TablePagination } from '@mui/material';
 
 const useStyles = makeStyles((theme) => ({
     table: {
@@ -35,6 +36,8 @@ const ProductListTable = () => {
     const classes = useStyles();
     const router = useRouter();
     const dispatch = useDispatch();
+    const [page, setPage] = React.useState(0);
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const { dataProduct } = useSelector((state) => state.dataProduct);
 
     const handleClickTambah = () => {
@@ -43,6 +46,15 @@ const ProductListTable = () => {
 
     const handleClickGoEdit = () => {
         router.push(`/admin/produk/EditProduct`);
+    };
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(+event.target.value);
+        setPage(0);
     };
 
     let product_list = [
@@ -104,119 +116,108 @@ const ProductListTable = () => {
     ];
 
     return (
-        <TableContainer className={classes.tableContainer} component={Paper}>
-            <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
-                <div style={{ width: 186, marginTop: 10, marginRight: 10 }}>
-                    <MainBlackButton className={'PurpleButton'} onClick={handleClickTambah}>
-                        Tambah
-                    </MainBlackButton>
-                    <hr style={{ border: 'none', height: 20 }} />
+        <>
+            <TableContainer className={classes.tableContainer} component={Paper}>
+                <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
+                    <div style={{ width: 186, marginTop: 10, marginRight: 10 }}>
+                        <MainBlackButton className={'PurpleButton'} onClick={handleClickTambah}>
+                            Tambah
+                        </MainBlackButton>
+                        <hr style={{ border: 'none', height: 20 }} />
+                    </div>
                 </div>
-            </div>
 
-            <div>
-                <Table className={classes.table} aria-label="simple table">
-                    {/**Table Head menggambarkan header dari tabelnya (hanya 1 baris dan 1 kolom) */}
-                    <TableHead>
-                        {/**TableRow sama dengan barisnya */}
-                        {/**TableCell sama dengan kolomnya */}
-                        {/**Arti TableCell didlam satu table row ini adalah... dalam 1 baris mempunyaii 7 kolom(karena cell ada 7) */}
-                        <TableRow>
-                            <TableCell className={classes.tableHeaderCell}>
-                                <p style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }}>Foto</p>
-                            </TableCell>
-                            <TableCell className={classes.tableHeaderCell}>
-                                <p style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }}>Nama Produk</p>
-                            </TableCell>
-                            <TableCell className={classes.tableHeaderCell}>
-                                <p style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }}>ID Produk</p>
-                            </TableCell>
-                            <TableCell className={classes.tableHeaderCell}>
-                                <p style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }}>Type Produk</p>
-                            </TableCell>
-                            <TableCell className={classes.tableHeaderCell}>
-                                <p style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }}>Harga</p>
-                            </TableCell>
-                            <TableCell className={classes.tableHeaderCell}>
-                                <p style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }}>Harga Promo</p>
-                            </TableCell>
-                            <TableCell className={classes.tableHeaderCell}>
-                                <p style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }}>Tanggal Input</p>
-                            </TableCell>
-                            <TableCell className={classes.tableHeaderCell}>
-                                <p style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }}>Status Produk</p>
-                            </TableCell>
-                        </TableRow>
-                    </TableHead>
-                    {/**TableBody menggambarkan content tabelnya (bawahnya header tabel) */}
-                    {/*dataProduct*/}
-                    {/**  router.push(`/product-page/${single.title}`); */}
-                    <TableBody>
-                        {dataProduct.map((row) => (
-                            <TableRow key={row._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                <TableCell style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                    {/* <Avatar alt={row.photo} src="." /> */}
-                                    {/* {row.photo} */}
-                                    <div style={{ minHeight: 50, width: '100%' }}>
-                                        <Image
-                                            src={row.photo}
-                                            alt="Product"
-                                            width={100}
-                                            height={100}
-                                            priority="true"
-                                            layout="responsive"
-                                            objectFit="fill"
-                                        />
-                                    </div>
-                                </TableCell>{' '}
-                                {/**Avatar ini nanti ganti sama image */}
-                                <TableCell
+                <div>
+                    <Table className={classes.table} aria-label="simple table">
+                        {/**Table Head menggambarkan header dari tabelnya (hanya 1 baris dan 1 kolom) */}
+                        <TableHead>
+                            {/**TableRow sama dengan barisnya */}
+                            {/**TableCell sama dengan kolomnya */}
+                            {/**Arti TableCell didlam satu table row ini adalah... dalam 1 baris mempunyaii 7 kolom(karena cell ada 7) */}
+                            <TableRow>
+                                <TableCell className={classes.tableHeaderCell}>
+                                    <p style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }}>Foto</p>
+                                </TableCell>
+                                <TableCell className={classes.tableHeaderCell}>
+                                    <p style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }}>Nama Produk</p>
+                                </TableCell>
+                                <TableCell className={classes.tableHeaderCell}>
+                                    <p style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }}>ID Produk</p>
+                                </TableCell>
+                                <TableCell className={classes.tableHeaderCell}>
+                                    <p style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }}>Type Produk</p>
+                                </TableCell>
+                                <TableCell className={classes.tableHeaderCell}>
+                                    <p style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }}>Harga</p>
+                                </TableCell>
+                                <TableCell className={classes.tableHeaderCell}>
+                                    <p style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }}>Harga Promo</p>
+                                </TableCell>
+                                <TableCell className={classes.tableHeaderCell}>
+                                    <p style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }}>Tanggal Input</p>
+                                </TableCell>
+                                <TableCell className={classes.tableHeaderCell}>
+                                    <p style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }}>Status Produk</p>
+                                </TableCell>
+                            </TableRow>
+                        </TableHead>
+                        {/**TableBody menggambarkan content tabelnya (bawahnya header tabel) */}
+                        {/*dataProduct*/}
+                        {/**  router.push(`/product-page/${single.title}`); */}
+                        <TableBody>
+                            {dataProduct.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+                                // {dataProduct.map((row) => (
+                                <TableRow
+                                    key={row._id}
+                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                     style={{ cursor: 'pointer' }}
                                     onClick={() => {
-                                        // dispatch(
-                                        //     goToDetailProductPageLocal({
-                                        //         id: row._id,
-                                        //         product_id: row.product_id,
-                                        //         meta_key: row.meta_key,
-                                        //         meta_Desc: row.meta_desc,
-                                        //         title: row.title,
-                                        //         image: row.photo,
-                                        //         price: row.price,
-                                        //         promo_price: row.promo_price,
-                                        //         type: row.type,
-                                        //         material: row.material,
-                                        //         size: {
-                                        //             length: row.size.length,
-                                        //             width_or_diameter: row.size.width_or_diameter
-                                        //         },
-                                        //         rating: row.rating,
-                                        //         weight: row.weight,
-                                        //         desc: row.desc,
-                                        //         status_stok: row.status_stok
-                                        //     })
-                                        // );
                                         console.log('IDDDDD', row._id);
                                         dispatch(getProductById(row._id));
                                         router.push(`/admin/produk/EditProduct`);
                                     }}
                                 >
-                                    {row.title}
-                                </TableCell>
-                                <TableCell>{row.product_id}</TableCell>
-                                <TableCell>{row.type}</TableCell>
-                                <TableCell>{row.price}</TableCell>
-                                <TableCell>{row.promo_price}</TableCell>
-                                <TableCell>{row.createdAt}</TableCell>
-                                <TableCell>{row.status_stok}</TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </div>
-        </TableContainer>
-        // <div>
-        //     <p>jajal</p>
-        // </div>
+                                    <TableCell
+                                        style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                                    >
+                                        {/* <Avatar alt={row.photo} src="." /> */}
+                                        {/* {row.photo} */}
+                                        <div style={{ minHeight: 50, width: '100%' }}>
+                                            <Image
+                                                src={row.photo}
+                                                alt="Product"
+                                                width={100}
+                                                height={100}
+                                                priority="true"
+                                                layout="responsive"
+                                                objectFit="fill"
+                                            />
+                                        </div>
+                                    </TableCell>{' '}
+                                    {/**Avatar ini nanti ganti sama image */}
+                                    <TableCell>{row.title}</TableCell>
+                                    <TableCell>{row.product_id}</TableCell>
+                                    <TableCell>{row.type}</TableCell>
+                                    <TableCell>{row.price}</TableCell>
+                                    <TableCell>{row.promo_price}</TableCell>
+                                    <TableCell>{row.createdAt}</TableCell>
+                                    <TableCell>{row.status_stok}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </div>
+            </TableContainer>
+            <TablePagination
+                rowsPerPageOptions={[10, 25, 100]}
+                component="div"
+                count={dataProduct.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+        </>
     );
 };
 

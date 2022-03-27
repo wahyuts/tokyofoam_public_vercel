@@ -370,14 +370,14 @@ export default function MenuDrawer() {
                         <ListItemText style={{ marginLeft: 13 }}>Contact Us</ListItemText>
                     </ListItem>
                 </div>
-                <div style={{ marginTop: '30%' }}>
+                {/* <div style={{ marginTop: '30%' }}>
                     <ListItem button onClick={handleClickWishlistPage}>
                         <div style={{ display: 'flex', alignItems: 'center', marginLeft: 13 }}>
                             <WhistlistIcon style={{ marginRight: 10 }} />
                             <ListItemText style={{ marginTop: 6 }}>Whislist</ListItemText>
                         </div>
                     </ListItem>
-                </div>
+                </div> */}
             </List>
             <ListItem button onClick={goToSignInLeftDrawer}>
                 <div style={{ display: 'flex', alignItems: 'center', marginLeft: 13 }}>
@@ -426,12 +426,12 @@ export default function MenuDrawer() {
                     </ListItem>
                 </div>
                 <div style={{ marginTop: '30%' }}>
-                    <ListItem button onClick={handleClickWishlistPage}>
+                    {/* <ListItem button onClick={handleClickWishlistPage}>
                         <div style={{ display: 'flex', alignItems: 'center', marginLeft: 13 }}>
                             <WhistlistIcon style={{ marginRight: 10 }} />
                             <ListItemText style={{ marginTop: 6 }}>Whislist</ListItemText>
                         </div>
-                    </ListItem>
+                    </ListItem> */}
                     <ListItem button onClick={handleClickProfilePage}>
                         <div style={{ display: 'flex', alignItems: 'center', marginLeft: 13 }}>
                             <ProfileIcon style={{ marginRight: 10 }} />

@@ -234,6 +234,8 @@ const PostBundlingProduct = ({ defaultImage }) => {
                 // };
                 // dispatch(uploadImage(formData, idMongoDb));
                 // console.log('seputar image', image);
+            } else {
+                alert('Tidak Bisa Upload! Koneksi Jaringan Anda Tidak Stabil!');
             }
         };
 

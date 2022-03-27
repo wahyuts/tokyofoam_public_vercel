@@ -272,8 +272,42 @@ export const resetPassword = (newUserData, router) => async (dispatch) => {
             localStorage.removeItem('ResetToken');
         }
     } catch (error) {
-        dispatch({ type: SET_ERRORS, payload: error.response.data.message });
+        // dispatch({ type: SET_ERRORS, payload: error.response.data.message });
+        if (error.response.status === 400) {
+            dispatch({ type: STOP_LOADING_UI });
+            alert(`${error.response.data.message}`);
+        }
+        console.log('ERROR', error);
     }
+};
+
+//Change password khusus yang dari user dashboard
+export const changePasswordSpecial = (newUserData, router) => async (dispatch) => {
+    const API = 'https://tokyofoam.herokuapp.com/api/auth/resetPassword';
+    try {
+        await dispatch({ type: LOADING_UI });
+        getAuthorizationHeaderTokenUser();
+        const results = await axios.post(API, newUserData);
+        if (results.data.message === 'Password sudah di perbaharui') {
+            dispatch({ type: STOP_LOADING_UI });
+            alert('Password sudah berhasil di perbaharui');
+            dispatch({ type: STOP_LOADING_UI });
+            router.push('/');
+            localStorage.removeItem('ResetToken');
+        }
+    } catch (error) {
+        // dispatch({ type: SET_ERRORS, payload: error.response.data.message });
+        if (error.response.status === 400) {
+            dispatch({ type: STOP_LOADING_UI });
+            alert(`${error.response.data.message}`);
+        }
+        console.log('ERROR', error);
+        // console.log(error);
+    }
+};
+
+export const onlyForStopLoadingUI = () => async (dispatch) => {
+    dispatch({ type: STOP_LOADING_UI });
 };
 
 // Sign Up untuk DESKTOP version
@@ -409,16 +443,27 @@ export const getAllUsers = () => async (dispatch) => {
 };
 
 // GET DATA ODER USERS
-export const getDataOrdersById = (id) => async (dispatch) => {
+export const getDataOrdersById = (id, router) => async (dispatch) => {
     const API = `https://tokyofoam.herokuapp.com/api/order/admin/${id}`;
     try {
         getAuthorizationHeaderTokenUser();
         const res = await axios.get(API);
         // console.log(res, 'cek res data orders <<<')
-        dispatch({
-            type: SET_GET_DATA_USER_ORDER,
-            payload: res.data.data
-        });
+
+        if (res.data.data.length === 0) {
+            alert('Pelanggan ini belum mempunyai daftar order!');
+        } else {
+            dispatch({
+                type: SET_GET_DATA_USER_ORDER,
+                payload: res.data.data
+            });
+            router.push('/admin/customer/customer-detail');
+        }
+
+        // dispatch({
+        //     type: SET_GET_DATA_USER_ORDER,
+        //     payload: res.data.data
+        // });
     } catch (error) {
         console.log(error);
     }
@@ -499,6 +544,15 @@ export const getAllCommentar = () => async (dispatch) => {
     } catch (error) {
         console.log(error);
     }
+};
+export const addComentar = (data) => async (dispatch) => {
+    const API = 'https://tokyofoam.herokuapp.com/api/comment/create';
+    getAuthorizationHeaderTokenUser();
+    const response = await axios({
+        method: 'post',
+        url: API,
+        data
+    });
 };
 
 //****************************************************************************** */

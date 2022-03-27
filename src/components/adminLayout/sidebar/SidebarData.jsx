@@ -20,9 +20,9 @@ export const SidebarData = [
         link: 'admin/customer'
     },
     {
-        title: 'Warna',
+        title: 'Notification',
         icon: 'bx bxs-palette',
-        link: 'admin/warna'
+        link: 'admin/notification'
     },
     {
         title: 'Situsku',

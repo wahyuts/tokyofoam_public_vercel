@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import { useRouter } from 'next/router';
+import { useDispatch, useSelector } from 'react-redux';
 
 import {
     Card,
@@ -134,7 +135,14 @@ export default function DetailRiwayat() {
         setPage(0);
     };
 
+    // const { detailUserOrder } = useSelector((state) => state.user);
+
+    // const { listOrderUserInUserDashboard } = useSelector((state) => state.dataProduct);
+    // console.log('PERCOBAAN 222', detailUserOrder.tanggal_pembelian[i]);
+
+    // console.log('PERCOBAAN', detailUserOrder);
     const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
+    console.log('DATA FILTER', filteredUsers);
 
     return (
         <Container>

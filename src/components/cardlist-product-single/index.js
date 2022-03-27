@@ -61,7 +61,7 @@ const CardlistProductSingle = () => {
         dispatch(getAllProductSingleByPage(numberPages));
     }, [dispatch, numberPages]);
 
-    const totalSemuaProductSingle = dataSemuaProductSingle.length;
+    const totalSemuaProductSingle = dataSemuaProductSingle?.length;
     const totalPages = Math.round(totalSemuaProductSingle / 4);
 
     // console.log('TOTAL PAGES', totalPages);
@@ -90,7 +90,7 @@ const CardlistProductSingle = () => {
         </div>
     );
 
-    let theCard = dataProductSingleByPage.map((single, i) => (
+    let theCard = dataProductSingleByPage?.map((single, i) => (
         <div className={classes.contFullCard} key={i}>
             <div
                 className={classes.contInnerCard}

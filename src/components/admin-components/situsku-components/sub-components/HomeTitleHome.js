@@ -32,6 +32,12 @@ const useStyles = makeStyles((theme) => ({
             rowGap: 10,
             paddingTop: 0,
             columnGap: 20
+        },
+        [theme.breakpoints.down('desktopHD')]: {
+            flexWrap: 'wrap',
+            rowGap: 10,
+            paddingTop: 0,
+            columnGap: 20
         }
     },
     FormControl: {
@@ -79,7 +85,7 @@ const HomeTitleHome = () => {
                 </div>
                 <div style={{ width: '100%', border: '1.5px solid #DFE0EB' }}></div>
                 <div className={classes.WrapperItemMain}>
-                    <form className={classes.FormControlGroup}>
+                    <form className={classes.FormControlGroup} onSubmit={() => {}}>
                         <div className={classes.FormControl}>
                             <div className={classes.ItemTopTitle}>
                                 <span className={classes.TextTitle}>Title</span>
@@ -89,7 +95,7 @@ const HomeTitleHome = () => {
                             </div>
                             <input
                                 className={classes.InputForm}
-                                style={{ fontSize: 14, fontWeight: 600, color: '#252733', paddingTop: 14 }}
+                                style={{ fontSize: 14, fontWeight: 600, color: '#252733', marginTop: 3 }}
                                 type="text"
                                 value={valueTitle}
                                 onChange={(e) => setValueTitle(e.target.value)}
@@ -114,6 +120,20 @@ const HomeTitleHome = () => {
                                 required
                             />
                         </div>
+                        {/* <div style={{ paddingTop: 20 }}>
+                            <Button
+                                style={{
+                                    width: 179,
+                                    height: 37,
+                                    background: '#2C2C2C',
+                                    borderRadius: 12,
+                                    textTransform: 'none'
+                                }}
+                                type="submit"
+                            >
+                                <span style={{ fontSize: 14, fontWeight: 600, color: '#FFFFFF' }}>Save</span>
+                            </Button>
+                        </div> */}
                     </form>
                 </div>
             </div>

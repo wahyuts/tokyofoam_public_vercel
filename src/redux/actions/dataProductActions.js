@@ -10,6 +10,7 @@ import {
     GET_PRODUCT_BY_NAME,
     GET_PRODUCT_BY_ID,
     SET_CHANGEABLE_PRODUCT_NAME,
+    SET_GET_DATA_USER_ORDER_IN_USER_DASHBOARD,
     LOADING_UI,
     LOADING_BUTTON_PAYNOW,
     LOADING_BUTTON_PAYLATTER,
@@ -323,10 +324,20 @@ export const postCreateNewProduct = (DataNewProduct) => async (dispatch) => {
             window.location.reload();
         }
     } catch (error) {
-        if (error.response.status === 500) {
+        if (error.request) {
+            console.log(error.request);
+            alert('Tidak Bisa Save! Terjadi Gangguan Pada Koneksi Anda! Atau Data Masih Ada Yang Kosong!');
+            dispatch({ type: STOP_LOADING_UI });
+        } else if (error.response.status === 400) {
             dispatch({ type: STOP_LOADING_UI });
             alert('Data Masih Ada Yang Kosong!');
         }
+
+        // if (error.response.status === 400) {
+        //     dispatch({ type: STOP_LOADING_UI });
+        //     alert('Data Masih Ada Yang Kosong!');
+        // }
+
         // console.log(error);
     }
 };
@@ -345,14 +356,15 @@ export const postCreateNewProductBundling = (DataNewProduct) => async (dispatch)
             // window.location.reload();
         }
     } catch (error) {
-        // dispatch({
-        //     type: SET_ERRORS,
-        //     payload: error.response.data.message
-        // });
-        if (error.response.status === 500) {
+        if (error.request) {
+            console.log(error.request);
+            alert('Tidak Bisa Save! Terjadi Gangguan Pada Koneksi Anda! Atau Data Masih Ada Yang Kosong!');
+            dispatch({ type: STOP_LOADING_UI });
+        } else if (error.response.status === 400) {
+            dispatch({ type: STOP_LOADING_UI });
             alert('Data Masih Ada Yang Kosong!');
         }
-        console.log(error);
+        // console.log(error);
     }
 };
 
@@ -595,6 +607,34 @@ export const potonganMembership = (selected) => (dispatch) => {
         type: SET_POTONGAN_MEMBERSHIP,
         payload: selected
     });
+};
+
+export const getListOrderUserOnUserDashboard = () => async (dispatch) => {
+    const API = `https://tokyofoam.herokuapp.com/api/order/byUserId/`;
+
+    try {
+        // await dispatch({ type: LOADING_UI });
+        getAuthorizationHeaderToken();
+        const results = await axios.get(API);
+
+        // if (results.data.data.length !== 0) {
+        //     dispatch({
+        //         type: SET_GET_DATA_USER_ORDER_IN_USER_DASHBOARDS,
+        //         payload: results.data.data
+        //     });
+        // }
+        dispatch({
+            type: SET_GET_DATA_USER_ORDER_IN_USER_DASHBOARD,
+            payload: results.data.data
+        });
+    } catch (error) {
+        if (error.response.status === 500) {
+            dispatch({ type: STOP_LOADING_BUTTON_PAYLATTER });
+            alert('Terjadi Gangguan Koneksi!');
+        }
+        console.log('ERROR', error);
+        // console.log(error);
+    }
 };
 
 export const postNewPesananPayLater =

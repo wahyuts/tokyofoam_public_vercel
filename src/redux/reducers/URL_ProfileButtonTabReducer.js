@@ -1,6 +1,7 @@
 import {
     LOCATION_PATH_ADDRESS,
     LOCATION_PATH_DASHBOARD,
+    LOCATION_PATH_EDIT_REVIEW,
     LOCATION_PATH_PROMO_AND_SALE,
     LOCATION_PATH_WISHLIST,
     SET_HEADER_ADD_NEW_ADDRESS,
@@ -22,11 +23,13 @@ const initialState = {
         {
             label: SET_PROFILE_ADDRESS,
             path: LOCATION_PATH_ADDRESS
-        },
-        {
-            label: SET_PROFILE_WISHLIST,
-            path: LOCATION_PATH_WISHLIST
         }
+
+        // {
+        //     label: SET_PROFILE_WISHLIST,
+        //     path: LOCATION_PATH_WISHLIST
+        // }
+
         // {
         //     label: SET_PROFILE_PROMO_AND_SALE,
         //     path: LOCATION_PATH_PROMO_AND_SALE

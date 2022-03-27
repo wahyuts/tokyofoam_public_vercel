@@ -1,10 +1,14 @@
 import React from 'react';
 import { makeStyles } from '@mui/styles';
-import { Card, Container, Grid, Typography, Box } from '@mui/material';
+import { Container, Box } from '@mui/material';
 import HomeBanner from './sub-components/HomeBanner';
-import HomeFlashsale from './sub-components/HomeFlashsale';
 import HomeTitleHome from './sub-components/HomeTitleHome';
 import HomeSubBanner from './sub-components/HomeSubBanner';
+import AboutUsBanner from './sub-components/AboutUsBanner';
+import HowToBuy from './sub-components/HowToBuy';
+import ProductBenefits from './sub-components/ProductBenefits';
+import HomeGaleri from './sub-components/HomeGaleri';
+import ContactUs from './sub-components/ContactUs';
 
 const useStyles = makeStyles((theme) => ({
     ContainerRow: {
@@ -20,9 +24,15 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         rowGap: 20,
+        [theme.breakpoints.up('tablet')]: {
+            width: '30%'
+        },
         [theme.breakpoints.down('tablet')]: {
             width: '50%'
         }
+        // [theme.breakpoints.up('desktopHD')]: {
+        //     width: '50%'
+        // }
     },
     ItemColumnRight: {
         width: '100%',
@@ -30,9 +40,15 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         rowGap: 20,
+        [theme.breakpoints.up('tablet')]: {
+            width: '30%'
+        },
         [theme.breakpoints.down('tablet')]: {
             width: '50%'
         }
+        // [theme.breakpoints.up('desktopHD')]: {
+        //     width: '50%'
+        // }
     },
     TextSitusku: {
         fontSize: 25,
@@ -55,9 +71,17 @@ const DashboardSitusku = () => {
                     <HomeTitleHome />
                     <div style={{ paddingTop: 20 }}></div>
                     <HomeSubBanner />
+                    <div style={{ paddingTop: 20 }}></div>
+                    <AboutUsBanner />
+                    <div style={{ paddingTop: 20 }}></div>
+                    <HowToBuy />
                 </div>
                 <div className={classes.ItemColumnRight}>
-                    <HomeFlashsale />
+                    <HomeGaleri />
+                    <div style={{ paddingTop: 20 }}></div>
+                    <ContactUs />
+                    <div style={{ paddingTop: 20 }}></div>
+                    <ProductBenefits />
                 </div>
             </div>
         </Container>

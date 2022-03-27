@@ -3,13 +3,15 @@ import Image from 'next/image';
 import { useDispatch } from 'react-redux';
 import { Button, Paper, Switch, MenuItem, FormHelperText, FormControl, Select, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Box, width } from '@mui/system';
+import { Box, positions, width } from '@mui/system';
 
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 import icon_analyze from '../../../../public/assets/icons/report-analytics.png';
 import icon_calendar from '../../../../public/assets/icons/calendar-time.png';
 import ButtonComponent from './component/button';
+import { useRouter } from 'next/router';
+import setPesanan from './redux/action/simple-action';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -55,6 +57,7 @@ const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
 export default function RincianPesanan(params) {
     const classes = useStyles();
+    const router = useRouter();
     const dispatch = useDispatch();
 
     const [status, setStatus] = React.useState('');
@@ -120,6 +123,7 @@ export default function RincianPesanan(params) {
                         padding: '34px 0px 34px 30px'
                     }}
                 >
+                    {/* <ArrowBackIosIcon onClick={() => router.push('/admin/pesanan')} /> */}
                     <ArrowBackIosIcon onClick={() => dispatch(setPesanan('listPesanan'))} />
                     <text style={{ color: '#000000', fontSize: 18, fontWeight: 600 }}>#Nomor Pesanan</text>
                 </div>
@@ -129,29 +133,31 @@ export default function RincianPesanan(params) {
                         flexDiraction: 'row',
                         width: '60%',
                         alignItems: 'center',
-                        justifyContent: 'space-around',
-                        padding: '34px 0px 34px 30px'
+                        justifyContent: 'space-between',
+                        position: 'relative'
+                        // padding: '34px 0px 34px 30px'
                     }}
                 >
-                    <Button variant="outlined" style={{ padding: '10px 0px 10px 0px' }}>
+                    <Button
+                        variant="outlined"
+                        style={{ padding: '10px 0px 10px 0px', position: 'absolute', right: 20 }}
+                    >
                         <Image src={icon_analyze} alt="analyze" width={25} height={25} />
                     </Button>
-                    <FormControl sx={{ m: 1, minWidth: 120 }}>
+                    {/* <FormControl sx={{ m: 1, minWidth: 120 }}>
                         <Select
                             labelId="demo-simple-select-helper-label"
                             id="demo-simple-select-helper"
                             value={status}
-                            // label={status}
                             onChange={handleChange}
                         >
                             <MenuItem value={10}>Dikonfirmasi</MenuItem>
                             <MenuItem value={20}>Pending</MenuItem>
                             <MenuItem value={30}>Diproses</MenuItem>
                         </Select>
-                        {/* <FormHelperText>With label + helper text</FormHelperText> */}
-                    </FormControl>
-                    <Switch {...label} defaultChecked />
-                    <div
+                    </FormControl> */}
+                    {/* <Switch {...label} defaultChecked /> */}
+                    {/* <div
                         style={{
                             display: 'flex',
                             flexDirection: 'row',
@@ -164,7 +170,7 @@ export default function RincianPesanan(params) {
                         <Image src={icon_calendar} alt="calendar" width={25} height={25} />
                         <p>02-11-2021</p>
                         <p>12.00 AM</p>
-                    </div>
+                    </div> */}
                 </div>
             </Paper>
             <div
@@ -172,7 +178,7 @@ export default function RincianPesanan(params) {
             >
                 <div style={{ width: '49%' }}>
                     <Paper style={{ marginBottom: '30px' }}>
-                        <table style={{ width: '100%' }}>
+                        <table style={{ width: '100%', minHeight: 277 }}>
                             <tr
                                 style={{
                                     display: 'flex',
@@ -181,7 +187,7 @@ export default function RincianPesanan(params) {
                                     borderStyle: 'solid',
                                     padding: '10px 15px 10px 15px',
                                     paddingTop: '5px',
-                                    paddingBottom: '5px',
+                                    paddingBottom: '8px',
                                     justifyContent: 'space-between'
                                 }}
                             >
@@ -218,8 +224,8 @@ export default function RincianPesanan(params) {
                                     <>
                                         <p style={styles.textColorDisable}>Nama</p>
                                         <p style={styles.textColorBold}>{dataPelanggan.name} </p>
-                                        <p style={styles.textColorDisable}>email</p>
-                                        <p style={styles.textColorBold}>{dataPelanggan.email} </p>
+                                        {/* <p style={styles.textColorDisable}>email</p>
+                                        <p style={styles.textColorBold}>{dataPelanggan.email} </p> */}
                                         <p style={styles.textColorDisable}>No Hp</p>
                                         <p style={styles.textColorBold}>{dataPelanggan.noHp} </p>
                                     </>
@@ -232,13 +238,13 @@ export default function RincianPesanan(params) {
                                             style={styles.textColorBold}
                                             onChange={(e) => updateInput(e, 'name')}
                                         />
-                                        <p style={styles.textColorDisable}>email</p>
+                                        {/* <p style={styles.textColorDisable}>email</p>
                                         <input
                                             type="text"
                                             placeholder={dataPelanggan.email}
                                             style={styles.textColorBold}
                                             onChange={(e) => updateInput(e, 'email')}
-                                        />
+                                        /> */}
                                         <p style={styles.textColorDisable}>No Hp</p>
                                         <input
                                             type="text"
@@ -300,8 +306,6 @@ export default function RincianPesanan(params) {
                                     <>
                                         <p style={styles.textColorDisable}>Kurir Pengiriman</p>
                                         <p style={styles.textColorBold}>{dataPelanggan.kurir} </p>
-                                        <p style={styles.textColorDisable}>Tipe Layanan Pengiriman</p>
-                                        <p style={styles.textColorBold}>{dataPelanggan.tipeLayanan} </p>
                                         <p style={styles.textColorDisable}>Tanggal Kirim</p>
                                         <p style={styles.textColorBold}>{dataPelanggan.tanggalKirim} </p>
                                         <p style={styles.textColorDisable}>No. Tracking</p>
@@ -315,13 +319,6 @@ export default function RincianPesanan(params) {
                                             placeholder={dataPelanggan.kurir}
                                             style={styles.textColorBold}
                                             onChange={(e) => updateInput(e, 'kurir')}
-                                        />
-                                        <p style={styles.textColorDisable}>Tipe Layanan Pengiriman</p>
-                                        <input
-                                            type="text"
-                                            placeholder={dataPelanggan.tipeLayanan}
-                                            style={styles.textColorBold}
-                                            onChange={(e) => updateInput(e, 'tipeLayanan')}
                                         />
                                         <p style={styles.textColorDisable}>Tanggal Kirim</p>
                                         <input
@@ -401,7 +398,7 @@ export default function RincianPesanan(params) {
                 </div>
                 <div style={{ width: '49%' }}>
                     <Paper style={{ marginBottom: '30px' }}>
-                        <table style={{ width: '100%' }}>
+                        <table style={{ width: '100%', minHeight: 250 }}>
                             <tr
                                 style={{
                                     display: 'flex',
@@ -475,70 +472,7 @@ export default function RincianPesanan(params) {
                             </tr>
                         </table>
                     </Paper>
-                    <Paper style={{ marginBottom: '30px' }}>
-                        <table style={{ width: '100%' }}>
-                            <tr
-                                style={{
-                                    display: 'flex',
-                                    borderWidth: '1px',
-                                    borderColor: '#EBEBEB',
-                                    borderStyle: 'solid',
-                                    padding: '10px 15px 10px 15px',
-                                    paddingTop: '5px',
-                                    paddingBottom: '5px',
-                                    justifyContent: 'space-between'
-                                }}
-                            >
-                                <text style={{ color: '#000000', fontSize: 18, fontWeight: 600 }}>
-                                    Jatuh Tenpo Pembayaran
-                                </text>
-                                <ButtonComponent
-                                    label={isEditJatuhTenpo.label}
-                                    variant="contained"
-                                    color="#673AB7"
-                                    width="133px"
-                                    textColor="#ffffff"
-                                    onPreessed={() =>
-                                        setIsEditJatuhTenpo({
-                                            ...isEditJatuhTenpo,
-                                            status: !isEditJatuhTenpo.status,
-                                            label: isEditJatuhTenpo.label === 'Edit' ? 'Save' : 'Edit'
-                                        })
-                                    }
-                                />
-                            </tr>
-                            <tr
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    borderWidth: '1px',
-                                    borderColor: '#EBEBEB',
-                                    borderStyle: 'solid',
-                                    paddingLeft: '15px',
-                                    paddingRight: '15px',
-                                    paddingTop: '26px',
-                                    paddingBottom: '26px'
-                                }}
-                            >
-                                {!isEditJatuhTenpo.status ? (
-                                    <>
-                                        <p style={styles.textColorDisable}>Tangga & jam</p>
-                                        <p style={styles.textColorBold}>{dataPelanggan.jatuhTenpo}</p>
-                                    </>
-                                ) : (
-                                    <>
-                                        <p style={styles.textColorDisable}>Tangga & jam</p>
-                                        <input
-                                            type="text"
-                                            placeholder={dataPelanggan.jatuhTenpo}
-                                            style={styles.textColorBold}
-                                            onChange={(e) => updateInput(e, 'jatuhTenpo')}
-                                        />
-                                    </>
-                                )}
-                            </tr>
-                        </table>
-                    </Paper>
+
                     <Paper style={{ marginBottom: '30px' }}>
                         <table style={{ width: '100%' }}>
                             <tr
