@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@mui/styles';
-import logo from '../../../../public/assets/images/tokyo-mini.png';
+import logo from '../../../../public/assets/images/logo-tokyofoam.png';
 import Image from 'next/image';
 
 const useStyles = makeStyles((theme) => ({
@@ -25,7 +25,7 @@ export default function MainDashboard() {
         <div className={classes.Container}>
             <div className={classes.Item}>
                 <h1> Welcome to TokyoFoam</h1>
-                <Image src={logo} layout="responsive" className="Image" alt="Logo Welcome" />
+                <Image src={logo} layout="responsive" className="Image" alt="TokyoFoam Logos" />
             </div>
         </div>
     );

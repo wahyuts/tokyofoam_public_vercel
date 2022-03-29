@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import { deleteOrderById } from '../../../redux/actions/dataHistoryOrderAction';
+import ScrollForModal from '../../../utils/re-useable-components/scroll-for-modal';
 
 const styles = {
     normalText: { fontWeight: 400, fontSize: '15px', color: '#474747' },
@@ -23,7 +24,11 @@ const styles = {
     normalTextStatusWaiting: { fontWeight: 400, fontSize: '14px', color: '#FFE18E' },
     normalTextDisable: { fontWeight: 400, fontSize: '14px', color: '#787878' },
     normalTextDisableBold: { fontWeight: 600, fontSize: '14px', color: '#787878' },
+
     boldTextStatus: { fontWeight: 600, fontSize: '16px', color: '#FF7373' },
+
+    smallTextDisable: { fontWeight: 400, fontSize: '12px', color: '#787878' },
+
     btnBoxPrimariContainer: {
         width: '140px',
         fontSize: '20px',
@@ -73,6 +78,11 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+export async function getServerSideProps() {
+    console.log('rendering now');
+    return { props: {} };
+}
+
 const CardComponent = ({ dataToRender }) => {
     const classes = useStyles();
     const router = useRouter();
@@ -83,25 +93,49 @@ const CardComponent = ({ dataToRender }) => {
 
     const [showModalPayment, setShowModalPayment] = useState(false);
     const [statusPayment, setStatusPayment] = useState({});
+    const [dataOrder, setDataOrder] = useState({});
+    const [dataCart, setDataCart] = useState([]);
+    const [scrollY, setScrollY] = useState(0);
 
     const showPaymentStatusLabel = (label) => {
-        if (label === 'failed') return setStatusPayment({ className: 'OrangeButton', label: 'Buy Again' });
-        if (label === 'complete') return setStatusPayment({ className: 'DisableButton', label });
+        if (label === 'expire') return setStatusPayment({ className: 'OrangeButton', label: 'Buy Again' });
+        if (label === 'Telah dibayar') return setStatusPayment({ className: 'DisableButton', label });
         return setStatusPayment({ className: 'BlackButton', label: 'Confirm Order & Pay' });
     };
 
+    const currencyFormat = (currency) => {
+        const newCurrency = new Intl.NumberFormat(['ban', 'id']).format(parseInt(currency, 10));
+        return newCurrency;
+    };
+
     useEffect(() => {}, [showModalPayment, listOrderUserInUserDashboard]);
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrollY(window.scrollY);
+        };
+
+        handleScroll();
+
+        window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <Container>
-            {dataToRender?.map((data, index) => {
-                const total = new Intl.NumberFormat(['ban', 'id']).format(
-                    parseInt(data.totalPrice_plus_shipping_minus_benefit_member, 10)
-                );
+            {dataToRender.map((data, index) => {
+                const total = currencyFormat(data?.totalPrice_plus_shipping_minus_benefit_member);
+                const shipping_fee = currencyFormat(data?.shipping_fee);
+                const total_exclude_shipping = currencyFormat(data?.total_exclude_shipping);
+                const potongan_benefit_membership = currencyFormat(data?.potongan_benefit_membership);
 
                 return (
                     <>
-                        <div key={index} className={classes.cardContainerDesktop}>
+                        <div key={`${index}478398`} className={classes.cardContainerDesktop}>
                             <Accordion disableGutters>
                                 <AccordionSummary
                                     expandIcon={<ExpandMoreIcon />}
@@ -145,7 +179,8 @@ const CardComponent = ({ dataToRender }) => {
                                 </AccordionSummary>
                                 {data?.cart?.map((item) => {
                                     const price = item?.promo_price === 0 ? item?.price : item?.promo_price;
-                                    const newPrice = new Intl.NumberFormat(['ban', 'id']).format(parseInt(price, 10));
+                                    const newPrice = currencyFormat(price);
+
                                     return (
                                         <AccordionDetails key={item?._id}>
                                             <div
@@ -204,12 +239,39 @@ const CardComponent = ({ dataToRender }) => {
                                     );
                                 })}
                             </Accordion>
-                            <p style={{ textAlign: 'right', marginBottom: 15, marginTop: 15 }}>
-                                <p style={styles.normalTextDisable}>
-                                    Total Pesanan:
-                                    <text style={styles.boldTextStatus}> Rp {total.toString()}</text>
-                                </p>
-                            </p>
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    justifyContent: 'flex-end',
+                                    marginBottom: 15,
+                                    marginTop: 15
+                                }}
+                            >
+                                <div>
+                                    <p style={styles.smallTextDisable}>Shipping Fee:</p>
+                                    <p style={styles.smallTextDisable}>Total Exclude Shipping:</p>
+                                    <p style={styles.smallTextDisable}>Potongan Benefit Member:</p>
+                                    <div style={{ marginTop: 20 }}>
+                                        <p style={styles.normalTextDisable}>Total Pesanan:</p>
+                                    </div>
+                                </div>
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'flex-end',
+                                        marginLeft: 20
+                                    }}
+                                >
+                                    <p style={styles.smallTextDisable}>{shipping_fee.toString()}</p>
+                                    <p style={styles.smallTextDisable}>{total_exclude_shipping.toString()}</p>
+                                    <p style={styles.smallTextDisable}>{potongan_benefit_membership.toString()}</p>
+                                    <div style={{ marginTop: 20 }}>
+                                        <p style={styles.boldTextStatus}> Rp {total.toString()}</p>
+                                    </div>
+                                </div>
+                            </div>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                 <p style={styles.normalText}>
                                     Tanggal Pesanan:
@@ -229,6 +291,8 @@ const CardComponent = ({ dataToRender }) => {
                                         onClick={() => {
                                             setShowModalPayment(true);
                                             showPaymentStatusLabel(data?.status_payment);
+                                            setDataCart(data?.cart);
+                                            setDataOrder(data);
                                         }}
                                     >
                                         <CreditCardOutlined style={{ color: '#474747', marginRight: '10px' }} />
@@ -292,9 +356,8 @@ const CardComponent = ({ dataToRender }) => {
                                     </AccordionSummary>
                                     {data?.cart?.map((item) => {
                                         const price = item?.promo_price === 0 ? item?.price : item?.promo_price;
-                                        const newPrice = new Intl.NumberFormat(['ban', 'id']).format(
-                                            parseInt(price, 10)
-                                        );
+                                        const newPrice = currencyFormat(price);
+
                                         return (
                                             <AccordionDetails key={item?._id}>
                                                 <div
@@ -356,12 +419,39 @@ const CardComponent = ({ dataToRender }) => {
                                         );
                                     })}
                                 </Accordion>
-                                <p style={{ textAlign: 'right', marginBottom: 15, marginTop: 15 }}>
-                                    <p style={styles.normalTextDisable}>
-                                        Total Pesanan:
-                                        <text style={styles.boldTextStatus}> Rp{total?.toString()}</text>
-                                    </p>
-                                </p>
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        justifyContent: 'flex-end',
+                                        marginBottom: 15,
+                                        marginTop: 15
+                                    }}
+                                >
+                                    <div>
+                                        <p style={styles.smallTextDisable}>Shipping Fee:</p>
+                                        <p style={styles.smallTextDisable}>Total Exclude Shipping:</p>
+                                        <p style={styles.smallTextDisable}>Potongan Benefit Member:</p>
+                                        <div style={{ marginTop: 20 }}>
+                                            <p style={styles.normalTextDisable}>Total Pesanan:</p>
+                                        </div>
+                                    </div>
+                                    <div
+                                        style={{
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            alignItems: 'flex-end',
+                                            marginLeft: 20
+                                        }}
+                                    >
+                                        <p style={styles.smallTextDisable}>{shipping_fee.toString()}</p>
+                                        <p style={styles.smallTextDisable}>{total_exclude_shipping.toString()}</p>
+                                        <p style={styles.smallTextDisable}>{potongan_benefit_membership.toString()}</p>
+                                        <div style={{ marginTop: 20 }}>
+                                            <p style={styles.boldTextStatus}> Rp {total.toString()}</p>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div
                                     style={{
                                         display: 'flex',
@@ -423,10 +513,6 @@ const CardComponent = ({ dataToRender }) => {
                     <p id="modal-modal-title" style={{ marginRight: '41px', fontSize: '25px', fontWeight: '500' }}>
                         Payment
                     </p>
-                    <AvTimer style={{ color: '#FF7373' }} fontSize="small" />
-                    <p style={{ color: '#FF7373', marginLeft: '12px', fontSize: '18px', fontWeight: '400' }}>
-                        23.37 Remaining
-                    </p>
                 </Box>
 
                 <Box style={{ display: 'flex', flexDirection: 'column' }}>
@@ -437,53 +523,135 @@ const CardComponent = ({ dataToRender }) => {
                                 width: '5%',
                                 alignItems: 'center',
                                 fontSize: '20px',
-                                fontWeight: '400'
+                                fontWeight: '600'
                             }}
                         >
                             No
                         </p>
-                        <p style={{ width: '65%', display: 'flex', fontSize: '20px', fontWeight: '400' }}>Product</p>
-                        <p style={{ width: '10%', justifyContent: 'center', fontSize: '20px', fontWeight: '400' }}>
-                            Qty
-                        </p>
-                        <p style={{ width: '20%', justifyContent: 'center', fontSize: '20px', fontWeight: '400' }}>
+                        <p style={{ width: '65%', display: 'flex', fontSize: '20px', fontWeight: '600' }}>Product</p>
+                        <p style={{ width: '20%', justifyContent: 'center', fontSize: '20px', fontWeight: '600' }}>
                             Price
                         </p>
                     </Box>
-                    <Box style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', marginTop: '35px' }}>
-                        <p
-                            style={{
-                                display: 'flex',
-                                width: '5%',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                fontSize: '18px',
-                                fontWeight: '400'
-                            }}
-                        >
-                            1
-                        </p>
-                        <Box style={{ width: '65%', display: 'flex', flexDirection: 'row' }}>
-                            <img
-                                src={'/assets/images/Single-Pillow-1.png'}
-                                className={classes.dialogImageItem}
-                                alt="backgroudn-image"
-                            />
-                            <Box style={{ marginLeft: '20px' }}>
-                                <p style={{ fontSize: '18px', fontWeight: '400' }}>Mulberry Silk Pillowcase</p>
-                                <p style={{ fontSize: '18px', fontWeight: '400' }}>Yellow (1kg)</p>
-                                <p style={{ fontSize: '18px', fontWeight: '400' }}>IDR 650.000</p>
-                            </Box>
-                        </Box>
-                        <p style={{ width: '10%', justifyContent: 'center', fontSize: '18px', fontWeight: '400' }}>2</p>
-                        <p style={{ width: '20%', justifyContent: 'center', fontSize: '18px', fontWeight: '400' }}>
-                            IDR 650.000
-                        </p>
-                    </Box>
+                    {/* {scrollY > 100 ? 'Scrolled more than 100px' : 'Still somewhere near the top!'} */}
+                    {dataCart.length <= 2 ? (
+                        dataCart?.map((item, index) => {
+                            const price = item?.promo_price === 0 ? item?.price : item?.promo_price;
+                            return (
+                                <Box
+                                    key={item._id}
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        flexDirection: 'row',
+                                        marginTop: '35px'
+                                    }}
+                                >
+                                    <p
+                                        style={{
+                                            display: 'flex',
+                                            width: '5%',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            fontSize: '18px',
+                                            fontWeight: '400'
+                                        }}
+                                    >
+                                        {index + 1}
+                                    </p>
+                                    <Box style={{ width: '65%', display: 'flex', flexDirection: 'row' }}>
+                                        <img
+                                            src={item?.imageProduct}
+                                            className={classes.dialogImageItem}
+                                            alt="backgroudn-image"
+                                        />
+                                        <Box style={{ marginLeft: '20px' }}>
+                                            <p style={{ fontSize: '18px', fontWeight: '400' }}>{item?.nameProduct}</p>
+                                            <p style={{ fontSize: '18px', fontWeight: '400' }}>
+                                                {item?.id_manual_product}
+                                            </p>
+                                            <p style={{ fontSize: '18px', fontWeight: '400' }}>
+                                                {price} x {item?.qty}
+                                            </p>
+                                        </Box>
+                                    </Box>
+                                    <p
+                                        style={{
+                                            width: '20%',
+                                            justifyContent: 'center',
+                                            fontSize: '18px',
+                                            fontWeight: '400'
+                                        }}
+                                    >
+                                        {item?.promo_price_x_qty}
+                                    </p>
+                                </Box>
+                            );
+                        })
+                    ) : (
+                        <ScrollForModal>
+                            {dataCart?.map((item, index) => {
+                                const price = item?.promo_price === 0 ? item?.price : item?.promo_price;
+                                return (
+                                    <Box
+                                        key={item._id}
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            flexDirection: 'row',
+                                            marginTop: '35px'
+                                        }}
+                                    >
+                                        <p
+                                            style={{
+                                                display: 'flex',
+                                                width: '5%',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                fontSize: '18px',
+                                                fontWeight: '400'
+                                            }}
+                                        >
+                                            {index + 1}
+                                        </p>
+                                        <Box style={{ width: '65%', display: 'flex', flexDirection: 'row' }}>
+                                            <img
+                                                src={item?.imageProduct}
+                                                className={classes.dialogImageItem}
+                                                alt="backgroudn-image"
+                                            />
+                                            <Box style={{ marginLeft: '20px' }}>
+                                                <p style={{ fontSize: '18px', fontWeight: '400' }}>
+                                                    {item?.nameProduct}
+                                                </p>
+                                                <p style={{ fontSize: '18px', fontWeight: '400' }}>
+                                                    {item?.id_manual_product}
+                                                </p>
+                                                <p style={{ fontSize: '18px', fontWeight: '400' }}>
+                                                    {price} x {item?.qty}
+                                                </p>
+                                            </Box>
+                                        </Box>
+                                        <p
+                                            style={{
+                                                width: '20%',
+                                                justifyContent: 'center',
+                                                fontSize: '18px',
+                                                fontWeight: '400'
+                                            }}
+                                        >
+                                            {item?.promo_price_x_qty}
+                                        </p>
+                                    </Box>
+                                );
+                            })}
+                        </ScrollForModal>
+                    )}
                 </Box>
+
                 <Box
                     style={{
-                        marginTop: '18px',
+                        marginTop: '34px',
                         display: 'flex',
                         justifyContent: 'space-between',
                         marginBottom: '33px'
@@ -492,8 +660,7 @@ const CardComponent = ({ dataToRender }) => {
                     <Box style={{ width: '48%' }}>
                         <p style={{ fontWeight: '500', fontSize: '18px' }}>Delivery Address</p>
                         <p style={{ fontSize: '14px', fontWeight: '400', marginTop: '18px' }}>
-                            Mia Artina , Jln. Gunung Saputan no.22X, Kecamatan Denpasar Barat, Kota Denpasar, Bali
-                            80117, Indonesia No Hp 0821212121212
+                            {dataOrder?.alamat_pengiriman}
                         </p>
                     </Box>
                     <Box
@@ -505,21 +672,21 @@ const CardComponent = ({ dataToRender }) => {
                         }}
                     >
                         <Box style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-                            <p style={{ fontWeight: '400', fontSize: '18px', marginBottom: '16px' }}>
-                                JNE OKE (2-3 Hari)
-                            </p>
-                            <img
-                                src={'/assets/images/jneIcon.png'}
-                                className={classes.dialogJNEIcon}
-                                alt="backgroudn-image"
-                            />
-                            <p style={{ fontWeight: '400', fontSize: '18px', marginTop: '16px' }}>Assurance</p>
+                            <p style={{ fontWeight: '400', fontSize: '18px' }}>{dataOrder?.expedisi?.toUpperCase()}</p>
+
+                            <p style={{ fontWeight: '400', fontSize: '18px', marginTop: '16px' }}>Diskon Membership</p>
                             <p style={{ fontWeight: '600', fontSize: '18px', marginTop: '12px' }}>Total</p>
                         </Box>
                         <Box>
-                            <p style={{ fontWeight: '400', fontSize: '18px' }}>IDR 50.000</p>
-                            <p style={{ fontWeight: '400', fontSize: '18px', marginTop: '48px' }}>IDR 1.300</p>
-                            <p style={{ fontWeight: '600', fontSize: '18px', marginTop: '12px' }}>IDR 701.300</p>
+                            <p style={{ fontWeight: '400', fontSize: '18px' }}>
+                                IDR {currencyFormat(dataOrder?.shipping_fee)}
+                            </p>
+                            <p style={{ fontWeight: '400', fontSize: '18px', marginTop: '16px' }}>
+                                IDR {currencyFormat(dataOrder?.potongan_benefit_membership)}
+                            </p>
+                            <p style={{ fontWeight: '600', fontSize: '18px', marginTop: '12px' }}>
+                                IDR {currencyFormat(dataOrder?.totalPrice_plus_shipping_minus_benefit_member)}
+                            </p>
                         </Box>
                     </Box>
                 </Box>
@@ -538,7 +705,7 @@ const CardComponent = ({ dataToRender }) => {
                         innerContaunerStyle={{ width: '328px', fontSize: '20px' }}
                         className={statusPayment?.className}
                         variant="contained"
-                        disable={statusPayment?.label === 'complete'}
+                        disable={statusPayment?.label === 'Telah dibayar'}
                     >
                         {statusPayment?.label}
                     </MainBlackButton>

@@ -33,10 +33,5 @@ export const SidebarData = [
         title: 'Report',
         icon: 'bx bxs-report',
         link: 'admin/report'
-    },
-    {
-        title: 'Settings',
-        icon: 'bx bx-cog',
-        link: 'admin/settings'
     }
 ];

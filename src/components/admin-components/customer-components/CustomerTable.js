@@ -23,7 +23,8 @@ import {
 import USERLIST from './_mocks/customer';
 import CustomerListHead from './CustomerListHead';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllUsers, getDataOrdersById } from '../../../redux/actions/userActions';
+import { getAllUsers, getDataOrdersById, getHistoryOrdersById } from '../../../redux/actions/userActions';
+import { filter } from 'lodash';
 
 // table stuff
 const TABLE_HEAD = [
@@ -57,9 +58,9 @@ function applySortFilter(array, comparator, query) {
         if (order !== 0) return order;
         return a[1] - b[1];
     });
-    if (query) {
-        return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
-    }
+    // if (query) {
+    //     return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    // }
     return stabilizedThis?.map((el) => el[0]);
 }
 
@@ -70,6 +71,7 @@ const useStyles = makeStyles((theme) => ({
     },
     ItemTop: {
         display: 'flex',
+        alignItems: 'center',
         justifyContent: 'space-between',
         [theme.breakpoints.down('tablet')]: {
             flexWrap: 'wrap',
@@ -78,11 +80,41 @@ const useStyles = makeStyles((theme) => ({
         }
     },
     ItemTopLeft: {
-        flex: 1,
+        // flex: 1,
+        // display: 'flex',
+        // alignItems: 'center',
+        // columnGap: 10
+        // backgroundColor: 'red'
+    },
+    TopNavSearch: {
+        position: 'relative',
+        height: 50,
+        background: '#FFFFFF',
+        display: 'flex',
+        alignItems: 'center',
+        // boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
+        borderRadius: 12,
+        '& .Input': {
+            height: 35,
+            width: 300,
+            paddingLeft: 20,
+            paddingRight: 50,
+            background: '#ffffff',
+            fontSize: '1rem',
+            borderRadius: 12,
+            border: '1px solid #898989'
+        },
+        '& #icon': {
+            fontSize: 18,
+            position: 'absolute',
+            right: 20
+        }
+    },
+    ItemMiddle: {
         display: 'flex',
         alignItems: 'center',
         columnGap: 10
-        // backgroundColor: 'red'
+        // flex: 1,
     },
     ItemDatePicker: {
         width: 167,
@@ -92,14 +124,13 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: 12
     },
     ItemTopRight: {
-        flex: 1,
-        display: 'flex',
-        justifyContent: 'flex-end',
-        columnGap: 10,
+        // flex: 1,
+        // display: 'flex',
+        // justifyContent: 'flex-end',
+        // columnGap: 10,
         [theme.breakpoints.down('tablet')]: {
             justifyContent: 'unset'
         }
-        // backgroundColor: 'blue'
     },
     TextExport: {
         fontSize: 14,
@@ -135,7 +166,6 @@ export default function CustomerTable() {
     const [filterName, setFilterName] = useState('');
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const router = useRouter();
-
     // handleClick to
     // const handleClickCustomer = () => {
     //     router.push('/admin/customer/customer-detail');
@@ -168,9 +198,12 @@ export default function CustomerTable() {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
+    const handleFilterByName = (event) => {
+        setFilterName(event.target.value);
+    };
 
     const filteredUsers = applySortFilter(usersDataAll, getComparator(order, orderBy), filterName);
-    // console.log(filteredUsers, 'filtered users ')
+    console.log(filteredUsers, 'filtered users ');
 
     // const handleFilterDate = (createdAt, field) => {
     //     const filteredUsersData = usersDataAll.filter((item) => {
@@ -185,6 +218,18 @@ export default function CustomerTable() {
             <Card className={classes.MainContainer}>
                 <div className={classes.ItemTop}>
                     <div className={classes.ItemTopLeft}>
+                        <div className={classes.TopNavSearch}>
+                            <input
+                                type="text"
+                                placeholder="Search"
+                                className="Input"
+                                value={filterName}
+                                onChange={handleFilterByName}
+                            />
+                            <i className="bx bx-search" id="icon"></i>
+                        </div>
+                    </div>
+                    <div className={classes.ItemMiddle}>
                         <div>
                             <input
                                 type="date"
@@ -217,7 +262,7 @@ export default function CustomerTable() {
                                 <span className={classes.TextExport}>Export</span>
                             </Button>
                         </div>
-                        <div className={classes.BtnTambah}>
+                        {/* <div className={classes.BtnTambah}>
                             <Button
                                 style={{
                                     textTransform: 'none',
@@ -229,7 +274,7 @@ export default function CustomerTable() {
                             >
                                 <span className={classes.TextTambah}>Tambah</span>
                             </Button>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
                 <div className={classes.ContainerTable}>
@@ -253,7 +298,8 @@ export default function CustomerTable() {
                             />
                             <TableBody>
                                 {filteredUsers
-                                    ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                    ?.filter((el) => el.nama.toLowerCase().includes(filterName.toLowerCase()))
+                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                     .map((users, el) => {
                                         // const { id, nama, email, alamat, tgl_daftar, phone, level_user } = row;
                                         // const isItemSelected = selected.indexOf(name) !== -1;
@@ -263,7 +309,7 @@ export default function CustomerTable() {
                                                 key={el}
                                                 tabIndex={-1}
                                                 onClick={() => {
-                                                    dispatch(getDataOrdersById(users._id, router));
+                                                    dispatch(getHistoryOrdersById(users._id, router));
                                                     console.log(users._id, 'cek id terlempar');
                                                     // router.push('/admin/customer/customer-detail');
                                                 }}

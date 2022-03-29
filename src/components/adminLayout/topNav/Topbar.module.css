@@ -2,7 +2,7 @@
     padding: 30px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     height: 50px;
 }
 .TopNavSearch {
@@ -34,12 +34,12 @@
     position: absolute;
     right: 20px;
 }
-.WrapperTopNavRight {
+/* .WrapperTopNavRight {
     display: flex;
     align-items: center;
     column-gap: 20px;
-    /* position: relative; */
-}
+    position: relative;
+} */
 
 .DropdownBell {
     display: flex;
@@ -55,6 +55,7 @@
 }
 .DropdownBlueCog {
     flex-grow: 0;
+    /* margin-left: auto; */
     width: 100px;
     height: 56px;
     background: #1e88e5;

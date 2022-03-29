@@ -628,7 +628,7 @@ export const getListOrderUserOnUserDashboard = () => async (dispatch) => {
             payload: results.data.data
         });
     } catch (error) {
-        if (error.response.status === 500) {
+        if (error?.response?.status === 500) {
             dispatch({ type: STOP_LOADING_BUTTON_PAYLATTER });
             alert('Terjadi Gangguan Koneksi!');
         }

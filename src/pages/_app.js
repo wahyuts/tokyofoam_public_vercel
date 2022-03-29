@@ -68,6 +68,7 @@ function MyApp(props) {
         currentPath === '/admin/produk' ||
         currentPath === '/admin/produk/EditProduct' ||
         currentPath === '/admin/produk/tambah-produk' ||
+        currentPath === '/admin/profiles-settings' ||
         currentPath === '/admin/situsku' ? (
             <Component {...pageProps} />
         ) : (

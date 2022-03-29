@@ -24,6 +24,7 @@ export default function Avatars() {
 
     const classes = useStyles();
     const router = useRouter();
+    const currentPath = router.pathname;
     const dispatch = useDispatch();
     const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -47,7 +48,7 @@ export default function Avatars() {
 
     const klikLogout = () => {
         // setMenuOpen(!menuOpens);
-        dispatch(logoutUser());
+        currentPath === '/profile' ? (dispatch(logoutUser()), router.push('/')) : dispatch(logoutUser());
     };
 
     return (

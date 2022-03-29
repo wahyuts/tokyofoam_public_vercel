@@ -5,7 +5,13 @@ import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 // mat ui stuff
 import { Card, Button, Container } from '@mui/material';
-import { getDataOrdersById } from '../../../redux/actions/userActions';
+import {
+    getAllUsers,
+    getDataOrdersById,
+    // getDataOrdersByIdCustomerDetail,
+    getHistoryOrdersById
+} from '../../../redux/actions/userActions';
+import { get } from 'lodash';
 
 const useStyles = makeStyles((theme) => ({
     CardTop: {
@@ -142,12 +148,12 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CustomerDetailComponent() {
     const { detailUserOrder } = useSelector((state) => state.user);
-    console.log('LIHHHHHHAT INI', detailUserOrder);
-    const { userDataAll } = useSelector((state) => state.user);
+    const { detailHistoryOrder } = useSelector((state) => state.user);
+    const { usersDataAll } = useSelector((state) => state.user);
     const dispatch = useDispatch();
     const classes = useStyles();
-    const [valueNama, setValueNama] = useState(detailUserOrder?.nama);
-    const [valueEmail, setValueEmail] = useState(detailUserOrder?.email);
+    const [valueNama, setValueNama] = useState(detailHistoryOrder?.nama);
+    const [valueEmail, setValueEmail] = useState(detailHistoryOrder?.email);
     const [valueType, setValueType] = useState('');
     const [valueNohp, setValueNohp] = useState('');
     const [valueAlamat, setValueAlamat] = useState('');
@@ -155,6 +161,8 @@ export default function CustomerDetailComponent() {
     const [valueBanyakProduk, setValueBanyakProduk] = useState('');
     const [valueTotalBelanja, setValueTotalBelanja] = useState('');
     const [valueUlasan, setValueUlasan] = useState('');
+    const [paymentStatus, setPaymentStatus] = useState([]);
+    const [paymentDate, setPaymentDate] = useState([]);
     const router = useRouter();
 
     const handleClickKembali = () => {
@@ -164,32 +172,44 @@ export default function CustomerDetailComponent() {
         router.push('/admin/customer/detail-ulasan');
     };
     const handleClickRiwayat = () => {
-        // dispatch(getDataOrdersById(id))
-        router.push('/admin/customer/detail-riwayat');
+        dispatch(getDataOrdersById(detailHistoryOrder.user_id, router));
+        // router.push('/admin/customer/detail-riwayat')
     };
 
     // Updte function
     const handleUpdateNama = () => {};
+
     useEffect(() => {
-        setValueNama(detailUserOrder.nama);
-        setValueEmail(detailUserOrder.email);
-        setValueType(detailUserOrder.level_user);
-        setValueNohp(detailUserOrder.no_telp);
-        setValueAlamat(detailUserOrder.alamat);
-        setValueTelahBelanja(detailUserOrder.total_pembelanjaan);
-        setValueBanyakProduk(detailUserOrder.total_product);
-        setValueTotalBelanja(detailUserOrder.jumlah_belanja);
+        setValueNama(detailHistoryOrder.nama);
+        setValueEmail(detailHistoryOrder.email);
+        setValueType(detailHistoryOrder.level_user);
+        setValueNohp(detailHistoryOrder.no_telp);
+        setValueAlamat(detailHistoryOrder.alamat);
+        setValueTelahBelanja(detailHistoryOrder.total_pembelanjaan);
+        setValueBanyakProduk(detailHistoryOrder.total_product);
+        setValueTotalBelanja(detailHistoryOrder.jumlah_belanja);
+        // status payment
+        setPaymentStatus(detailUserOrder?.status_payment);
+        // transaction date
+        setPaymentDate(detailUserOrder?.tanggal_pembelian);
     }, [
-        detailUserOrder.nama,
-        detailUserOrder.email,
-        detailUserOrder.level_user,
-        detailUserOrder.no_telp,
-        detailUserOrder.alamat,
-        detailUserOrder.jumlah_belanja,
-        detailUserOrder.total_product,
-        detailUserOrder.total_pembelanjaan
+        detailHistoryOrder.nama,
+        detailHistoryOrder.email,
+        detailHistoryOrder.level_user,
+        detailHistoryOrder.no_telp,
+        detailHistoryOrder.alamat,
+        detailHistoryOrder.jumlah_belanja,
+        detailHistoryOrder.total_product,
+        detailHistoryOrder.total_pembelanjaan,
+        detailHistoryOrder.status_payment,
+        detailHistoryOrder.tanggal_pembelian
     ]);
-    console.log(detailUserOrder, 'detailUserORder <<<,');
+
+    // useEffect(() => {
+    //     dispatch(getAllUsers());
+    // }, [dispatch]);
+    console.log(detailHistoryOrder, 'cek user dat');
+    // console.log(paymentDate, 'payment Date');
     return (
         <Container>
             <Card className={classes.CardTop}>

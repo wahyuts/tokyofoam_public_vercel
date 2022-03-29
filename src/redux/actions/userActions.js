@@ -26,7 +26,8 @@ import {
     SET_ID_UNIQ_CART_USER,
     SET_GET_ALL_DATA_USER,
     SET_GET_DATA_USER_ORDER,
-    GET_COMMENT
+    GET_COMMENT,
+    SET_GET_DATA_USER_HISTORY_ORDER
 } from '../type';
 
 // Login untuk DESKTOP And MOBILE Version
@@ -449,28 +450,57 @@ export const getDataOrdersById = (id, router) => async (dispatch) => {
         getAuthorizationHeaderTokenUser();
         const res = await axios.get(API);
         // console.log(res, 'cek res data orders <<<')
-
         if (res.data.data.length === 0) {
-            alert('Pelanggan ini belum mempunyai daftar order!');
+            alert('Tidak ada detail transaksi pada Pelanggan ini!');
         } else {
             dispatch({
                 type: SET_GET_DATA_USER_ORDER,
                 payload: res.data.data
             });
-            router.push('/admin/customer/customer-detail');
+            router.push('/admin/customer/detail-riwayat');
         }
-
-        // dispatch({
-        //     type: SET_GET_DATA_USER_ORDER,
-        //     payload: res.data.data
-        // });
     } catch (error) {
         console.log(error);
     }
 };
 
-//Fungsi buat set dan clear berbagai error
+// GET DATA ORDER USERS BY ID
+export const getHistoryOrdersById = (id, router) => async (dispatch) => {
+    const API = `https://tokyofoam.herokuapp.com/api/order/historyDetail/${id}`;
+    try {
+        getAuthorizationHeaderTokenUser();
+        const res = await axios.get(API);
+        // console.log(res, 'cek res data orders <<<')
+        if (res.data.data.status_payment.length === 0) {
+            alert('Pelanggan ini belum mempunyai daftar order!');
+        } else {
+            dispatch({
+                type: SET_GET_DATA_USER_HISTORY_ORDER,
+                payload: res.data.data
+            });
+            router.push('/admin/customer/customer-detail');
+        }
+    } catch (error) {
+        console.log(error);
+    }
+};
+// // GET DATA ODER USERS CUSTOMER DETAIL
+// export const getDataOrdersByIdCustomerDetail = (id, router) => async (dispatch) => {
+//     const API = `https://tokyofoam.herokuapp.com/api/order/admin/${id}`;
+//     try {
+//         getAuthorizationHeaderTokenUser();
+//         const res = await axios.get(API);
+//         dispatch({
+//             type: SET_GET_DATA_USER_ORDER,
+//             payload: res.data.data
+//         });
+//         router.push('/admin/customer/detail-riwayat');
+//     } catch (error) {
+//         console.log(error);
+//     }
+// };
 
+//Fungsi buat set dan clear berbagai error
 export const clearError = () => (dispatch) => {
     dispatch({ type: CLEAR_ERRORS });
 };

@@ -1,15 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@mui/styles';
 import { useRouter } from 'next/router';
-import { useDispatch, useSelector } from 'react-redux';
-
 import {
     Card,
     Table,
     Stack,
-    Avatar,
     Button,
-    Checkbox,
     TableRow,
     TableBody,
     TableCell,
@@ -18,11 +14,12 @@ import {
     TableContainer,
     TablePagination
 } from '@mui/material';
-
 // import file
 import DatePickerCustomer from './date-picker-customer/DatePickerCustomer';
 import USERLIST from './_mocks/customer';
 import CustomerListHead from './CustomerListHead';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllUsers } from '../../../redux/actions/userActions';
 
 // table stuff
 const TABLE_HEAD = [
@@ -53,7 +50,7 @@ function getComparator(order, orderBy) {
         : (a, b) => -descendingComparator(a, b, orderBy);
 }
 function applySortFilter(array, comparator, query) {
-    const stabilizedThis = array.map((el, index) => [el, index]);
+    const stabilizedThis = array?.map((el, index) => [el, index]);
     stabilizedThis.sort((a, b) => {
         const order = comparator(a[0], b[0]);
         if (order !== 0) return order;
@@ -64,6 +61,7 @@ function applySortFilter(array, comparator, query) {
     }
     return stabilizedThis.map((el) => el[0]);
 }
+
 const useStyles = makeStyles((theme) => ({
     ItemTop: {
         display: 'flex',
@@ -105,17 +103,23 @@ const useStyles = makeStyles((theme) => ({
 
 export default function DetailRiwayat() {
     const classes = useStyles();
+    const { detailUserOrder } = useSelector((state) => state.user);
+    const { detailHistoryOrder } = useSelector((state) => state.user);
     const [dateFromHistory, setDateFromHistory] = useState();
     const [dateToHistory, setDateToHistory] = useState();
-
     const [page, setPage] = useState(0);
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('name');
     const [selected, setSelected] = useState([]);
     const [filterName, setFilterName] = useState('');
     const [rowsPerPage, setRowsPerPage] = useState(5);
-
+    const dispatch = useDispatch();
     const router = useRouter();
+
+    // useEffect(() => {
+    //     dispatch(getAllUsers());
+    // }, [dispatch]);
+
     const handleClickKembali = () => {
         router.push('/admin/customer');
     };
@@ -134,16 +138,10 @@ export default function DetailRiwayat() {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
-
-    // const { detailUserOrder } = useSelector((state) => state.user);
-
-    // const { listOrderUserInUserDashboard } = useSelector((state) => state.dataProduct);
-    // console.log('PERCOBAAN 222', detailUserOrder.tanggal_pembelian[i]);
-
-    // console.log('PERCOBAAN', detailUserOrder);
-    const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
-    console.log('DATA FILTER', filteredUsers);
-
+    // console.log(detailUserOrder, 'cek data')
+    // const filteredDataRiwayat = applySortFilter(detailUserOrder, getComparator(order, orderBy), filterName);
+    // console.log(filteredDataRiwayat, 'cek ');
+    console.log(detailUserOrder, 'cek datataaaa');
     return (
         <Container>
             <Card>
@@ -201,62 +199,28 @@ export default function DetailRiwayat() {
                                 order={order}
                                 orderBy={orderBy}
                                 headLabel={TABLE_HEAD}
-                                rowCount={USERLIST.length}
+                                rowCount={detailUserOrder.length}
                                 numSelected={selected.length}
                                 onRequestSort={handleRequestSort}
                             />
                             <TableBody>
-                                {filteredUsers
-                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                    .map((row) => {
-                                        const { id, name, role, date, noPelanggan, email, statusPayment } = row;
-                                        const isItemSelected = selected.indexOf(name) !== -1;
+                                {detailUserOrder
+                                    ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                    .map((row, el) => {
                                         return (
-                                            <TableRow
-                                                hover
-                                                key={id}
-                                                tabIndex={-1}
-                                                // onClick={handleClickCustomer}
-                                                // style={{ cursor: 'pointer' }}
-                                            >
+                                            <TableRow hover key={el} tabIndex={-1}>
                                                 <TableCell>1</TableCell>
-                                                <TableCell>{name}</TableCell>
-                                                <TableCell>11/11/20</TableCell>
-                                                <TableCell>1</TableCell>
-                                                <TableCell>{statusPayment}</TableCell>
+                                                <TableCell>{row.nama_pembeli}</TableCell>
+                                                <TableCell>{row.tanggal_pembelian}</TableCell>
+                                                <TableCell>{row.total_qty}</TableCell>
+                                                <TableCell>{row.status_payment}</TableCell>
 
                                                 <TableCell component="th" scope="row">
                                                     <Stack direction="row" alignItems="left" spacing={0}>
                                                         <Typography noWrap>IDR</Typography>
-                                                        <Typography noWrap>750.000</Typography>
+                                                        <Typography noWrap>{row.total_price}</Typography>
                                                     </Stack>
                                                 </TableCell>
-                                                {/* <TableCell component="th" scope="row" align="left">
-                                                    <Stack direction="row" alignItems="right" spacing={0}>
-                                                        <Button style={{ textTransform: 'none' }}>
-                                                            <Typography
-                                                                style={{
-                                                                    color: '#7ABAE8',
-                                                                    fontSize: 14,
-                                                                    fontWeight: 400
-                                                                }}
-                                                            >
-                                                                Edit
-                                                            </Typography>
-                                                        </Button>
-                                                        <Button style={{ textTransform: 'none' }}>
-                                                            <Typography
-                                                                style={{
-                                                                    color: '#7ABAE8',
-                                                                    fontSize: 14,
-                                                                    fontWeight: 400
-                                                                }}
-                                                            >
-                                                                Hapus
-                                                            </Typography>
-                                                        </Button>
-                                                    </Stack>
-                                                </TableCell> */}
                                             </TableRow>
                                         );
                                     })}
@@ -266,7 +230,7 @@ export default function DetailRiwayat() {
                     <TablePagination
                         rowsPerPageOptions={[5, 10, 25]}
                         component="div"
-                        count={USERLIST.length}
+                        count={detailUserOrder.length}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         onPageChange={handleChangePage}

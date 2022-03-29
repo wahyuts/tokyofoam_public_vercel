@@ -132,10 +132,10 @@ export default function Topbar() {
     useEffect(() => {}, [credentials.nama]);
     return (
         <div className={Styles.TopNav}>
-            <div className={Styles.TopNavSearch}>
+            {/* <div className={Styles.TopNavSearch}>
                 <input type="text" placeholder="Search" />
                 <i className="bx bx-search"></i>
-            </div>
+            </div> */}
             <div className={Styles.WrapperTopNavRight}>
                 {/* <div className={Styles.DropdownBell}>
                     <Tooltip title="">

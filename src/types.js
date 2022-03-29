@@ -26,3 +26,6 @@ export const LOCATION_PATH_PAYMENT = '/profile/pages/profile-dashboard-payment';
 export const LOCATION_PATH_DETAILS_ORDER = '/profile/pages/profile-dashboard-details-order';
 export const LOCATION_PATH_EDIT_REVIEW = '/profile/pages/profile-mobile-review';
 export const LOCATION_PATH_MOBILE_PAYMENT = '/profile/pages/profile-mobile-payment';
+
+// GET ORDER BY ORDER ID FOR RINCIAN PESANAN ADMIN
+export const GET_ORDER_BY_ID_ORDER = 'GET_ORDER_BY_ID_ORDER';

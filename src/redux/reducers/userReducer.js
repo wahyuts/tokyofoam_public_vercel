@@ -8,7 +8,9 @@ import {
     SET_ADD_KOTA_LOGREG,
     SET_ADD_KECAMATAN_LOGREG,
     SET_GET_ALL_DATA_USER,
-    SET_GET_DATA_USER_ORDER
+    SET_GET_DATA_USER_ORDER,
+    SET_GET_DATA_USER_HISTORY_ORDER
+    // SET_GET_ALL_DATA_SITUSKU
 } from '../type';
 
 const initialState = {
@@ -17,6 +19,7 @@ const initialState = {
     loading: false,
     usersDataAll: [],
     detailUserOrder: [],
+    detailHistoryOrder: [],
     credentials: {},
     likes: [],
     notifications: [],
@@ -82,7 +85,11 @@ export default function userReducer(state = initialState, action) {
                 ...state,
                 detailUserOrder: action.payload
             };
-
+        case SET_GET_DATA_USER_HISTORY_ORDER:
+            return {
+                ...state,
+                detailHistoryOrder: action.payload
+            };
         default:
             return state;
     }

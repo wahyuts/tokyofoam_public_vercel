@@ -2,7 +2,7 @@
 
 import Img from '../../../public/assets/images/Single-Pillow-1.png';
 
-import { SET_HISTORY_ORDER, GET_ALL_ORDER_FOR_ADMIN } from '../../types';
+import { SET_HISTORY_ORDER, GET_ALL_ORDER_FOR_ADMIN, GET_ORDER_BY_ID_ORDER } from '../../types';
 
 const initialState = {
     data_history_order: [
@@ -139,7 +139,8 @@ const initialState = {
             price: '651.300'
         }
     ],
-    all_order_for_admin: []
+    all_order_for_admin: [],
+    single_order_by_id_order: {}
 };
 
 export default function dataHistoryOrder(state = initialState, action) {
@@ -153,6 +154,11 @@ export default function dataHistoryOrder(state = initialState, action) {
             return {
                 ...state,
                 all_order_for_admin: action.payload
+            };
+        case GET_ORDER_BY_ID_ORDER:
+            return {
+                ...state,
+                single_order_by_id_order: action.payload
             };
         default:
             return state;

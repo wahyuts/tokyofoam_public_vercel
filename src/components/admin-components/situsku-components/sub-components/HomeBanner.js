@@ -6,7 +6,8 @@ import Image from 'next/image';
 import CameraImage from '../../../../../public/assets/images/CameraImage.png';
 import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { getDataSettingsMainBanner } from '../../../../redux/actions/dataSituskuAction';
 
 const useStyles = makeStyles((theme) => ({
     Container: {
@@ -108,8 +109,12 @@ const useStyles = makeStyles((theme) => ({
         background: 'rgba(211, 226, 255, 0.1)',
         border: '1px dashed #9e9e9e',
         borderRadius: 8,
-        cursor: 'pointer',
-        position: 'relative'
+        cursor: 'pointer'
+        // position: 'absolute',
+        // "& .CameraImage": {
+        //     position: 'absolute',
+        //     zIndex: 100
+        // }
         // [theme.breakpoints.down('tablet')]: {
         //     width: 350
         // }
@@ -210,14 +215,16 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 const HomeBanner = () => {
+    const dispatch = useDispatch();
     const fileSelect = useRef(null);
     const { credentials } = useSelector((state) => state.user);
-    console.log(credentials, 'cek credentials');
+    // console.log(credentials, 'cek credentials');
+    const { dataSettingsMainBanner } = useSelector((state) => state.dataSitusku);
     const classes = useStyles();
     const [files, setFiles] = useState([]);
-    const [valueTitle, setValueTitle] = useState();
-    const [valueSubTitle, setValueSubTitle] = useState();
-    const [valueLink, setValueLink] = useState();
+    const [valueTitle, setValueTitle] = useState('');
+    const [valueSubTitle, setValueSubTitle] = useState('');
+    const [valueLink, setValueLink] = useState('');
     const [image, setImage] = useState('');
     const [showNoImage, setShowNoImage] = useState(true);
     const [photoName, setPhotoName] = useState('');
@@ -244,7 +251,7 @@ const HomeBanner = () => {
 
                 setImage(response.secure_url);
                 setShowNoImage(false);
-                console.log('seputar image', response.secure_url);
+                // console.log('seputar image', response.secure_url);
                 // const formData = {
                 //     photo: response.secure_url
                 // };
@@ -275,7 +282,7 @@ const HomeBanner = () => {
             fileSelect.current.click();
         }
     };
-    console.log(image, 'cek image');
+    // console.log(image, 'cek image');
 
     // const onDrop = useCallback((acceptedFiles, rejectFiles) => {
     //     const url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUDNAME}/upload`;
@@ -331,6 +338,16 @@ const HomeBanner = () => {
         });
     };
 
+    const saveImage = () => {
+        const data = {
+            image_main_banner: image,
+            title_on_banner: valueTitle,
+            link_on_banner: valueLink
+        };
+        console.log(data, 'cek data');
+        dispatch(getDataSettingsMainBanner(data));
+    };
+
     const { getRootProps, getInputProps } = useDropzone({
         onDrop,
         accept: 'image/*',
@@ -350,6 +367,14 @@ const HomeBanner = () => {
     //     }
     // });
 
+    // useEffect(() => {
+    //     setImage(dataSettingsMainBanner.image_main_banner)
+    // },[image])
+
+    // useEffect(() => {
+    //     dispatch(getDataSettingsMainBanner())
+    // },[])
+
     const images = files.map((file) => (
         <div key={files.name}>
             <div>
@@ -357,8 +382,9 @@ const HomeBanner = () => {
             </div>
         </div>
     ));
-    // console.log(images);
-    console.log(getInputProps(), getRootProps(), 'cek input props');
+    console.log(image, 'cek image');
+    // console.log(getInputProps(), getRootProps(), 'cek input props');
+    console.log(dataSettingsMainBanner, 'cek data settings Main Banner');
     const handleEditTitle = () => {};
     const handleEditSubTitle = () => {};
     const handleEditLink = () => {};
@@ -372,6 +398,30 @@ const HomeBanner = () => {
                 <div style={{ width: '100%', border: '1.5px solid #DFE0EB' }}></div>
                 <div className={classes.WrapperItemMain}>
                     <div>
+                        {/* <div style={{ width: '100%' }}>
+                            <div className={classes.ContainerUpload}>
+                                <div className={classes.WrapperUpload} onClick={handleEditPicture}>
+                                    <Image src={CameraImage} alt="Camera Pict" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            style={{
+                                width: '100%',
+                                overflow: 'hidden',
+                                borderRadius: 8
+                            }}
+                        >
+                            <Image
+                                src={image}
+                                alt="Product Image"
+                                width={459}
+                                height={191}
+                                priority="true"
+                                layout="responsive"
+                            />
+                        </div> */}
                         {showNoImage === true ? (
                             <div style={{ width: '100%' }}>
                                 <div className={classes.ContainerUpload}>
@@ -388,14 +438,28 @@ const HomeBanner = () => {
                                     borderRadius: 8
                                 }}
                             >
-                                <Image
+                                {image.length ? (
+                                    <Image
+                                        src={image}
+                                        alt="Product Image"
+                                        width={459}
+                                        height={191}
+                                        priority="true"
+                                        layout="responsive"
+                                    />
+                                ) : (
+                                    <div className={classes.WrapperUpload} onClick={handleEditPicture}>
+                                        <Image src={CameraImage} alt="Camera Pict" className="CameraImage" />
+                                    </div>
+                                )}
+                                {/* <Image
                                     src={image}
                                     alt="Product Image"
                                     width={459}
                                     height={191}
                                     priority="true"
                                     layout="responsive"
-                                />
+                                /> */}
                             </div>
                         )}
                         <input
@@ -414,8 +478,7 @@ const HomeBanner = () => {
                                     borderRadius: 12,
                                     textTransform: 'none'
                                 }}
-                                // onClick={() => uploadImage()}
-                                onClick={handleEditPicture}
+                                onClick={saveImage}
                             >
                                 <span style={{ fontSize: 14, fontWeight: 600, color: '#FFFFFF' }}>Save</span>
                             </Button>

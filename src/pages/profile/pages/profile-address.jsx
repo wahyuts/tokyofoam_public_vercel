@@ -7,7 +7,6 @@ import { Box } from '@mui/system';
 
 import HorizontalSpacer from '../../../components/HorizontalSpacer';
 import MainBlackButton from '../../../utils/re-useable-components/buttons/MainBlackButton';
-import ButtonTab from '../component/ButtonTab';
 import Dialog from '../component/dialog';
 import {
     LOCATION_PATH_ADDRESS_ADD_NEW_ADDRESS,
@@ -64,12 +63,6 @@ const style = {
 };
 
 const useStyles = makeStyles((theme) => ({
-    desktopContainer: {
-        marginBottom: '97px',
-        [theme.breakpoints.down('mobile')]: {
-            display: 'none'
-        }
-    },
     profileContainer: {
         display: 'flex',
         flexDirection: 'column',
@@ -209,30 +202,6 @@ const Address = (params) => {
                 {show_label_profile === SET_PROFILE_ADDRESS && (
                     <>
                         <p className={'title'}>{show_label_profile}</p>
-                        {/* <div className={'blackButton-desktop'}>
-                            <MainBlackButton
-                                className={'BlackButton'}
-                                innerContaunerStyle={style.btnPrimaryContained}
-                                onClick={async () => {
-                                    // await dispatch(setAddressLabel(SET_HEADER_ADD_NEW_ADDRESS));
-                                    setShowModal(true);
-                                }}
-                            >
-                                Add New Address
-                            </MainBlackButton>
-                        </div> */}
-                        {/* <div className={'blackButton-mobile'}>
-                            <MainBlackButton
-                                className={'BlackButton'}
-                                innerContaunerStyle={style.btnPrimaryContained}
-                                onClick={async () => {
-                                    await dispatch(setAddressLabel(SET_HEADER_ADD_NEW_ADDRESS));
-                                    router.push(LOCATION_PATH_ADDRESS_ADD_NEW_ADDRESS);
-                                }}
-                            >
-                                Add New Address
-                            </MainBlackButton>
-                        </div> */}
                         <Box className={classes.addressContainer}>
                             <Box className={'information'}>
                                 <p style={{ fontSize: '20px', fontWeight: '500' }}>Default Address</p>
@@ -280,58 +249,6 @@ const Address = (params) => {
                                 </MainBlackButton>
                             </Box>
                         </Box>
-                        {/* <Box className={classes.addressContainer}>
-                            <Box className={'information'}>
-                                <p>Address 2</p>
-                                <p style={{ marginTop: '35px', marginBottom: '10px' }}>Mia Artina</p>
-                                <p style={{ marginBottom: '10px', textAlign: 'center' }}>
-                                    Jln. Gunung Saputan no.22X, Kecamatan Denpasar Barat
-                                </p>
-                                <p>Denpasar</p>
-                            </Box>
-                            <Box className={'btnDesktop'}>
-                                <MainBlackButton
-                                    className={'WhiteButton'}
-                                    onClick={async () => {
-                                        await dispatch(setAddressLabel(SET_HEADER_EDIT_ADDRESS));
-                                        setShowModal(true);
-                                    }}
-                                    innerContaunerStyle={style.btnPrimaryOutline}
-                                    variant="outlined"
-                                >
-                                    Edit
-                                </MainBlackButton>
-                                <HorizontalSpacer widht={{ marginRight: '15px' }} />
-                                <MainBlackButton
-                                    className={'WhiteButton'}
-                                    innerContaunerStyle={style.btnPrimaryOutline}
-                                    variant="outlined"
-                                >
-                                    Delete
-                                </MainBlackButton>
-                            </Box>
-                            <Box className={'btnMobile'}>
-                                <MainBlackButton
-                                    className={'WhiteButton'}
-                                    onClick={async () => {
-                                        await dispatch(setAddressLabel(SET_HEADER_EDIT_ADDRESS));
-                                        router.push(LOCATION_PATH_ADDRESS_ADD_NEW_ADDRESS);
-                                    }}
-                                    innerContaunerStyle={style.btnPrimaryOutline_mobile}
-                                    variant="outlined"
-                                >
-                                    Edit
-                                </MainBlackButton>
-                                <HorizontalSpacer widht={{ marginRight: '15px' }} />
-                                <MainBlackButton
-                                    className={'WhiteButton'}
-                                    innerContaunerStyle={style.btnPrimaryOutline_mobile}
-                                    variant="outlined"
-                                >
-                                    Delete
-                                </MainBlackButton>
-                            </Box>
-                        </Box> */}
                     </>
                 )}
             </div>

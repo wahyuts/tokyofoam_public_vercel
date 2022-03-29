@@ -8,45 +8,8 @@ import { makeStyles } from '@mui/styles';
 import { useState } from 'react';
 
 const useStyles = makeStyles((theme) => ({
-    dialogUploadWrapper: {
-        display: 'flex',
-        marginTop: '20px'
-    },
-    dialogIcWrapper: {
-        background: '#D8D8D8',
-        width: '50px',
-        height: '50px',
-        borderRadius: '5px',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginRight: '30px'
-    },
-    dialogIcCamera: {
-        '&.MuiSvgIcon-root': {
-            width: '35px',
-            height: '35px'
-        }
-    },
-    dialogFormWrapper: {
-        marginTop: '20px',
-        marginBottom: '15px'
-    },
-    dialogInput: {
-        width: '93%',
-        padding: '10px 10px',
-        marginTop: '15px'
-    },
-    dialogBtnWrapper: {
-        display: 'flex',
-        justifyContent: 'space-between'
-    },
     dialogImageItem: {
         width: '18%'
-    },
-    dialogJNEIcon: {
-        width: '28px',
-        height: '14px'
     }
 }));
 
@@ -64,10 +27,6 @@ const Payment = (params) => {
             <Box style={{ display: 'flex', alignItems: 'center', marginBottom: '30px', paddingTop: '20px' }}>
                 <p id="modal-modal-title" style={{ marginRight: '41px', fontSize: '25px', fontWeight: '500' }}>
                     Payment
-                </p>
-                <AvTimer style={{ color: '#FF7373' }} fontSize="small" />
-                <p style={{ color: '#FF7373', marginLeft: '12px', fontSize: '18px', fontWeight: '400' }}>
-                    23.37 Remaining
                 </p>
             </Box>
 

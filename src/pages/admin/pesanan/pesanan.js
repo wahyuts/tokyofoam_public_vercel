@@ -16,9 +16,13 @@ import { makeStyles } from '@mui/styles';
 // import { setPesanan } from './redux/action/simple-action';
 
 import ButtonComponent from './component/button';
-import setPesanan from './redux/action/simple-action';
+// import setPesanan from './redux/action/simple-action';
 import MainBlackButton from '../../../utils/re-useable-components/buttons/MainBlackButton';
-import { getAllOrderForAdminDashboard } from '../../../redux/actions/dataHistoryOrderAction';
+import {
+    getAllOrderForAdminDashboard,
+    getSingleOrderByIdOrder,
+    setPesanan
+} from '../../../redux/actions/dataHistoryOrderAction';
 
 const useStyles = makeStyles((theme) => ({
     table: {
@@ -33,182 +37,27 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: 'bold',
         backgroundColor: '#5E35B1',
         color: 'white'
+    },
+    topNavSearch: {
+        position: 'relative',
+        height: 50,
+        width: 300,
+        backgroundColor: '#ffffff',
+        display: 'flex',
+        alignItems: 'center',
+        boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
+        borderRadius: 12,
+        '& .forInput': {
+            width: '100%',
+            height: '100%',
+            outline: 'none',
+            border: 'none',
+            borderRadius: 12,
+            paddingLeft: 10
+        }
+        /* overflow: hidden; */
     }
 }));
-
-const columns = [
-    { id: 'no_pesanan', label: 'No Pesanan', minWidth: 170 },
-    { id: 'tanggal_jual', label: 'Tanggal Jual', minWidth: 100 },
-    {
-        id: 'jatuh_tempo',
-        label: 'Jatuh Tempo',
-        minWidth: 170,
-        align: 'left'
-        // format: (value) => value.toLocaleString('en-US')
-    },
-    {
-        id: 'pelanggan',
-        label: 'Pelanggan',
-        minWidth: 170,
-        align: 'left'
-        // format: (value) => value.toLocaleString('en-US')
-    },
-    {
-        id: 'tujuan_pengiriman',
-        label: 'Tujuan Pengiriman',
-        minWidth: 170,
-        align: 'left'
-        // format: (value) => value.toFixed(2)
-    },
-    {
-        id: 'total',
-        label: 'Total',
-        minWidth: 170,
-        align: 'left'
-        // format: (value) => value.toFixed(2)
-    },
-    {
-        id: 'status',
-        label: 'Status',
-        minWidth: 170,
-        align: 'left'
-        // format: (value) => value.toFixed(2)
-    }
-];
-
-function createData(no_pesanan, tanggal_jual, jatuh_tempo, pelanggan, tujuan_pengiriman, total, status) {
-    return { no_pesanan, tanggal_jual, jatuh_tempo, pelanggan, tujuan_pengiriman, total, status };
-}
-
-const rows = [
-    createData(
-        '1',
-        '02-Nov-2021 12.00',
-        '02-Nov-2021 12.00',
-        'Maria L',
-        'JNE OKE (2-3 Hari)',
-        'IDR 651.300',
-        'pending'
-    ),
-    createData(
-        '1',
-        '02-Nov-2021 12.00',
-        '02-Nov-2021 12.00',
-        'Maria L',
-        'JNE OKE (2-3 Hari)',
-        'IDR 651.300',
-        'pending'
-    ),
-    createData(
-        '1',
-        '02-Nov-2021 12.00',
-        '02-Nov-2021 12.00',
-        'Maria L',
-        'JNE OKE (2-3 Hari)',
-        'IDR 651.300',
-        'pending'
-    ),
-    createData(
-        '1',
-        '02-Nov-2021 12.00',
-        '02-Nov-2021 12.00',
-        'Maria L',
-        'JNE OKE (2-3 Hari)',
-        'IDR 651.300',
-        'pending'
-    ),
-    createData(
-        '1',
-        '02-Nov-2021 12.00',
-        '02-Nov-2021 12.00',
-        'Maria L',
-        'JNE OKE (2-3 Hari)',
-        'IDR 651.300',
-        'pending'
-    ),
-    createData(
-        '1',
-        '02-Nov-2021 12.00',
-        '02-Nov-2021 12.00',
-        'Maria L',
-        'JNE OKE (2-3 Hari)',
-        'IDR 651.300',
-        'pending'
-    ),
-    createData(
-        '1',
-        '02-Nov-2021 12.00',
-        '02-Nov-2021 12.00',
-        'Maria L',
-        'JNE OKE (2-3 Hari)',
-        'IDR 651.300',
-        'pending'
-    ),
-    createData(
-        '1',
-        '02-Nov-2021 12.00',
-        '02-Nov-2021 12.00',
-        'Maria L',
-        'JNE OKE (2-3 Hari)',
-        'IDR 651.300',
-        'pending'
-    ),
-    createData(
-        '1',
-        '02-Nov-2021 12.00',
-        '02-Nov-2021 12.00',
-        'Maria L',
-        'JNE OKE (2-3 Hari)',
-        'IDR 651.300',
-        'pending'
-    ),
-    createData(
-        '1',
-        '02-Nov-2021 12.00',
-        '02-Nov-2021 12.00',
-        'Maria L',
-        'JNE OKE (2-3 Hari)',
-        'IDR 651.300',
-        'pending'
-    ),
-    createData(
-        '1',
-        '02-Nov-2021 12.00',
-        '02-Nov-2021 12.00',
-        'Maria L',
-        'JNE OKE (2-3 Hari)',
-        'IDR 651.300',
-        'pending'
-    ),
-    createData(
-        '1',
-        '02-Nov-2021 12.00',
-        '02-Nov-2021 12.00',
-        'Maria L',
-        'JNE OKE (2-3 Hari)',
-        'IDR 651.300',
-        'pending'
-    ),
-    createData(
-        '1',
-        '02-Nov-2021 12.00',
-        '02-Nov-2021 12.00',
-        'Maria L',
-        'JNE OKE (2-3 Hari)',
-        'IDR 651.300',
-        'pending'
-    ),
-    createData(
-        '1',
-        '02-Nov-2021 12.00',
-        '02-Nov-2021 12.00',
-        'Maria L',
-        'JNE OKE (2-3 Hari)',
-        'IDR 651.300',
-        'pending'
-    ),
-    createData('1', '02-Nov-2021 12.00', '02-Nov-2021 12.00', 'Maria L', 'JNE OKE (2-3 Hari)', 'IDR 651.300', 'pending')
-];
 
 export default function Pesanan() {
     const classes = useStyles();
@@ -216,9 +65,18 @@ export default function Pesanan() {
     const dispatch = useDispatch();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [searchByIdPesanan, setSearchByIdPesanan] = React.useState('');
     const { all_order_for_admin } = useSelector((state) => state.data_history_order);
 
     console.log('all ORDER FOR ADMIN', all_order_for_admin);
+    console.log('text seacrh', searchByIdPesanan);
+
+    const filteredOrder = all_order_for_admin.filter((orderById) => {
+        return (
+            orderById._id.toLocaleLowerCase().includes(searchByIdPesanan.toLocaleLowerCase()) ||
+            orderById.nama_pembeli.toLocaleLowerCase().includes(searchByIdPesanan.toLocaleLowerCase())
+        );
+    });
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -227,6 +85,10 @@ export default function Pesanan() {
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(+event.target.value);
         setPage(0);
+    };
+
+    const handleChangeSearch = (e) => {
+        setSearchByIdPesanan(e.target.value);
     };
 
     React.useEffect(() => {
@@ -243,21 +105,21 @@ export default function Pesanan() {
                     margin: '20px'
                 }}
             >
-                <div>{/* <input>Filter Date - start</input> */}</div>
+                <div className={classes.topNavSearch}>
+                    <input
+                        className="forInput"
+                        type="text"
+                        placeholder="Masukan Id Pesanan Atau Nama Pembeli"
+                        onChange={handleChangeSearch}
+                    />
+                    <i className="bx bx-search"></i>
+                </div>
                 <Stack spacing={2} direction="row">
                     <ButtonComponent variant="outlined" label="Export" textColor="#000000" />
-                    <ButtonComponent variant="contained" label="Tambah" color="#673AB7" textColor="#ffffff" />
                 </Stack>
             </div>
 
             <TableContainer className={classes.tableContainer} component={Paper}>
-                {/* <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
-                    <div style={{ width: 186, marginTop: 10, marginRight: 10 }}>
-                        <MainBlackButton className={'PurpleButton'}>Tambah</MainBlackButton>
-                        <hr style={{ border: 'none', height: 20 }} />
-                    </div>
-                </div> */}
-
                 <div>
                     <Table className={classes.table} aria-label="simple table">
                         {/**Table Head menggambarkan header dari tabelnya (hanya 1 baris dan 1 kolom) */}
@@ -298,34 +160,31 @@ export default function Pesanan() {
                         {/*dataProduct*/}
                         {/**  router.push(`/product-page/${single.title}`); */}
                         <TableBody>
-                            {all_order_for_admin
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((row) => (
-                                    // {dataProduct.map((row) => (
-                                    <TableRow
-                                        key={row._id}
-                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                        style={{ cursor: 'pointer' }}
-                                        onClick={() => {
-                                            console.log('IDDDDD', row._id);
-                                            // dispatch(getProductById(row._id));
-                                            // router.push(`/admin/pesanan/rincian-pesanan`);
-                                            dispatch(setPesanan('rincianPesanan'));
-                                        }}
-                                    >
-                                        {/**Avatar ini nanti ganti sama image */}
-                                        <TableCell>{row._id}</TableCell>
-                                        <TableCell>{row.nama_pembeli}</TableCell>
-                                        <TableCell>{row.tanggal_pembelian}</TableCell>
-                                        <TableCell>{row.expedisi}</TableCell>
-                                        <TableCell>{row.no_handphone}</TableCell>
-                                        <TableCell>{row.totalPrice_plus_shipping_minus_benefit_member}</TableCell>
-                                        <TableCell>{row.status_payment}</TableCell>
-                                        <TableCell>
-                                            <p>Ini ro resi harusnya</p>
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
+                            {filteredOrder.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+                                // {dataProduct.map((row) => (
+                                <TableRow
+                                    key={row._id}
+                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    style={{ cursor: 'pointer' }}
+                                    onClick={() => {
+                                        console.log('IDDDDD', row._id);
+                                        // dispatch(getProductById(row._id));
+                                        // router.push(`/admin/pesanan/rincian-pesanan`);
+                                        dispatch(getSingleOrderByIdOrder(row._id));
+                                        // dispatch(setPesanan('rincianPesanan'));
+                                    }}
+                                >
+                                    {/**Avatar ini nanti ganti sama image */}
+                                    <TableCell>{row._id}</TableCell>
+                                    <TableCell>{row.nama_pembeli}</TableCell>
+                                    <TableCell>{row.tanggal_pembelian}</TableCell>
+                                    <TableCell>{row.expedisi}</TableCell>
+                                    <TableCell>{row.no_handphone}</TableCell>
+                                    <TableCell>{row.totalPrice_plus_shipping_minus_benefit_member}</TableCell>
+                                    <TableCell>{row.status_payment}</TableCell>
+                                    <TableCell>{row.no_resi}</TableCell>
+                                </TableRow>
+                            ))}
                         </TableBody>
                     </Table>
                 </div>
@@ -333,7 +192,7 @@ export default function Pesanan() {
             <TablePagination
                 rowsPerPageOptions={[10, 25, 100]}
                 component="div"
-                count={all_order_for_admin.length}
+                count={filteredOrder.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}

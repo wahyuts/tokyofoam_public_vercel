@@ -32,6 +32,7 @@
         "no-lonely-if": "off",
         "no-unused-expressions": "off",
         "no-dupe-keys": "off",
+        "no-sequences": "off",
 
         // rule from plugin:import/recommended
         "import/no-mutable-exports": 0,
