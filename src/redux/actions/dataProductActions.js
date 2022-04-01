@@ -773,6 +773,22 @@ export const getAllNotificationFunction = () => async (dispatch) => {
     }
 };
 
+// Untuk Delete Notification Product
+export const deleteNotificationList = (id) => async (dispatch) => {
+    const API = `https://tokyofoam.herokuapp.com/api/notification/delete/${id}`;
+    try {
+        getAuthorizationHeaderToken();
+        const res = await axios.delete(API);
+        // console.log(res, 'cek res <<<')
+        if (res.data.message === 'Data above successfull deleted') {
+            alert('Notifikasi Berhasil Dihapus!');
+            dispatch(getAllNotificationFunction());
+        }
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 //Fungsi buat get token dari local storage dan langsung pake
 const getAuthorizationHeaderToken = () => {
     const IdToken = localStorage.getItem('FBIdToken');

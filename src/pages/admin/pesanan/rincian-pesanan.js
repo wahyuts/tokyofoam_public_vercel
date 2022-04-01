@@ -15,6 +15,9 @@ import { useRouter } from 'next/router';
 import {
     deleteOrderByIdOnAdmin,
     saveStatusPengiriman,
+    saveTujuanPengiriman,
+    savePelangganButton,
+    saveNotedCatatan,
     setPesanan
 } from '../../../redux/actions/dataHistoryOrderAction';
 
@@ -75,6 +78,7 @@ export default function RincianPesanan(params) {
     const router = useRouter();
     const dispatch = useDispatch();
     const { single_order_by_id_order } = useSelector((state) => state.data_history_order);
+    const [dataSingleOrder, setDataSingleOrder] = useState({});
 
     const [status, setStatus] = React.useState('');
     const [isEditPelanggan, setIsEditPelanggan] = useState({ status: false, label: 'Edit' });
@@ -84,18 +88,18 @@ export default function RincianPesanan(params) {
     const [isEditPesanan, setIsEditPesanan] = useState({ status: false, label: 'Edit' });
     const [isEditNote, setIsEditNote] = useState({ status: false, label: 'Edit' });
     const [dataPelanggan, setDataPelanggan] = useState({
-        name: 'mari L',
+        name: single_order_by_id_order.nama_pembeli,
         email: 'gsg@nska.com',
-        noHp: '2435849379',
-        noHpPenerima: '+6281236006789',
-        alamatPenerima: 'Maria L, pinang residence, Unit 36 Kota Jakarta Selatan DKI Jakarta Indonesia maria@gmail.com',
+        noHp: single_order_by_id_order.no_handphone,
+        noHpPenerima: single_order_by_id_order.no_handphone,
+        alamatPenerima: single_order_by_id_order.alamat_pengiriman,
         kurir: 'JNE OKE (2-3 Hari)',
         tipeLayanan: 'DELIVEREE',
-        tanggalKirim: '-',
-        noTraking: '-',
+        tanggalKirim: single_order_by_id_order.tanggal_start_pengiriman,
+        noTraking: single_order_by_id_order.no_resi,
         jatuhTenpo: '03-11-2021 12.00 AM',
         pesanan: 1,
-        note: '-'
+        note: single_order_by_id_order.catatan
     });
 
     const handleChange = (event) => {
@@ -122,12 +126,40 @@ export default function RincianPesanan(params) {
         isEditStatusPengiriman,
         isEditJatuhTenpo,
         isEditPesanan,
-        isEditNote
+        isEditNote,
+        dataPelanggan
     ]);
 
-    console.log(dataPelanggan);
-    console.log(isEditJatuhTenpo);
-    console.log('SINGLE ORDER', single_order_by_id_order);
+    useEffect(() => {
+        setDataSingleOrder(single_order_by_id_order);
+    }, [single_order_by_id_order]);
+
+    // console.log('object data SINGLE', dataSingleOrder);
+
+    // console.log(dataPelanggan);
+    // console.log(isEditJatuhTenpo);
+    // console.log('SINGLE ORDER', single_order_by_id_order);
+
+    const dataStatusKirim = {
+        tanggal_start_pengiriman: dataPelanggan.tanggalKirim,
+        no_resi: dataPelanggan.noTraking
+    };
+
+    const dataTujuanKirim = {
+        alamat_pengiriman: dataPelanggan.alamatPenerima,
+        no_handphone: dataPelanggan.noHpPenerima
+    };
+
+    const dataPelanggans = {
+        nama_pembeli: dataPelanggan.name,
+        no_handphone: dataPelanggan.noHp
+    };
+
+    const dataCatatan = {
+        catatan: dataPelanggan.note
+    };
+
+    // console.log('object data', dataStatusKirim);
 
     let ButtonEditPelanggan = (
         <>
@@ -157,11 +189,14 @@ export default function RincianPesanan(params) {
                 width="133px"
                 textColor="#ffffff"
                 onPreessed={() =>
-                    setIsEditPelanggan({
-                        ...isEditPelanggan,
-                        status: !isEditPelanggan.status,
-                        label: isEditPelanggan.label === 'Edit' ? 'Save' : 'Edit'
-                    })
+                    dispatch(
+                        savePelangganButton(
+                            single_order_by_id_order._id,
+                            setIsEditPelanggan,
+                            isEditPelanggan,
+                            dataPelanggans
+                        )
+                    )
                 }
             />
         </>
@@ -195,16 +230,12 @@ export default function RincianPesanan(params) {
                 width="133px"
                 textColor="#ffffff"
                 onPreessed={() =>
-                    // setIsEditStatusPengiriman({
-                    //     ...isEditStatusPengiriman,
-                    //     status: !isEditStatusPengiriman.status,
-                    //     label: isEditStatusPengiriman.label === 'Edit' ? 'Save' : 'Edit'
-                    // }),
                     dispatch(
                         saveStatusPengiriman(
                             single_order_by_id_order._id,
                             setIsEditStatusPengiriman,
-                            isEditStatusPengiriman
+                            isEditStatusPengiriman,
+                            dataStatusKirim
                         )
                     )
                 }
@@ -240,11 +271,14 @@ export default function RincianPesanan(params) {
                 width="133px"
                 textColor="#ffffff"
                 onPreessed={() =>
-                    setIsEditTujuanPengiriman({
-                        ...isEditTujuanPengiriman,
-                        status: !isEditTujuanPengiriman.status,
-                        label: isEditTujuanPengiriman.label === 'Edit' ? 'Save' : 'Edit'
-                    })
+                    dispatch(
+                        saveTujuanPengiriman(
+                            single_order_by_id_order._id,
+                            setIsEditTujuanPengiriman,
+                            isEditTujuanPengiriman,
+                            dataTujuanKirim
+                        )
+                    )
                 }
             />
         </>
@@ -278,11 +312,12 @@ export default function RincianPesanan(params) {
                 width="133px"
                 textColor="#ffffff"
                 onPreessed={() =>
-                    setIsEditNote({
-                        ...isEditNote,
-                        status: !isEditNote.status,
-                        label: isEditNote.label === 'Edit' ? 'Save' : 'Edit'
-                    })
+                    // setIsEditNote({
+                    //     ...isEditNote,
+                    //     status: !isEditNote.status,
+                    //     label: isEditNote.label === 'Edit' ? 'Save' : 'Edit'
+                    // })
+                    dispatch(saveNotedCatatan(single_order_by_id_order._id, setIsEditNote, isEditNote, dataCatatan))
                 }
             />
         </>
@@ -371,18 +406,18 @@ export default function RincianPesanan(params) {
                                 {!isEditPelanggan.status ? (
                                     <>
                                         <p style={styles.textColorDisable}>Nama</p>
-                                        <p style={styles.textColorBold}>{single_order_by_id_order.nama_pembeli} </p>
+                                        <p style={styles.textColorBold}>{dataPelanggans.nama_pembeli} </p>
                                         {/* <p style={styles.textColorDisable}>email</p>
                                         <p style={styles.textColorBold}>{dataPelanggan.email} </p> */}
                                         <p style={styles.textColorDisable}>No Hp</p>
-                                        <p style={styles.textColorBold}>{single_order_by_id_order.no_handphone} </p>
+                                        <p style={styles.textColorBold}>{dataPelanggans.no_handphone} </p>
                                     </>
                                 ) : (
                                     <>
                                         <p style={styles.textColorDisable}>Nama</p>
                                         <input
                                             type="text"
-                                            placeholder={single_order_by_id_order.nama_pembeli}
+                                            value={dataPelanggans.nama_pembeli}
                                             style={styles.textColorBold2}
                                             onChange={(e) => updateInput(e, 'name')}
                                         />
@@ -396,7 +431,7 @@ export default function RincianPesanan(params) {
                                         <p style={styles.textColorDisable}>No Hp</p>
                                         <input
                                             type="text"
-                                            placeholder={single_order_by_id_order.no_handphone}
+                                            value={dataPelanggans.no_handphone}
                                             style={styles.textColorBold2}
                                             onChange={(e) => updateInput(e, 'noHp')}
                                         />
@@ -448,14 +483,12 @@ export default function RincianPesanan(params) {
                                             <p style={styles.textColorBold}>-</p>
                                         ) : (
                                             <p style={styles.textColorBold}>
-                                                {single_order_by_id_order.tanggal_start_pengiriman}{' '}
+                                                {dataStatusKirim.tanggal_start_pengiriman}{' '}
                                             </p>
                                         )}
-                                        {/* <p style={styles.textColorBold}>
-                                            {single_order_by_id_order.tanggal_start_pengiriman}{' '}
-                                        </p> */}
+
                                         <p style={styles.textColorDisable}>No. Tracking</p>
-                                        <p style={styles.textColorBold}>{single_order_by_id_order.no_resi} </p>
+                                        <p style={styles.textColorBold}>{dataStatusKirim.no_resi} </p>
                                     </>
                                 ) : (
                                     <>
@@ -469,14 +502,14 @@ export default function RincianPesanan(params) {
                                         <p style={styles.textColorDisable}>Tanggal Kirim</p>
                                         <input
                                             type="text"
-                                            placeholder={single_order_by_id_order.tanggal_start_pengiriman}
+                                            value={dataStatusKirim.tanggal_start_pengiriman}
                                             style={styles.textColorBold2}
                                             onChange={(e) => updateInput(e, 'tanggalKirim')}
                                         />
                                         <p style={styles.textColorDisable}>No. Tracking</p>
                                         <input
                                             type="text"
-                                            placeholder={single_order_by_id_order.no_resi}
+                                            value={dataStatusKirim.no_resi}
                                             style={styles.textColorBold2}
                                             onChange={(e) => updateInput(e, 'noTraking')}
                                         />
@@ -520,12 +553,12 @@ export default function RincianPesanan(params) {
                                     single_order_by_id_order.catatan === '' ? (
                                         <p style={styles.textColorBold}>-</p>
                                     ) : (
-                                        <p style={styles.textColorBold}>{single_order_by_id_order.catatan} </p>
+                                        <p style={styles.textColorBold}>{dataCatatan.catatan} </p>
                                     )
                                 ) : (
                                     <input
                                         type="text"
-                                        placeholder={single_order_by_id_order.catatan}
+                                        value={dataCatatan.catatan}
                                         style={styles.textColorBold2}
                                         onChange={(e) => updateInput(e, 'note')}
                                     />
@@ -586,9 +619,9 @@ export default function RincianPesanan(params) {
                                 {!isEditTujuanPengiriman.status ? (
                                     <>
                                         <p style={styles.textColorDisable}>Nama & Alamat</p>
-                                        <p style={styles.textColorBold}>{single_order_by_id_order.alamat_pengiriman}</p>
+                                        <p style={styles.textColorBold}>{dataTujuanKirim.alamat_pengiriman}</p>
                                         <p style={styles.textColorDisable}>No Hp</p>
-                                        <p style={styles.textColorBold}>{single_order_by_id_order.no_handphone}</p>
+                                        <p style={styles.textColorBold}>{dataTujuanKirim.no_handphone}</p>
                                     </>
                                 ) : (
                                     <>
@@ -599,12 +632,12 @@ export default function RincianPesanan(params) {
                                             rows="5"
                                             style={styles.textColorBold2}
                                             onChange={(e) => updateInput(e, 'alamatPenerima')}
-                                            placeholder={single_order_by_id_order.alamat_pengiriman}
+                                            value={dataTujuanKirim.alamat_pengiriman}
                                         />
                                         <p style={styles.textColorDisable}>No Hp</p>
                                         <input
                                             type="text"
-                                            placeholder={single_order_by_id_order.no_handphone}
+                                            value={dataTujuanKirim.no_handphone}
                                             style={styles.textColorBold2}
                                             onChange={(e) => updateInput(e, 'noHpPenerima')}
                                         />

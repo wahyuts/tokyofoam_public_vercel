@@ -160,7 +160,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const DesktopLoginDrawer = ({ menuOpens, setMenuOpen }) => {
-    const { loading, errors, errors_register } = useSelector((state) => state.UI);
+    const { loading, errors, errors_register, errors_forgot_password_submit } = useSelector((state) => state.UI);
     const { locationProvinceLogreg, stateKotaLogreg, stateKecamatanLogreg } = useSelector((state) => state.user);
     const { email, password } = useSelector((state) => state.formLoginData);
 
@@ -596,6 +596,11 @@ const DesktopLoginDrawer = ({ menuOpens, setMenuOpen }) => {
                     value={forgotPassword}
                     onChange={handleForgotPassword}
                 />
+            </div>
+            <div>
+                <p style={{ fontSize: 15, color: '#FF7373', marginLeft: 20, marginTop: 10 }}>
+                    {errors_forgot_password_submit}
+                </p>
             </div>
             <div className={classes.loginButton}>
                 {loading ? (

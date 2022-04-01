@@ -29,6 +29,7 @@ import { Checkbox, TextField } from '@mui/material';
 import AutoCompleteProvinceLogreg from '../../../utils/re-useable-components/dropdown-log-reg/AutoComplete-Province-Logreg';
 import DropdownKabupatenLogreg from '../../../utils/re-useable-components/dropdown-log-reg/dropdown-kabupaten-logreg';
 import DropdownKecamatanLogreg from '../../../utils/re-useable-components/dropdown-log-reg/dropdown-kecamatan-logreg';
+import { useRouter } from 'next/router';
 
 const useStyles = makeStyles((theme) => ({
     menuIcon: {
@@ -172,6 +173,8 @@ export default function MenuDrawer() {
     const { locationProvinceLogreg, stateKotaLogreg, stateKecamatanLogreg } = useSelector((state) => state.user);
 
     const classes = useStyles();
+    const router = useRouter();
+    const currentPath = router.pathname;
     const dispatch = useDispatch();
     const {
         handleClickHome,
@@ -312,10 +315,14 @@ export default function MenuDrawer() {
     };
 
     const klikLogout = () => {
+        currentPath === '/profile'
+            ? (dispatch(logoutUser()), router.push('/'), setIsOpenDrawer(!isOpenDrawer), setShowSI(true))
+            : (dispatch(logoutUser()), setIsOpenDrawer(!isOpenDrawer), setShowSI(true));
         // setMenuOpen(!menuOpens);
-        dispatch(logoutUser());
-        setIsOpenDrawer(!isOpenDrawer);
-        setShowSI(true);
+
+        // dispatch(logoutUser());
+        // setIsOpenDrawer(!isOpenDrawer);
+        // setShowSI(true);
     };
 
     const onForgotPass = () => {

@@ -3,10 +3,9 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "dev": "(if exist .next rd /s /q .next 2>nul) && next dev",
+        "dev": "next dev",
         "build": "next build",
-        "start": "NODE_ENV=production node server.js",
-        "local": "next start",
+        "start": "next start",
         "lint": "next lint",
         "check-format": "prettier --check .",
         "check-lint": "eslint . --ext ts --ext tsx --ext js",

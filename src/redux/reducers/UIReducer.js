@@ -3,6 +3,8 @@ import {
     SET_ERRORS_REGISTER,
     CLEAR_ERRORS,
     CLEAR_ERRORS_REGISTER,
+    SET_ERRORS_FORGOT_PASSWORD_SUBMIT,
+    CLEAR_ERRORS_FORGOT_PASSWORD_SUBMIT,
     SET_ERRORS_CHECKOUT_BUTTON,
     CLEAR_ERRORS_CHECKOUT_BUTTON,
     SET_ERRORS_EMPTY_BAG,
@@ -21,6 +23,7 @@ const initialState = {
     loading_button_paylatter: false,
     errors: null,
     errors_register: null,
+    errors_forgot_password_submit: null,
     errors_auth_checkout_button: null,
     errors_empty_bag: null
 };
@@ -51,6 +54,12 @@ export default function UIReducer(state = initialState, action) {
                 // loading: false,
                 errors_auth_checkout_button: action.payload
             };
+        case SET_ERRORS_FORGOT_PASSWORD_SUBMIT:
+            return {
+                ...state,
+                loading: false,
+                errors_forgot_password_submit: action.payload
+            };
         case CLEAR_ERRORS:
             return {
                 ...state,
@@ -74,6 +83,12 @@ export default function UIReducer(state = initialState, action) {
                 ...state,
                 loading: false,
                 errors_auth_checkout_button: null
+            };
+        case CLEAR_ERRORS_FORGOT_PASSWORD_SUBMIT:
+            return {
+                ...state,
+                loading: false,
+                errors_forgot_password_submit: null
             };
         case LOADING_UI:
             return {

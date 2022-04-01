@@ -1,21 +1,22 @@
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Router, useRouter } from 'next/router';
 import Image from 'next/image';
 
-import { Accordion, AccordionDetails, AccordionSummary, Container, IconButton } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Alert, Container, IconButton } from '@mui/material';
 import { VisibilityOutlined, CreditCardOutlined, ChatOutlined, PhotoCamera, AvTimer } from '@mui/icons-material';
 import { makeStyles } from '@mui/styles';
 import { Box, display } from '@mui/system';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import { LOCATION_PATH_DETAILS_ORDER, LOCATION_PATH_EDIT_REVIEW, LOCATION_PATH_MOBILE_PAYMENT } from '../../../types';
 import Dialog from './dialog';
 import MainBlackButton from '../../../utils/re-useable-components/buttons/MainBlackButton';
 import HorizontalSpacer from '../../../components/HorizontalSpacer';
-import { useDispatch, useSelector } from 'react-redux';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
-import { deleteOrderById } from '../../../redux/actions/dataHistoryOrderAction';
+import { deleteOrderById, getOrderById } from '../../../redux/actions/dataHistoryOrderAction';
 import ScrollForModal from '../../../utils/re-useable-components/scroll-for-modal';
+import axios from 'axios';
 
 const styles = {
     normalText: { fontWeight: 400, fontSize: '15px', color: '#474747' },
@@ -67,7 +68,8 @@ const useStyles = makeStyles((theme) => ({
 
     dialogBtnWrapper: {
         display: 'flex',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        alignItems: 'center'
     },
     dialogImageItem: {
         width: '18%'
@@ -89,17 +91,18 @@ const CardComponent = ({ dataToRender }) => {
     const dispatch = useDispatch();
 
     const { listOrderUserInUserDashboard } = useSelector((state) => state.dataProduct);
-    console.log('DAFTAR ORDER USER', listOrderUserInUserDashboard);
+    // console.log('DAFTAR ORDER USER', listOrderUserInUserDashboard);
 
     const [showModalPayment, setShowModalPayment] = useState(false);
     const [statusPayment, setStatusPayment] = useState({});
     const [dataOrder, setDataOrder] = useState({});
     const [dataCart, setDataCart] = useState([]);
-    const [scrollY, setScrollY] = useState(0);
+    const [deleteResponse, setDeleteResponse] = useState('');
 
     const showPaymentStatusLabel = (label) => {
         if (label === 'expire') return setStatusPayment({ className: 'OrangeButton', label: 'Buy Again' });
         if (label === 'Telah dibayar') return setStatusPayment({ className: 'DisableButton', label });
+        if (label === 'Pending') return setStatusPayment({ className: '', label: 'Pending' });
         return setStatusPayment({ className: 'BlackButton', label: 'Confirm Order & Pay' });
     };
 
@@ -109,24 +112,15 @@ const CardComponent = ({ dataToRender }) => {
     };
 
     useEffect(() => {}, [showModalPayment, listOrderUserInUserDashboard]);
+
     useEffect(() => {
-        const handleScroll = () => {
-            setScrollY(window.scrollY);
-        };
+        console.log(deleteResponse);
+    }, [deleteResponse]);
 
-        handleScroll();
-
-        window.addEventListener('scroll', handleScroll);
-
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
+    // console.log(statusPayment);
     return (
         <Container>
+            {deleteResponse === 'OK' && <Alert severity="success">Deleted has been success</Alert>}
             {dataToRender.map((data, index) => {
                 const total = currencyFormat(data?.totalPrice_plus_shipping_minus_benefit_member);
                 const shipping_fee = currencyFormat(data?.shipping_fee);
@@ -161,7 +155,7 @@ const CardComponent = ({ dataToRender }) => {
                                             ID Pesanan {data?._id}
                                         </p>
                                         <p style={{ fontWeight: 400, fontSize: '15px', color: '#474747' }}>
-                                            Status Pesanan:
+                                            Status Payment:
                                             <text
                                                 style={
                                                     data?.status_payment === 'Telah dibayar'
@@ -309,7 +303,7 @@ const CardComponent = ({ dataToRender }) => {
                                         aria-label="delete"
                                         className={classes.btnIcon}
                                         onClick={async () => {
-                                            await dispatch(deleteOrderById(data?._id));
+                                            setDeleteResponse(await dispatch(deleteOrderById(data?._id)));
                                         }}
                                     >
                                         <DeleteOutlinedIcon style={{ color: '#FF0000', marginRight: '10px' }} />
@@ -473,7 +467,8 @@ const CardComponent = ({ dataToRender }) => {
                                     >
                                         <CreditCardOutlined
                                             style={{ color: '#474747', marginRight: '10px' }}
-                                            onClick={() => {
+                                            onClick={async () => {
+                                                await dispatch(getOrderById(data?._id));
                                                 router.push(LOCATION_PATH_MOBILE_PAYMENT);
                                             }}
                                         />
@@ -483,7 +478,7 @@ const CardComponent = ({ dataToRender }) => {
                                             aria-label="delete"
                                             className={classes.btnIcon}
                                             onClick={async () => {
-                                                await dispatch(deleteOrderById(data?._id));
+                                                setDeleteResponse(await dispatch(deleteOrderById(data?._id)));
                                             }}
                                         >
                                             <DeleteOutlinedIcon style={{ color: '#FF0000', marginRight: '10px' }} />
@@ -537,6 +532,8 @@ const CardComponent = ({ dataToRender }) => {
                     {dataCart.length <= 2 ? (
                         dataCart?.map((item, index) => {
                             const price = item?.promo_price === 0 ? item?.price : item?.promo_price;
+                            const totalPrice =
+                                item?.promo_price_x_qty === 0 ? item?.price_x_qty : item?.promo_price_x_qty;
                             return (
                                 <Box
                                     key={item._id}
@@ -583,7 +580,7 @@ const CardComponent = ({ dataToRender }) => {
                                             fontWeight: '400'
                                         }}
                                     >
-                                        {item?.promo_price_x_qty}
+                                        {totalPrice}
                                     </p>
                                 </Box>
                             );
@@ -592,6 +589,8 @@ const CardComponent = ({ dataToRender }) => {
                         <ScrollForModal>
                             {dataCart?.map((item, index) => {
                                 const price = item?.promo_price === 0 ? item?.price : item?.promo_price;
+                                const totalPrice =
+                                    item?.promo_price_x_qty === 0 ? item?.price_x_qty : item?.promo_price_x_qty;
                                 return (
                                     <Box
                                         key={item._id}
@@ -640,7 +639,7 @@ const CardComponent = ({ dataToRender }) => {
                                                 fontWeight: '400'
                                             }}
                                         >
-                                            {item?.promo_price_x_qty}
+                                            {totalPrice}
                                         </p>
                                     </Box>
                                 );
@@ -660,7 +659,7 @@ const CardComponent = ({ dataToRender }) => {
                     <Box style={{ width: '48%' }}>
                         <p style={{ fontWeight: '500', fontSize: '18px' }}>Delivery Address</p>
                         <p style={{ fontSize: '14px', fontWeight: '400', marginTop: '18px' }}>
-                            {dataOrder?.alamat_pengiriman}
+                            {`${dataOrder?.nama_pembeli}, ${dataOrder?.alamat_pengiriman}`}
                         </p>
                     </Box>
                     <Box
@@ -700,15 +699,33 @@ const CardComponent = ({ dataToRender }) => {
                         Back
                     </MainBlackButton>
                     <HorizontalSpacer widht={{ marginRight: '15px' }} />
-                    <MainBlackButton
-                        onClick={() => setShowModalReview(false)}
-                        innerContaunerStyle={{ width: '328px', fontSize: '20px' }}
-                        className={statusPayment?.className}
-                        variant="contained"
-                        disable={statusPayment?.label === 'Telah dibayar'}
-                    >
-                        {statusPayment?.label}
-                    </MainBlackButton>
+                    {statusPayment.label === 'Pending' ? (
+                        <p>Check your email to confirm</p>
+                    ) : (
+                        <MainBlackButton
+                            onClick={async () => {
+                                if (statusPayment?.label === 'Buy Again') {
+                                    router.push('/product-page');
+                                } else {
+                                    const resp = await axios.get(
+                                        `https://tokyofoam.herokuapp.com/api/payment/getToken/${dataOrder?._id}`
+                                    );
+                                    const midtrans_url = resp?.data?.url;
+                                    try {
+                                        window.location.href = `${midtrans_url}`;
+                                    } catch (error) {
+                                        console.log(error);
+                                    }
+                                }
+                            }}
+                            innerContaunerStyle={{ width: '328px', fontSize: '20px' }}
+                            className={statusPayment?.className}
+                            variant="contained"
+                            disable={statusPayment?.label === 'Telah dibayar'}
+                        >
+                            {statusPayment?.label}
+                        </MainBlackButton>
+                    )}
                 </Box>
             </Dialog>
         </Container>

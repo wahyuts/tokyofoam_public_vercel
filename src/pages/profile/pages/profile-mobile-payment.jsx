@@ -1,21 +1,28 @@
 import { Card, Container, Grid } from '@mui/material';
-import { AvTimer } from '@mui/icons-material';
 import { Box } from '@mui/system';
 import MainBlackButton from '../../../utils/re-useable-components/buttons/MainBlackButton';
 import HorizontalSpacer from '../../../components/HorizontalSpacer';
 import { useRouter } from 'next/router';
 import { makeStyles } from '@mui/styles';
 import { useState } from 'react';
+import { SET_PROFILE_DASHBOARD } from '../../../types';
+import { useDispatch, useSelector } from 'react-redux';
+import { setProfile } from '../../../redux/actions/urlOnProfileButtonTabAction';
 
 const useStyles = makeStyles((theme) => ({
     dialogImageItem: {
-        width: '18%'
+        width: '30%',
+        height: '35%'
     }
 }));
 
 const Payment = (params) => {
     const classes = useStyles();
+    const dispatch = useDispatch();
     const router = useRouter();
+
+    const { dataOrderById } = useSelector((state) => state.data_history_order);
+
     const [statusPayment, setStatusPayment] = useState({});
     const showPaymentStatusLabel = (label) => {
         if (label === 'failed') return setStatusPayment({ className: 'OrangeButton', label: 'Buy Again' });
@@ -50,95 +57,81 @@ const Payment = (params) => {
                             Price
                         </p>
                     </Box> */}
-            <Card style={{ width: '100%', display: 'flex', flexDirection: 'row' }}>
-                <img
-                    src={'/assets/images/Single-Pillow-1.png'}
-                    className={classes.dialogImageItem}
-                    alt="backgroudn-image"
-                />
-                <Box style={{ marginLeft: '20px' }}>
-                    <p style={{ fontSize: '18px', fontWeight: '400' }}>Mulberry Silk Pillowcase</p>
-                    <p style={{ fontSize: '18px', fontWeight: '400' }}>Yellow (1kg)</p>
-                    <p style={{ fontSize: '18px', fontWeight: '400' }}>IDR 650.000</p>
-                </Box>
-            </Card>
+            {dataOrderById?.cart?.map((item) => {
+                const price = item?.promo_price === 0 ? item?.price : item?.promo_price;
+                return (
+                    <Card
+                        key={item._id}
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            flexDirection: 'row',
+                            marginTop: '35px',
+                            padding: '10px'
+                        }}
+                    >
+                        <Box style={{ width: '100%', display: 'flex', flexDirection: 'row' }}>
+                            <img src={item?.imageProduct} className={classes.dialogImageItem} alt="backgroudn-image" />
+                            <Box style={{ marginLeft: '20px' }}>
+                                <p style={{ fontSize: '18px', fontWeight: '400' }}>{item?.nameProduct}</p>
+                                <p style={{ fontSize: '18px', fontWeight: '400' }}>{item?.id_manual_product}</p>
+                                <p style={{ fontSize: '18px', fontWeight: '400' }}>{price}</p>
+                            </Box>
+                        </Box>
+                    </Card>
+                );
+            })}
             <Box style={{ width: '100%', marginTop: '50px' }}>
                 <p style={{ fontWeight: '500', fontSize: '14px' }}>Delivery Address</p>
                 <p style={{ fontSize: '14px', fontWeight: '400', marginTop: '10px' }}>
-                    Mia Artina , Jln. Gunung Saputan no.22X, Kecamatan Denpasar Barat, Kota Denpasar, Bali 80117,
-                    Indonesia No Hp 0821212121212
+                    {`${dataOrderById?.nama_pembeli}, ${dataOrderById?.alamat_pengiriman}`}
+                    <text>{`No Hp ${dataOrderById?.no_handphone}`}</text>
                 </p>
             </Box>
             <Grid className={classes.container} sx={{ mx: 'auto' }} mt={'50px'}>
                 <table style={{ width: '100%' }}>
-                    <tr style={{ display: 'flex', width: '100%' }}>
-                        <td
-                            style={{
-                                borderWidth: '1px',
-                                borderColor: '#EBEBEB',
-                                borderStyle: 'solid',
-                                width: '10%'
-                            }}
-                        >
-                            <p style={{ textAlign: 'center' }}>1 </p>
-                        </td>
-                        <td
-                            style={{
-                                borderWidth: '1px',
-                                borderColor: '#EBEBEB',
-                                borderStyle: 'solid',
-                                width: '60%',
-                                paddingLeft: '11px'
-                            }}
-                        >
-                            <p style={{ textAlign: 'left' }}>Mulberry Silk Pillowcase (1)</p>
-                        </td>
-                        <td
-                            style={{
-                                borderWidth: '1px',
-                                borderColor: '#EBEBEB',
-                                borderStyle: 'solid',
-                                width: '30%',
-                                paddingRight: '14px'
-                            }}
-                        >
-                            <p style={{ textAlign: 'right' }}>IDR 650.000</p>
-                        </td>
-                    </tr>
-                    <tr style={{ display: 'flex', width: '100%' }}>
-                        <td
-                            style={{
-                                borderWidth: '1px',
-                                borderColor: '#EBEBEB',
-                                borderStyle: 'solid',
-                                width: '10%'
-                            }}
-                        >
-                            <p style={{ textAlign: 'center' }}>1 </p>
-                        </td>
-                        <td
-                            style={{
-                                borderWidth: '1px',
-                                borderColor: '#EBEBEB',
-                                borderStyle: 'solid',
-                                width: '60%',
-                                paddingLeft: '11px'
-                            }}
-                        >
-                            <p style={{ textAlign: 'left' }}>Mulberry Silk Pillowcase (1)</p>
-                        </td>
-                        <td
-                            style={{
-                                borderWidth: '1px',
-                                borderColor: '#EBEBEB',
-                                borderStyle: 'solid',
-                                width: '30%',
-                                paddingRight: '14px'
-                            }}
-                        >
-                            <p style={{ textAlign: 'right' }}>IDR 650.000</p>
-                        </td>
-                    </tr>
+                    {dataOrderById?.cart.map((item, index) => {
+                        const totalPrice = item?.promo_price_x_qty === 0 ? item?.price_x_qty : item?.promo_price_x_qty;
+
+                        return (
+                            <>
+                                <tr style={{ display: 'flex', width: '100%' }}>
+                                    <td
+                                        style={{
+                                            borderWidth: '1px',
+                                            borderColor: '#EBEBEB',
+                                            borderStyle: 'solid',
+                                            width: '10%'
+                                        }}
+                                    >
+                                        <p style={{ textAlign: 'center' }}>{index + 1}</p>
+                                    </td>
+                                    <td
+                                        style={{
+                                            borderWidth: '1px',
+                                            borderColor: '#EBEBEB',
+                                            borderStyle: 'solid',
+                                            width: '60%',
+                                            paddingLeft: '11px'
+                                        }}
+                                    >
+                                        <p style={{ textAlign: 'left' }}>{`${item?.nameProduct} (${item?.qty})`} </p>
+                                    </td>
+                                    <td
+                                        style={{
+                                            borderWidth: '1px',
+                                            borderColor: '#EBEBEB',
+                                            borderStyle: 'solid',
+                                            width: '30%',
+                                            paddingRight: '14px'
+                                        }}
+                                    >
+                                        <p style={{ textAlign: 'right' }}>{totalPrice}</p>
+                                    </td>
+                                </tr>
+                            </>
+                        );
+                    })}
 
                     <tr style={{ display: 'flex' }}>
                         <td
@@ -167,7 +160,9 @@ const Payment = (params) => {
                                 width: '30%'
                             }}
                         >
-                            <p style={{ textAlign: 'right' }}>IDR 650.000</p>
+                            <p style={{ textAlign: 'right' }}>
+                                {dataOrderById?.totalPrice_plus_shipping_minus_benefit_member}
+                            </p>
                         </td>
                     </tr>
                 </table>
@@ -184,7 +179,10 @@ const Payment = (params) => {
             </MainBlackButton>
             <HorizontalSpacer widht={{ marginRight: '15px' }} />
             <MainBlackButton
-                onClick={() => setShowModalPayment(false)}
+                onClick={() => {
+                    dispatch(setProfile(SET_PROFILE_DASHBOARD));
+                    router.push('/profile');
+                }}
                 innerContaunerStyle={{ width: '186px', fontSize: '20px' }}
                 className="WhiteButton"
                 variant="outlined"

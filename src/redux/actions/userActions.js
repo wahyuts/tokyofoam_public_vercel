@@ -8,6 +8,8 @@ import {
     SET_ERRORS_CHECKOUT_BUTTON,
     CLEAR_ERRORS_CHECKOUT_BUTTON,
     SET_ERRORS_EMPTY_BAG,
+    SET_ERRORS_FORGOT_PASSWORD_SUBMIT,
+    CLEAR_ERRORS_FORGOT_PASSWORD_SUBMIT,
     CLEAR_ERRORS_EMPTY_BAG,
     LOADING_UI,
     STOP_LOADING_UI,
@@ -252,10 +254,12 @@ export const changePassword =
                 setRegister(false);
                 setForgot(false);
                 setBoxForgot(true);
-                dispatch({ type: CLEAR_ERRORS });
+                // dispatch({ type: CLEAR_ERRORS });
+                dispatch({ type: CLEAR_ERRORS_FORGOT_PASSWORD_SUBMIT });
             }
         } catch (error) {
-            dispatch({ type: SET_ERRORS, payload: error.response.data.message });
+            // dispatch({ type: SET_ERRORS, payload: error.response.data.message });
+            dispatch({ type: SET_ERRORS_FORGOT_PASSWORD_SUBMIT, payload: error.response.data.message });
         }
     };
 

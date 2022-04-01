@@ -399,6 +399,12 @@ const Checkout = () => {
     const [value, setValue] = useState(shippingFee);
     const [aggree, setAgreeTC] = useState(false);
 
+    const handleChangeAgreement = (e) => {
+        setAgreeTC(e.target.checked);
+    };
+
+    // console.log('check or not', aggree);
+
     const [defaultAddress, setDefaultAdress] = useState('userAddress');
 
     // console.log('BAGGGING', dataProductOnBag);
@@ -456,6 +462,7 @@ const Checkout = () => {
 
     const handleDefaultAddress = (event) => {
         setDefaultAdress(event.target.value);
+        setAgreeTC(false);
     };
 
     // STATE BUAT FORM MEMBER CHECKOUT
@@ -522,40 +529,43 @@ const Checkout = () => {
             } else if (nameMember === '' || addressMember === '' || noHandphoneMember === '' || kodeposMember === '') {
                 setErrorEmptyFieldUserAddress('Kodepos masih kosong!');
             } else {
-                const dataPesanan = {
-                    nama_pembeli: `${nameMember}`,
-                    tanggal_pembelian: `${date}`, //ini tipe date
-                    no_handphone: `${noHandphoneMember}`,
-                    alamat_pengiriman: `${addressMember}`,
-                    kodepos: `${kodeposMember}`,
-                    catatan: `${noted}`,
-                    expedisi: `${kurir}`,
-                    shipping_fee: shippingFee,
-                    total_exclude_shipping: totalPrice,
-                    potongan_benefit_membership: benefitMembership, // ini bukan di ambil dari reducer melainkan hanya variable biasa
-                    // totalPrice_plus_shipping_minus_benefit_member: totalPrice_plus_shipping_minus_benefit_member,
-                    totalPrice_plus_shipping_minus_benefit_member: TotalMustPay,
-                    status_payment: 'Belum Diterima',
-                    no_resi: 'Belum Terinput',
-                    tanggal_start_pengiriman: '',
-                    cart: dataProductOnBag
-                };
+                if (aggree === true) {
+                    const dataPesanan = {
+                        nama_pembeli: `${nameMember}`,
+                        tanggal_pembelian: `${date}`, //ini tipe date
+                        no_handphone: `${noHandphoneMember}`,
+                        alamat_pengiriman: `${addressMember}`,
+                        kodepos: `${kodeposMember}`,
+                        catatan: `${noted}`,
+                        expedisi: `${kurir}`,
+                        shipping_fee: shippingFee,
+                        total_exclude_shipping: totalPrice,
+                        potongan_benefit_membership: benefitMembership, // ini bukan di ambil dari reducer melainkan hanya variable biasa
+                        // totalPrice_plus_shipping_minus_benefit_member: totalPrice_plus_shipping_minus_benefit_member,
+                        totalPrice_plus_shipping_minus_benefit_member: TotalMustPay,
+                        status_payment: 'Belum Diterima',
+                        no_resi: 'Belum Terinput',
+                        tanggal_start_pengiriman: '',
+                        cart: dataProductOnBag
+                    };
 
-                dispatch(
-                    postNewPesananPayLater(
-                        dataPesanan,
-                        router,
-                        setKodeposMember,
-                        setOtherNameMember,
-                        setOtherAddressMember,
-                        setOtherNoHandphoneMember,
-                        setOtherKodeposMember,
-                        setNoted
-                    )
-                );
-                // dispatch(deleteCartBEfromPayButton(dataProductOnBag));
-
-                // abis const data diatas baru disini fungsi post api nya
+                    dispatch(
+                        postNewPesananPayLater(
+                            dataPesanan,
+                            router,
+                            setKodeposMember,
+                            setOtherNameMember,
+                            setOtherAddressMember,
+                            setOtherNoHandphoneMember,
+                            setOtherKodeposMember,
+                            setNoted
+                        )
+                    );
+                    // dispatch(deleteCartBEfromPayButton(dataProductOnBag));
+                    // abis const data diatas baru disini fungsi post api nya
+                } else {
+                    alert('Anda belum menyetujui agreement !');
+                }
             }
         } else {
             if (dataProductOnBag.length === 0) {
@@ -570,39 +580,43 @@ const Checkout = () => {
             ) {
                 setErrorEmptyFieldOtherAddress('Form masih ada yang kosong!');
             } else {
-                const dataPesananOtherAddress = {
-                    nama_pembeli: `${otherNameMember}`,
-                    tanggal_pembelian: `${date}`, // ini tipe date
-                    no_handphone: `${otherNoHandphoneMember}`,
-                    alamat_pengiriman: `${otherAddressMember}`,
-                    kodepos: `${otherKodeposMember}`,
-                    catatan: `${noted}`,
-                    expedisi: `${kurir}`,
-                    shipping_fee: shippingFee,
-                    total_exclude_shipping: totalPrice,
-                    potongan_benefit_membership: benefitMembership,
-                    // totalPrice_plus_shipping_minus_benefit_member: totalPrice_plus_shipping_minus_benefit_member,
-                    totalPrice_plus_shipping_minus_benefit_member: TotalMustPay,
-                    status_payment: 'Belum Diterima',
-                    no_resi: 'Belum Terinput',
-                    tanggal_start_pengiriman: '',
-                    cart: dataProductOnBag
-                    // abis const data diatas baru disini fungsi post api nya
-                };
+                if (aggree === true) {
+                    const dataPesananOtherAddress = {
+                        nama_pembeli: `${otherNameMember}`,
+                        tanggal_pembelian: `${date}`, // ini tipe date
+                        no_handphone: `${otherNoHandphoneMember}`,
+                        alamat_pengiriman: `${otherAddressMember}`,
+                        kodepos: `${otherKodeposMember}`,
+                        catatan: `${noted}`,
+                        expedisi: `${kurir}`,
+                        shipping_fee: shippingFee,
+                        total_exclude_shipping: totalPrice,
+                        potongan_benefit_membership: benefitMembership,
+                        // totalPrice_plus_shipping_minus_benefit_member: totalPrice_plus_shipping_minus_benefit_member,
+                        totalPrice_plus_shipping_minus_benefit_member: TotalMustPay,
+                        status_payment: 'Belum Diterima',
+                        no_resi: 'Belum Terinput',
+                        tanggal_start_pengiriman: '',
+                        cart: dataProductOnBag
+                        // abis const data diatas baru disini fungsi post api nya
+                    };
 
-                dispatch(
-                    postNewPesananPayLater(
-                        dataPesananOtherAddress,
-                        router,
-                        setKodeposMember,
-                        setOtherNameMember,
-                        setOtherAddressMember,
-                        setOtherNoHandphoneMember,
-                        setOtherKodeposMember,
-                        setNoted
-                    )
-                );
-                // dispatch(deleteCartBEfromPayButton(dataProductOnBag));
+                    dispatch(
+                        postNewPesananPayLater(
+                            dataPesananOtherAddress,
+                            router,
+                            setKodeposMember,
+                            setOtherNameMember,
+                            setOtherAddressMember,
+                            setOtherNoHandphoneMember,
+                            setOtherKodeposMember,
+                            setNoted
+                        )
+                    );
+                    // dispatch(deleteCartBEfromPayButton(dataProductOnBag));
+                } else {
+                    alert('Anda belum menyetujui agreement !');
+                }
             }
         }
     };
@@ -617,39 +631,43 @@ const Checkout = () => {
             } else if (nameMember === '' || addressMember === '' || noHandphoneMember === '' || kodeposMember === '') {
                 setErrorEmptyFieldUserAddress('Kodepos masih kosong!');
             } else {
-                const dataPesanan = {
-                    nama_pembeli: `${nameMember}`,
-                    tanggal_pembelian: `${date}`, //ini tipe date
-                    no_handphone: `${noHandphoneMember}`,
-                    alamat_pengiriman: `${addressMember}`,
-                    kodepos: `${kodeposMember}`,
-                    catatan: `${noted}`,
-                    expedisi: `${kurir}`,
-                    shipping_fee: shippingFee,
-                    total_exclude_shipping: totalPrice,
-                    potongan_benefit_membership: benefitMembership, // ini bukan di ambil dari reducer melainkan hanya variable biasa
-                    totalPrice_plus_shipping_minus_benefit_member: TotalMustPay,
-                    // totalPrice_plus_shipping_minus_benefit_member: totalPrice_plus_shipping_minus_benefit_member,
-                    status_payment: 'Belum Diterima', // Aslinya Sudah Diterima
-                    no_resi: 'Belum Terinput',
-                    tanggal_start_pengiriman: '',
-                    cart: dataProductOnBag
-                };
+                if (aggree === true) {
+                    const dataPesanan = {
+                        nama_pembeli: `${nameMember}`,
+                        tanggal_pembelian: `${date}`, //ini tipe date
+                        no_handphone: `${noHandphoneMember}`,
+                        alamat_pengiriman: `${addressMember}`,
+                        kodepos: `${kodeposMember}`,
+                        catatan: `${noted}`,
+                        expedisi: `${kurir}`,
+                        shipping_fee: shippingFee,
+                        total_exclude_shipping: totalPrice,
+                        potongan_benefit_membership: benefitMembership, // ini bukan di ambil dari reducer melainkan hanya variable biasa
+                        totalPrice_plus_shipping_minus_benefit_member: TotalMustPay,
+                        // totalPrice_plus_shipping_minus_benefit_member: totalPrice_plus_shipping_minus_benefit_member,
+                        status_payment: 'Belum Diterima', // Aslinya Sudah Diterima
+                        no_resi: 'Belum Terinput',
+                        tanggal_start_pengiriman: '',
+                        cart: dataProductOnBag
+                    };
 
-                dispatch(
-                    postNewPesananPayNow(
-                        dataPesanan,
-                        router,
-                        setKodeposMember,
-                        setOtherNameMember,
-                        setOtherAddressMember,
-                        setOtherNoHandphoneMember,
-                        setOtherKodeposMember,
-                        setNoted
-                    )
-                );
-                // dispatch(deleteCartBEfromPayButton(dataProductOnBag));
-                // abis const data diatas baru disini fungsi post api nya
+                    dispatch(
+                        postNewPesananPayNow(
+                            dataPesanan,
+                            router,
+                            setKodeposMember,
+                            setOtherNameMember,
+                            setOtherAddressMember,
+                            setOtherNoHandphoneMember,
+                            setOtherKodeposMember,
+                            setNoted
+                        )
+                    );
+                    // dispatch(deleteCartBEfromPayButton(dataProductOnBag));
+                    // abis const data diatas baru disini fungsi post api nya
+                } else {
+                    alert('Anda belum menyetujui agreement !');
+                }
             }
         } else {
             if (dataProductOnBag.length === 0) {
@@ -664,39 +682,43 @@ const Checkout = () => {
             ) {
                 setErrorEmptyFieldOtherAddress('Form masih ada yang kosong!');
             } else {
-                const dataPesananOtherAddress = {
-                    nama_pembeli: `${otherNameMember}`,
-                    tanggal_pembelian: `${date}`, // ini tipe date
-                    no_handphone: `${otherNoHandphoneMember}`,
-                    alamat_pengiriman: `${otherAddressMember}`,
-                    kodepos: `${otherKodeposMember}`,
-                    catatan: `${noted}`,
-                    expedisi: `${kurir}`,
-                    shipping_fee: shippingFee,
-                    total_exclude_shipping: totalPrice,
-                    potongan_benefit_membership: benefitMembership,
-                    totalPrice_plus_shipping_minus_benefit_member: TotalMustPay,
-                    // totalPrice_plus_shipping_minus_benefit_member: totalPrice_plus_shipping_minus_benefit_member,
-                    status_payment: 'Belum Diterima', // Aslinya Sudah Diterima
-                    no_resi: 'Belum Terinput',
-                    tanggal_start_pengiriman: '',
-                    cart: dataProductOnBag
-                    // abis const data diatas baru disini fungsi post api nya
-                };
+                if (aggree === true) {
+                    const dataPesananOtherAddress = {
+                        nama_pembeli: `${otherNameMember}`,
+                        tanggal_pembelian: `${date}`, // ini tipe date
+                        no_handphone: `${otherNoHandphoneMember}`,
+                        alamat_pengiriman: `${otherAddressMember}`,
+                        kodepos: `${otherKodeposMember}`,
+                        catatan: `${noted}`,
+                        expedisi: `${kurir}`,
+                        shipping_fee: shippingFee,
+                        total_exclude_shipping: totalPrice,
+                        potongan_benefit_membership: benefitMembership,
+                        totalPrice_plus_shipping_minus_benefit_member: TotalMustPay,
+                        // totalPrice_plus_shipping_minus_benefit_member: totalPrice_plus_shipping_minus_benefit_member,
+                        status_payment: 'Belum Diterima', // Aslinya Sudah Diterima
+                        no_resi: 'Belum Terinput',
+                        tanggal_start_pengiriman: '',
+                        cart: dataProductOnBag
+                        // abis const data diatas baru disini fungsi post api nya
+                    };
 
-                dispatch(
-                    postNewPesananPayNow(
-                        dataPesananOtherAddress,
-                        router,
-                        setKodeposMember,
-                        setOtherNameMember,
-                        setOtherAddressMember,
-                        setOtherNoHandphoneMember,
-                        setOtherKodeposMember,
-                        setNoted
-                    )
-                );
-                // dispatch(deleteCartBEfromPayButton(dataProductOnBag));
+                    dispatch(
+                        postNewPesananPayNow(
+                            dataPesananOtherAddress,
+                            router,
+                            setKodeposMember,
+                            setOtherNameMember,
+                            setOtherAddressMember,
+                            setOtherNoHandphoneMember,
+                            setOtherKodeposMember,
+                            setNoted
+                        )
+                    );
+                    // dispatch(deleteCartBEfromPayButton(dataProductOnBag));
+                } else {
+                    alert('Anda belum menyetujui agreement !');
+                }
             }
         }
     };
@@ -902,7 +924,13 @@ const Checkout = () => {
             <div style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <div className={classes.innerCheckBox}>
                     <div className={classes.theCheckBox}>
-                        <input type="checkbox" id="agree01" name="agree_term" value="false" />
+                        <input
+                            type="checkbox"
+                            id="agree01"
+                            name="agree_term"
+                            value={aggree}
+                            onChange={handleChangeAgreement}
+                        />
                         <label className={classes.pSize} style={{ marginLeft: 10 }} htmlFor="agree01">
                             I Agree to the Terms & Conditions & Shopping Condition
                         </label>
@@ -1095,7 +1123,13 @@ const Checkout = () => {
             <div style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <div className={classes.innerCheckBox}>
                     <div className={classes.theCheckBox}>
-                        <input type="checkbox" id="agree01" name="agree_term" value="false" />
+                        <input
+                            type="checkbox"
+                            id="agree01"
+                            name="agree_term"
+                            value={aggree}
+                            onChange={handleChangeAgreement}
+                        />
                         <label className={classes.pSize} style={{ marginLeft: 10 }} htmlFor="agree01">
                             I Agree to the Terms & Conditions & Shopping Condition
                         </label>
@@ -1357,9 +1391,9 @@ const Checkout = () => {
     }
 
     let TotalMustPay = totalPrice + shippingFee - benefitMembership;
-    console.log('TotalMustPay', TotalMustPay);
-    console.log('Status User', status_level_user);
-    console.log('Level', benefitMembership);
+    // console.log('TotalMustPay', TotalMustPay);
+    // console.log('Status User', status_level_user);
+    // console.log('Level', benefitMembership);
 
     let Total_Plus_Shipping = (
         <>

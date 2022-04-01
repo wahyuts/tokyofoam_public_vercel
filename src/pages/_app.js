@@ -66,6 +66,7 @@ function MyApp(props) {
         currentPath === '/admin/pesanan' ||
         currentPath === '/admin/pesanan/rincian-pesanan' ||
         currentPath === '/admin/produk' ||
+        currentPath === '/admin/notification' ||
         currentPath === '/admin/produk/EditProduct' ||
         currentPath === '/admin/produk/tambah-produk' ||
         currentPath === '/admin/profiles-settings' ||

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import ProductListTable from '../../../components/admin-components/product-components/ProductListTable';
+import NotificationListTable from '../../../components/admin-components/notification-components/NotificationListTable';
 import Layout from '../../../components/adminLayout/layout/Layout';
 import { useSelector } from 'react-redux';
 
@@ -19,7 +19,7 @@ export default function Produk() {
         <div>
             {credentials.level_user !== 'admin' ? null : (
                 <Layout>
-                    <ProductListTable />
+                    <NotificationListTable />
                 </Layout>
             )}
         </div>

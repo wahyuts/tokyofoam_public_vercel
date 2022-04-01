@@ -5,7 +5,7 @@ import Sidebar from '../sidebar/Sidebar';
 import { useDispatch } from 'react-redux';
 
 import Topbar from '../topNav/Topbar';
-import { getAllDataProduct } from '../../../redux/actions/dataProductActions';
+import { getAllDataProduct, getAllNotificationFunction } from '../../../redux/actions/dataProductActions';
 import Appbar from '../appBar/Appbar';
 // import RoutesLink from '../../RoutesLink';
 export default function Layout({ children }) {
@@ -13,6 +13,7 @@ export default function Layout({ children }) {
 
     useEffect(() => {
         dispatch(getAllDataProduct());
+        dispatch(getAllNotificationFunction());
     }, [dispatch]);
 
     return (

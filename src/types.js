@@ -11,6 +11,7 @@ export const SET_HEADER_EDIT_ADDRESS = 'Edit Address';
 
 //data ordered types
 export const SET_HISTORY_ORDER = 'History Order';
+export const SET_DATA_ORDER_BY_ID = 'Data Order By ID';
 
 // GET ALL ORDER FOR ADMIN
 export const GET_ALL_ORDER_FOR_ADMIN = 'GET_ALL_ORDER_FOR_ADMIN';
