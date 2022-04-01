@@ -15,7 +15,13 @@ import ListItemText from '@mui/material/ListItemText';
 
 //Redux
 import { useDispatch, useSelector } from 'react-redux';
-import { loginUserTrial, loginUser, logoutUser, signupUserMobile } from '../../../redux/actions/userActions';
+import {
+    loginUserTrial,
+    loginUser,
+    logoutUser,
+    signupUserMobile,
+    changePasswordMobileDrawer
+} from '../../../redux/actions/userActions';
 
 //Icon
 import WhistlistIcon from '@mui/icons-material/FavoriteBorder';
@@ -169,7 +175,7 @@ const useStyles = makeStyles((theme) => ({
 export default function MenuDrawer() {
     const { authenticated } = useSelector((state) => state.user);
     const { credentials } = useSelector((state) => state.user);
-    const { loading, errors, errors_register } = useSelector((state) => state.UI);
+    const { loading, errors, errors_register, errors_forgot_password_submit } = useSelector((state) => state.UI);
     const { locationProvinceLogreg, stateKotaLogreg, stateKecamatanLogreg } = useSelector((state) => state.user);
 
     const classes = useStyles();
@@ -204,6 +210,7 @@ export default function MenuDrawer() {
     const [confirmPassword, setConfirmPassword] = React.useState('');
     const [regAlamat, setRegAlamat] = React.useState('');
     const [regNoHandphone, setRegNoHandphone] = React.useState('');
+    const [forgotPassword, setForgotPassword] = React.useState('');
 
     const { dataProductOnBag } = useSelector((state) => state.bag);
     // const keranjang = dataProductOnBag;
@@ -346,10 +353,19 @@ export default function MenuDrawer() {
         setRegister(true);
     };
 
-    const OnToForgotBox = () => {
-        setRegister(false);
-        setForgot(false);
-        setBoxForgot(true);
+    const handleForgotPassword = (e) => {
+        setForgotPassword(e.target.value);
+    };
+
+    const OnToForgotBox = (e) => {
+        // setRegister(false);
+        // setForgot(false);
+        // setBoxForgot(true);
+        e.preventDefault();
+        const userData = {
+            email: forgotPassword
+        };
+        dispatch(changePasswordMobileDrawer(userData, setRegister, setForgot, setBoxForgot));
     };
 
     const listWhenNotLogin = (
@@ -644,7 +660,20 @@ export default function MenuDrawer() {
                 </ListItem>
             </List>
             <div className={classes.EmailPassword}>
-                <TextField label="Email" size="small" type="text" fullWidth style={{ marginBottom: 15 }} />
+                <TextField
+                    label="Email"
+                    size="small"
+                    type="text"
+                    fullWidth
+                    style={{ marginBottom: 15 }}
+                    value={forgotPassword}
+                    onChange={handleForgotPassword}
+                />
+            </div>
+            <div>
+                <p style={{ fontSize: 12, color: '#FF7373', marginLeft: 20, marginTop: 10 }}>
+                    {errors_forgot_password_submit}
+                </p>
             </div>
             <div className={classes.loginButton}>
                 {' '}

@@ -81,7 +81,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export async function getServerSideProps() {
-    console.log('rendering now');
+    // console.log('rendering now');
     return { props: {} };
 }
 

@@ -36,7 +36,7 @@ import {
 export const loginUser = (userData, setMenuOpen, keranjang, setIsOpenDrawer, setShowSI) => async (dispatch) => {
     // setMenuOpen itu buat drawer desktop
     // setIsOpenDrawer, setShowSI itu buat drawer mobile
-    console.log('USER', userData);
+    // console.log('USER', userData);
     // console.log('keranjang', keranjang);
     const API = 'https://tokyofoam.herokuapp.com/api/auth/login';
     const URLCheckout = localStorage.getItem('URLCheckout');
@@ -44,10 +44,13 @@ export const loginUser = (userData, setMenuOpen, keranjang, setIsOpenDrawer, set
     try {
         await dispatch({ type: LOADING_UI });
         const results = await axios.post(API, userData);
-        setAuthorizationHeader(results.data.token);
-        dispatch(getUserData(setMenuOpen, setIsOpenDrawer, setShowSI, keranjang)); // set authenticated nya ada didalam getUserData
-        if (URLCheckout === '/cart') {
-            dispatch(clearErrorCheckoutButton());
+        if (results.data.success === true) {
+            setAuthorizationHeader(results.data.token);
+            dispatch(getUserData(setMenuOpen, setIsOpenDrawer, setShowSI, keranjang)); // set authenticated nya ada didalam getUserData
+            alert('Login Berhasil ! Welcome To Tokyofoam !');
+            if (URLCheckout === '/cart') {
+                dispatch(clearErrorCheckoutButton());
+            }
         }
     } catch (error) {
         if (error.response) {
@@ -263,6 +266,28 @@ export const changePassword =
         }
     };
 
+// forgot password/ change password untuk MOBILE version
+export const changePasswordMobileDrawer = (newUserData, setRegister, setForgot, setBoxForgot) => async (dispatch) => {
+    const API = 'https://tokyofoam.herokuapp.com/api/auth/forgotPassword';
+    try {
+        await dispatch({ type: LOADING_UI }); // meanggil dispatch untuk membuar loading : true
+        const results = await axios.post(API, newUserData);
+        if (results.data.message === 'Link reset password sudah dikirim ke email') {
+            const tokenReset = `Bearer ${results.data.token}`;
+            localStorage.setItem('ResetToken', tokenReset); // menyimpan IdToken di localStorage
+            dispatch({ type: STOP_LOADING_UI });
+            setRegister(false);
+            setForgot(false);
+            setBoxForgot(true);
+            // dispatch({ type: CLEAR_ERRORS });
+            dispatch({ type: CLEAR_ERRORS_FORGOT_PASSWORD_SUBMIT });
+        }
+    } catch (error) {
+        // dispatch({ type: SET_ERRORS, payload: error.response.data.message });
+        dispatch({ type: SET_ERRORS_FORGOT_PASSWORD_SUBMIT, payload: error.response.data.message });
+    }
+};
+
 // Reset password
 export const resetPassword = (newUserData, router) => async (dispatch) => {
     const API = 'https://tokyofoam.herokuapp.com/api/auth/resetPassword';
@@ -360,6 +385,7 @@ export const logoutUser = () => (dispatch) => {
     delete axios.defaults.headers.common['Authorization'];
     dispatch({ type: SET_UNAUTHENTICATED });
     dispatch({ type: CLEAR_ERRORS });
+    alert('Anda Baru Saja Logout !');
 };
 
 //Fungsi mau dapetin data2 user (biasanya buat user profile atau mau cantumin nama di headnav)
