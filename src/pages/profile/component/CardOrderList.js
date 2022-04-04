@@ -197,8 +197,9 @@ const CardComponent = ({ dataToRender }) => {
                                                     style={{
                                                         display: 'flex',
                                                         flexDiraction: 'row',
-                                                        width: '80%',
-                                                        backgroundColor: 'red'
+                                                        width: '80%'
+
+                                                        // backgroundColor: 'red'
                                                     }}
                                                 >
                                                     <div style={{ width: 180 }}>
