@@ -1,4 +1,5 @@
 import {
+    LABEL_STATUS_PAYMENT,
     LOCATION_PATH_ADDRESS,
     LOCATION_PATH_DASHBOARD,
     LOCATION_PATH_EDIT_REVIEW,
@@ -35,7 +36,8 @@ const initialState = {
         //     path: LOCATION_PATH_PROMO_AND_SALE
         // }
     ],
-    headerPage: ''
+    headerPage: '',
+    label_status_payment: ''
 };
 
 export default function urlProfileReducer(state = initialState, action) {
@@ -75,6 +77,11 @@ export default function urlProfileReducer(state = initialState, action) {
             return {
                 ...state,
                 headerPage: SET_HEADER_EDIT_ADDRESS
+            };
+        case LABEL_STATUS_PAYMENT:
+            return {
+                ...state,
+                label_status_payment: action.payload
             };
 
         default:

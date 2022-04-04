@@ -2,6 +2,7 @@
 import axios from 'axios';
 import { GET_ALL_ORDER_FOR_ADMIN, SET_HISTORY_ORDER, GET_ORDER_BY_ID_ORDER, SET_DATA_ORDER_BY_ID } from '../../types';
 import { getListOrderUserOnUserDashboard } from './dataProductActions';
+import { dbResponseSuccess } from './dbResponses';
 
 export const historyOrder = () => (dispatch) => {
     return dispatch({
@@ -18,7 +19,7 @@ export const deleteOrderById = (id) => async (dispatch) => {
             url: API
         });
         await dispatch(getListOrderUserOnUserDashboard());
-        return response?.statusText;
+        await dispatch(dbResponseSuccess({ response: response?.statusText, label: 'Deleted' }));
     } catch (error) {
         console.log(error);
     }

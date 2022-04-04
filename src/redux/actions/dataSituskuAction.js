@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { SET_GET_DATA_MAIN_BANNER, SET_GET_DATA_SETTING_ABOUT_US } from '../type';
+import { SET_GET_DATA_MAIN_BANNER, SET_GET_DATA_SETTING_ABOUT_US, SET_PATCH_DATA_MAIN_BANNER } from '../type';
 
 // GET DATA SETTINGS ABOUT US
 export const getDataSettingsAboutUs = () => async (dispatch) => {
@@ -17,7 +17,7 @@ export const getDataSettingsAboutUs = () => async (dispatch) => {
 };
 
 // MAIN BANNER
-export const getDataSettingsMainBanner = (data) => async (dispatch) => {
+export const patchDataSettingsMainBanner = (data) => async (dispatch) => {
     const API = 'https://tokyofoam.herokuapp.com/api/setting/update/Setting_main_banner';
     getAuthorizationHeaderToken();
     try {
@@ -26,6 +26,23 @@ export const getDataSettingsMainBanner = (data) => async (dispatch) => {
             type: SET_GET_DATA_MAIN_BANNER,
             payload: res.data.Setting_main_banner
         });
+        alert('Data sudah di update!');
+        // dispatch(getDataSettingsMainBanner)
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const getDataSettingsMainBanner = (token, setImage) => async (dispatch) => {
+    const API = 'https://tokyofoam.herokuapp.com/api/setting/get/Setting_main_banner';
+    getAuthorizationHeaderToken();
+    try {
+        const res = await axios.get(API, token);
+        dispatch({
+            type: SET_GET_DATA_MAIN_BANNER,
+            payload: res.data.Setting_main_banner
+        });
+        setImage(res.data.Setting_main_banner.image_main_banner);
     } catch (error) {
         console.log(error);
     }

@@ -30,3 +30,7 @@ export const LOCATION_PATH_MOBILE_PAYMENT = '/profile/pages/profile-mobile-payme
 
 // GET ORDER BY ORDER ID FOR RINCIAN PESANAN ADMIN
 export const GET_ORDER_BY_ID_ORDER = 'GET_ORDER_BY_ID_ORDER';
+
+// random types
+export const LABEL_STATUS_PAYMENT = 'label status payment';
+export const DB_RESPONSE_STATUS = 'db response status';

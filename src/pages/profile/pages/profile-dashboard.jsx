@@ -4,9 +4,8 @@ import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Container, Typography } from '@mui/material';
-import { makeStyles, withStyles } from '@mui/styles';
+import { makeStyles } from '@mui/styles';
 import { Box } from '@mui/system';
-import { getListOrderUserOnUserDashboard } from '../../../redux/actions/dataProductActions';
 
 import MainBlackButton from '../../../utils/re-useable-components/buttons/MainBlackButton';
 import CardComponent from '../component/CardOrderList';
@@ -70,54 +69,6 @@ const useStyles = makeStyles((theme) => ({
     editIcon: {
         fontSize: '12px',
         marginLeft: '11px'
-    },
-    btnIcon: {
-        '&.MuiIconButton-root': {
-            borderRadius: '0'
-        },
-        '&.MuiIconButton-root:hover': {
-            background: 'none'
-        }
-    },
-    dialogUploadWrapper: {
-        display: 'flex',
-        marginTop: '20px'
-    },
-    dialogIcWrapper: {
-        background: '#D8D8D8',
-        width: '50px',
-        height: '50px',
-        borderRadius: '5px',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginRight: '30px'
-    },
-    dialogIcCamera: {
-        '&.MuiSvgIcon-root': {
-            width: '35px',
-            height: '35px'
-        }
-    },
-    dialogFormWrapper: {
-        marginTop: '20px',
-        marginBottom: '15px'
-    },
-    dialogInput: {
-        width: '93%',
-        padding: '10px 10px',
-        marginTop: '15px'
-    },
-    dialogBtnWrapper: {
-        display: 'flex',
-        justifyContent: 'space-between'
-    },
-    dialogImageItem: {
-        width: '18%'
-    },
-    dialogJNEIcon: {
-        width: '28px',
-        height: '14px'
     }
 }));
 
@@ -128,23 +79,19 @@ const Dashboard = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const router = useRouter();
-    const { credentials } = useSelector((state) => state.user);
-    const { listOrderUserInUserDashboard } = useSelector((state) => state.dataProduct);
 
     const [dataToShow, setDataToShow] = useState([]);
     const [next, setNext] = useState(3);
     const [countData, setCountData] = useState(3);
+
+    const { credentials } = useSelector((state) => state.user);
+    const { listOrderUserInUserDashboard } = useSelector((state) => state.dataProduct);
 
     const loopWithSlice = (start, end) => {
         const slicedPosts = listOrderUserInUserDashboard?.slice(start, end);
         arrayForHoldingPosts = [...arrayForHoldingPosts, ...slicedPosts];
         setDataToShow(arrayForHoldingPosts);
     };
-
-    useEffect(() => {
-        loopWithSlice(0, postsPerPage);
-    }, []);
-
     const handleShowMorePosts = () => {
         loopWithSlice(next, next + postsPerPage);
         setNext(next + postsPerPage);
@@ -153,6 +100,10 @@ const Dashboard = () => {
     const handleClickChangePassword = () => {
         router.push('/change-password-user');
     };
+
+    useEffect(() => {
+        loopWithSlice(0, postsPerPage);
+    }, []);
 
     useEffect(() => {}, [countData, arrayForHoldingPosts, listOrderUserInUserDashboard]);
     return (

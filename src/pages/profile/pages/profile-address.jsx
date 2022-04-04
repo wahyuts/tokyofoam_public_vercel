@@ -196,6 +196,8 @@ const Address = (params) => {
     };
 
     useEffect(() => {}, [show_label_profile]);
+
+    console.log(credentials);
     return (
         <div>
             <div className={classes.profileContainer}>
@@ -209,7 +211,7 @@ const Address = (params) => {
                                 <p style={{ marginBottom: '10px', textAlign: 'center' }}>{credentials?.alamat}</p>
                             </Box>
                             <Box className={'btnDesktop'}>
-                                <MainBlackButton
+                                {/* <MainBlackButton
                                     className={'BlackButton'}
                                     onClick={async () => {
                                         await dispatch(setAddressLabel(SET_HEADER_EDIT_ADDRESS));
@@ -218,18 +220,18 @@ const Address = (params) => {
                                     innerContaunerStyle={style.btnSecondaryContained}
                                 >
                                     Edit
-                                </MainBlackButton>
-                                <HorizontalSpacer widht={{ marginRight: '15px' }} />
+                                </MainBlackButton> */}
+                                {/* <HorizontalSpacer widht={{ marginRight: '15px' }} />
                                 <MainBlackButton
                                     className={'WhiteButton'}
                                     innerContaunerStyle={style.btnPrimaryOutline}
                                     variant="outlined"
                                 >
                                     Delete
-                                </MainBlackButton>
+                                </MainBlackButton> */}
                             </Box>
                             <Box className={'btnMobile'}>
-                                <MainBlackButton
+                                {/* <MainBlackButton
                                     className={'BlackButton'}
                                     onClick={async () => {
                                         await dispatch(setAddressLabel(SET_HEADER_EDIT_ADDRESS));
@@ -238,15 +240,15 @@ const Address = (params) => {
                                     innerContaunerStyle={style.btnPrimaryContained_mobile}
                                 >
                                     Edit
-                                </MainBlackButton>
-                                <HorizontalSpacer widht={{ marginRight: '15px' }} />
+                                </MainBlackButton> */}
+                                {/* <HorizontalSpacer widht={{ marginRight: '15px' }} />
                                 <MainBlackButton
                                     className={'WhiteButton'}
                                     innerContaunerStyle={style.btnPrimaryOutline_mobile}
                                     variant="outlined"
                                 >
                                     Delete
-                                </MainBlackButton>
+                                </MainBlackButton> */}
                             </Box>
                         </Box>
                     </>
@@ -267,7 +269,6 @@ const Address = (params) => {
                             id="outlined-basic"
                             placeholder={headerPage === 'Add New Address' ? '' : 'Mia Artina'}
                             variant="outlined"
-                            r
                             className={classes.dialogInput}
                             size="small"
                         />
@@ -275,11 +276,7 @@ const Address = (params) => {
                     <Box className={classes.dialogFormWrapper}>
                         <Typography className={'lable'}>*Address</Typography>
                         <TextField
-                            placeholder={
-                                headerPage === 'Add New Address'
-                                    ? ''
-                                    : 'Jln. Gunung Saputan no.22X, Kecamatan Denpasar Barat'
-                            }
+                            placeholder={headerPage === 'Add New Address' ? '' : credentials?.alamat}
                             id="outlined-basic"
                             className={classes.dialogInput}
                             size="small"
@@ -292,7 +289,7 @@ const Address = (params) => {
                         <Typography className={'lable'}>*Provinsi</Typography>
                         <AutoCompleteProvinceLogreg />
                     </Box>
-                    <HorizontalSpacer widht={{ marginRight: '31px' }} />
+                    {/* <HorizontalSpacer widht={{ marginRight: '31px' }} />
                     <Box className={classes.dialogFormWrapper}>
                         <Typography className={'lable'}>*Kode Pos</Typography>
                         <TextField
@@ -301,7 +298,7 @@ const Address = (params) => {
                             className={classes.dialogInput}
                             size="small"
                         />
-                    </Box>
+                    </Box> */}
                 </Box>
                 <Box className={'dialogInnerContainerTwiceForm'}>
                     <Box className={classes.dialogFormWrapper}>
@@ -312,7 +309,7 @@ const Address = (params) => {
                     <Box className={classes.dialogFormWrapper}>
                         <Typography className={'lable'}>*No Telp</Typography>
                         <TextField
-                            placeholder={headerPage === 'Add New Address' ? '' : 'Your number'}
+                            placeholder={headerPage === 'Add New Address' ? '' : credentials?.no_telp}
                             variant="outlined"
                             className={classes.dialogInput}
                             size="small"

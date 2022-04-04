@@ -17,6 +17,7 @@ import idUniqCartReducer from './reducers/idUniqCartReducer';
 import orderReducer from './reducers/orderReducer';
 import commentReducer from './reducers/commentReducer';
 import notificationsReducer from './reducers/notificationsReducer';
+import dbResponses from './reducers/dbResponses';
 
 import uiPesanan from '../pages/admin/pesanan/redux/reducer/uiPesanan';
 import storage from './sync_storage';
@@ -48,7 +49,8 @@ const combinedReducer = combineReducers({
     theComment: commentReducer,
     theNotifications: notificationsReducer,
     dataSitusku: dataAllSituskuReducer,
-    uiPesanan
+    uiPesanan,
+    dbResponses
 });
 
 // BINDING MIDDLEWARE

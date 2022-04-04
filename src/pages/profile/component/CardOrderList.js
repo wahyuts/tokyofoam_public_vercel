@@ -1,22 +1,25 @@
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { forwardRef, useEffect, useState } from 'react';
 import { Router, useRouter } from 'next/router';
 import Image from 'next/image';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
 
-import { Accordion, AccordionDetails, AccordionSummary, Alert, Container, IconButton } from '@mui/material';
-import { VisibilityOutlined, CreditCardOutlined, ChatOutlined, PhotoCamera, AvTimer } from '@mui/icons-material';
+import { Accordion, AccordionDetails, AccordionSummary, Container, IconButton, Snackbar, Stack } from '@mui/material';
+import { VisibilityOutlined, CreditCardOutlined, DeleteOutlined } from '@mui/icons-material';
 import { makeStyles } from '@mui/styles';
-import { Box, display } from '@mui/system';
+import { Box } from '@mui/system';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import MuiAlert from '@mui/material/Alert';
 
-import { LOCATION_PATH_DETAILS_ORDER, LOCATION_PATH_EDIT_REVIEW, LOCATION_PATH_MOBILE_PAYMENT } from '../../../types';
-import Dialog from './dialog';
+import { deleteOrderById, getOrderById } from '../../../redux/actions/dataHistoryOrderAction';
+import { setLabelStatusPayment } from '../../../redux/actions/urlOnProfileButtonTabAction';
+
 import MainBlackButton from '../../../utils/re-useable-components/buttons/MainBlackButton';
 import HorizontalSpacer from '../../../components/HorizontalSpacer';
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
-import { deleteOrderById, getOrderById } from '../../../redux/actions/dataHistoryOrderAction';
 import ScrollForModal from '../../../utils/re-useable-components/scroll-for-modal';
-import axios from 'axios';
+import Dialog from './dialog';
+
+import { LOCATION_PATH_DETAILS_ORDER, LOCATION_PATH_MOBILE_PAYMENT } from '../../../types';
 
 const styles = {
     normalText: { fontWeight: 400, fontSize: '15px', color: '#474747' },
@@ -28,14 +31,7 @@ const styles = {
 
     boldTextStatus: { fontWeight: 600, fontSize: '16px', color: '#FF7373' },
 
-    smallTextDisable: { fontWeight: 400, fontSize: '12px', color: '#787878' },
-
-    btnBoxPrimariContainer: {
-        width: '140px',
-        fontSize: '20px',
-        fontWeight: '500',
-        justifyContent: 'center'
-    }
+    smallTextDisable: { fontWeight: 400, fontSize: '12px', color: '#787878' }
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -50,8 +46,6 @@ const useStyles = makeStyles((theme) => ({
     },
     cardContainerMobile: {
         display: 'none',
-        // padding: '20px 24px 24px 24px',
-
         [theme.breakpoints.down('mobile')]: {
             marginBottom: 35,
             display: 'flex'
@@ -73,17 +67,13 @@ const useStyles = makeStyles((theme) => ({
     },
     dialogImageItem: {
         width: '18%'
-    },
-    dialogJNEIcon: {
-        width: '28px',
-        height: '14px'
     }
 }));
 
-export async function getServerSideProps() {
-    // console.log('rendering now');
-    return { props: {} };
-}
+// eslint-disable-next-line react/display-name
+const Alert = forwardRef((props, ref) => {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const CardComponent = ({ dataToRender }) => {
     const classes = useStyles();
@@ -91,13 +81,14 @@ const CardComponent = ({ dataToRender }) => {
     const dispatch = useDispatch();
 
     const { listOrderUserInUserDashboard } = useSelector((state) => state.dataProduct);
-    // console.log('DAFTAR ORDER USER', listOrderUserInUserDashboard);
+    const { statusResponse } = useSelector((state) => state.dbResponses);
+    console.log('DAFTAR ORDER USER', listOrderUserInUserDashboard);
 
     const [showModalPayment, setShowModalPayment] = useState(false);
     const [statusPayment, setStatusPayment] = useState({});
     const [dataOrder, setDataOrder] = useState({});
     const [dataCart, setDataCart] = useState([]);
-    const [deleteResponse, setDeleteResponse] = useState('');
+    const [open, setOpen] = useState(false);
 
     const showPaymentStatusLabel = (label) => {
         if (label === 'expire') return setStatusPayment({ className: 'OrangeButton', label: 'Buy Again' });
@@ -111,21 +102,36 @@ const CardComponent = ({ dataToRender }) => {
         return newCurrency;
     };
 
-    useEffect(() => {}, [showModalPayment, listOrderUserInUserDashboard]);
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen(false);
+    };
+
+    useEffect(() => {}, [showModalPayment, listOrderUserInUserDashboard, statusPayment]);
 
     useEffect(() => {
-        console.log(deleteResponse);
-    }, [deleteResponse]);
+        statusResponse?.response === 'OK' && setOpen(true);
+    }, [statusResponse]);
 
-    // console.log(statusPayment);
+    console.log(statusResponse);
+
     return (
         <Container>
-            {deleteResponse === 'OK' && <Alert severity="success">Deleted has been success</Alert>}
+            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                    {`${statusResponse.label} has been success`}
+                </Alert>
+            </Snackbar>
+
             {dataToRender.map((data, index) => {
                 const total = currencyFormat(data?.totalPrice_plus_shipping_minus_benefit_member);
                 const shipping_fee = currencyFormat(data?.shipping_fee);
                 const total_exclude_shipping = currencyFormat(data?.total_exclude_shipping);
                 const potongan_benefit_membership = currencyFormat(data?.potongan_benefit_membership);
+                const expedisi = data?.expedisi;
 
                 return (
                     <>
@@ -172,7 +178,7 @@ const CardComponent = ({ dataToRender }) => {
                                     </div>
                                 </AccordionSummary>
                                 {data?.cart?.map((item) => {
-                                    const price = item?.promo_price === 0 ? item?.price : item?.promo_price;
+                                    const price = item?.promo_price === 0 ? item?.price : item?.promo_price_x_qty;
                                     const newPrice = currencyFormat(price);
 
                                     return (
@@ -243,7 +249,7 @@ const CardComponent = ({ dataToRender }) => {
                                 }}
                             >
                                 <div>
-                                    <p style={styles.smallTextDisable}>Shipping Fee:</p>
+                                    <p style={styles.smallTextDisable}>Shipping Fee {`(${expedisi})`}:</p>
                                     <p style={styles.smallTextDisable}>Total Exclude Shipping:</p>
                                     <p style={styles.smallTextDisable}>Potongan Benefit Member:</p>
                                     <div style={{ marginTop: 20 }}>
@@ -267,10 +273,16 @@ const CardComponent = ({ dataToRender }) => {
                                 </div>
                             </div>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <p style={styles.normalText}>
-                                    Tanggal Pesanan:
-                                    <text style={styles.normalTextDisable}> {data?.tanggal_pembelian}</text>
-                                </p>
+                                <div>
+                                    <p style={styles.normalText}>
+                                        No Resi/Tracking:
+                                        <text style={styles.normalTextDisable}> {data?.no_resi}</text>
+                                    </p>
+                                    <p style={styles.normalText}>
+                                        Tanggal Pesanan:
+                                        <text style={styles.normalTextDisable}> {data?.tanggal_pembelian}</text>
+                                    </p>
+                                </div>
                                 <div
                                     style={{
                                         display: 'flex',
@@ -303,10 +315,10 @@ const CardComponent = ({ dataToRender }) => {
                                         aria-label="delete"
                                         className={classes.btnIcon}
                                         onClick={async () => {
-                                            setDeleteResponse(await dispatch(deleteOrderById(data?._id)));
+                                            await dispatch(deleteOrderById(data?._id));
                                         }}
                                     >
-                                        <DeleteOutlinedIcon style={{ color: '#FF0000', marginRight: '10px' }} />
+                                        <DeleteOutlined style={{ color: '#FF0000', marginRight: '10px' }} />
                                     </IconButton>
                                 </div>
                             </div>
@@ -349,7 +361,7 @@ const CardComponent = ({ dataToRender }) => {
                                         </div>
                                     </AccordionSummary>
                                     {data?.cart?.map((item) => {
-                                        const price = item?.promo_price === 0 ? item?.price : item?.promo_price;
+                                        const price = item?.promo_price === 0 ? item?.price : item?.promo_price_x_qty;
                                         const newPrice = currencyFormat(price);
 
                                         return (
@@ -423,7 +435,7 @@ const CardComponent = ({ dataToRender }) => {
                                     }}
                                 >
                                     <div>
-                                        <p style={styles.smallTextDisable}>Shipping Fee:</p>
+                                        <p style={styles.smallTextDisable}>Shipping Fee {`(${expedisi})`}:</p>
                                         <p style={styles.smallTextDisable}>Total Exclude Shipping:</p>
                                         <p style={styles.smallTextDisable}>Potongan Benefit Member:</p>
                                         <div style={{ marginTop: 20 }}>
@@ -454,10 +466,16 @@ const CardComponent = ({ dataToRender }) => {
                                         alignItems: 'center'
                                     }}
                                 >
-                                    <p style={styles.normalText}>
-                                        Tanggal Pesanan:
-                                        <text style={styles.normalTextDisable}> {data?.tanggal_pembelian}</text>
-                                    </p>
+                                    <div>
+                                        <p style={styles.normalText}>
+                                            No Tracking:
+                                            <text style={styles.normalTextDisable}> {data?.no_resi}</text>
+                                        </p>
+                                        <p style={styles.normalText}>
+                                            Tanggal Pesanan:
+                                            <text style={styles.normalTextDisable}> {data?.tanggal_pembelian}</text>
+                                        </p>
+                                    </div>
                                     <div
                                         style={{
                                             display: 'flex',
@@ -469,6 +487,7 @@ const CardComponent = ({ dataToRender }) => {
                                             style={{ color: '#474747', marginRight: '10px' }}
                                             onClick={async () => {
                                                 await dispatch(getOrderById(data?._id));
+                                                await dispatch(setLabelStatusPayment(data?.status_payment));
                                                 router.push(LOCATION_PATH_MOBILE_PAYMENT);
                                             }}
                                         />
@@ -478,10 +497,10 @@ const CardComponent = ({ dataToRender }) => {
                                             aria-label="delete"
                                             className={classes.btnIcon}
                                             onClick={async () => {
-                                                setDeleteResponse(await dispatch(deleteOrderById(data?._id)));
+                                                await dispatch(deleteOrderById(data?._id));
                                             }}
                                         >
-                                            <DeleteOutlinedIcon style={{ color: '#FF0000', marginRight: '10px' }} />
+                                            <DeleteOutlined style={{ color: '#FF0000', marginRight: '10px' }} />
                                         </IconButton>
                                     </div>
                                 </div>
@@ -528,7 +547,6 @@ const CardComponent = ({ dataToRender }) => {
                             Price
                         </p>
                     </Box>
-                    {/* {scrollY > 100 ? 'Scrolled more than 100px' : 'Still somewhere near the top!'} */}
                     {dataCart.length <= 2 ? (
                         dataCart?.map((item, index) => {
                             const price = item?.promo_price === 0 ? item?.price : item?.promo_price;
@@ -568,7 +586,7 @@ const CardComponent = ({ dataToRender }) => {
                                                 {item?.id_manual_product}
                                             </p>
                                             <p style={{ fontSize: '18px', fontWeight: '400' }}>
-                                                {price} x {item?.qty}
+                                                IDR {currencyFormat(price)} x {item?.qty}
                                             </p>
                                         </Box>
                                     </Box>
@@ -580,7 +598,7 @@ const CardComponent = ({ dataToRender }) => {
                                             fontWeight: '400'
                                         }}
                                     >
-                                        {totalPrice}
+                                        IDR {currencyFormat(totalPrice)}
                                     </p>
                                 </Box>
                             );
@@ -627,7 +645,7 @@ const CardComponent = ({ dataToRender }) => {
                                                     {item?.id_manual_product}
                                                 </p>
                                                 <p style={{ fontSize: '18px', fontWeight: '400' }}>
-                                                    {price} x {item?.qty}
+                                                    IDR {currencyFormat(price)} x {item?.qty}
                                                 </p>
                                             </Box>
                                         </Box>
@@ -639,7 +657,7 @@ const CardComponent = ({ dataToRender }) => {
                                                 fontWeight: '400'
                                             }}
                                         >
-                                            {totalPrice}
+                                            IDR {currencyFormat(totalPrice)}
                                         </p>
                                     </Box>
                                 );
@@ -708,7 +726,7 @@ const CardComponent = ({ dataToRender }) => {
                                     router.push('/product-page');
                                 } else {
                                     const resp = await axios.get(
-                                        `https://tokyofoam.herokuapp.com/api/payment/getToken/${dataOrder?._id}`
+                                        ` https://tokyofoam.herokuapp.com/api/payment/getToken/${dataOrder?._id}`
                                     );
                                     const midtrans_url = resp?.data?.url;
                                     try {

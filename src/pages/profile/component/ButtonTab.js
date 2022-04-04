@@ -1,25 +1,17 @@
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Button, Typography } from '@mui/material';
+import { Alert, Button, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Box } from '@mui/system';
 
-import { SET_PROFILE_LOGOUT, SET_PROFILE_PROMO_AND_SALE, SET_PROFILE_WISHLIST } from '../../../types';
 import { setProfile } from '../../../redux/actions/urlOnProfileButtonTabAction';
 import { addComentar, logoutUser } from '../../../redux/actions/userActions';
 
 import MainBlackButton from '../../../utils/re-useable-components/buttons/MainBlackButton';
-import HorizontalSpacer from '../../../components/HorizontalSpacer';
 import Dialog from './dialog';
 
-const style = {
-    btnPrimaryOutline: {
-        width: '186px',
-        borderRadius: '20px'
-    }
-};
+import { SET_PROFILE_LOGOUT, SET_PROFILE_PROMO_AND_SALE, SET_PROFILE_WISHLIST } from '../../../types';
 
 const useStyles = makeStyles((theme) => ({
     btnMenuContainer: {
@@ -53,17 +45,6 @@ const useStyles = makeStyles((theme) => ({
             color: '#FF7373'
         }
     },
-    buttonActive: {
-        '&.MuiButton-root': {
-            backgroundColor: 'red',
-            borderRadius: '20px',
-            padding: '5px 36px'
-        },
-        '&.MuiButton-text': {
-            color: '#474747',
-            textTransform: 'capitalize'
-        }
-    },
     dialogContainer: { width: '100%', alignSelf: 'center' },
     dialogFormWrapper: {
         marginTop: '20px',
@@ -85,14 +66,15 @@ const ButtonTab = () => {
     const dispatch = useDispatch();
     const [showModal, setShowModal] = useState(false);
     const { show_label_profile, tab_menu_list } = useSelector((state) => state.url_profile);
+
     const [review, setReview] = useState({
         judul: '',
         comment: ''
     });
     const [reviewErrorMsg, setReviewErrorMsg] = useState('');
 
-    console.log(review);
     useEffect(() => {}, [review, reviewErrorMsg]);
+
     return (
         <Box className={classes.btnMenuContainer}>
             {tab_menu_list?.map((item, i) => (
@@ -159,7 +141,7 @@ const ButtonTab = () => {
                         onClick={async () => {
                             try {
                                 if (review.judul.length !== 0 && review.comment.length !== 0) {
-                                    dispatch(addComentar(review));
+                                    await dispatch(addComentar(review));
                                     setReview({ judul: '', comment: '' });
                                     setShowModal(false);
                                     setReviewErrorMsg('');

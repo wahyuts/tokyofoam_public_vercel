@@ -1,10 +1,12 @@
 import Image from 'next/image';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Logo from '../../../public/assets/images/logo-tokyofoam.png';
 import { makeStyles } from '@mui/styles';
 
 //Redux
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { getOnlyUserData2 } from '../../redux/actions/dataProductActions';
 
 const useStyles = makeStyles((theme) => ({
     mainCont: {
@@ -43,8 +45,13 @@ const useStyles = makeStyles((theme) => ({
 const PaymentPending = () => {
     const router = useRouter();
     const classes = useStyles();
+    const dispatch = useDispatch();
 
     // const { changeable_URL } = useSelector((state) => state.url);
+
+    useEffect(() => {
+        dispatch(getOnlyUserData2());
+    }, [dispatch]);
 
     const klik = () => {
         router.push(`/`);

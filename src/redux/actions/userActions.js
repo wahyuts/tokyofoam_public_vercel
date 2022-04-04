@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { DB_RESPONSE_STATUS } from '../../types';
 import {
     SET_USER,
     SET_ERRORS,
@@ -31,6 +32,7 @@ import {
     GET_COMMENT,
     SET_GET_DATA_USER_HISTORY_ORDER
 } from '../type';
+import { dbResponseSuccess } from './dbResponses';
 
 // Login untuk DESKTOP And MOBILE Version
 export const loginUser = (userData, setMenuOpen, keranjang, setIsOpenDrawer, setShowSI) => async (dispatch) => {
@@ -422,6 +424,36 @@ export const getUserData = (setMenuOpen, setIsOpenDrawer, setShowSI, keranjang) 
         });
 };
 
+//Fungsi buat get user data TANPA Embel2 cart keranjang, box drawer dll
+export const getOnlyUserData = () => (dispatch) => {
+    const API = 'https://tokyofoam.herokuapp.com/api/user/profile';
+    // dispatch({ type: LOADING_USER });
+    getAuthorizationHeaderTokenUser();
+    axios
+        .get(API)
+        .then((res) => {
+            dispatch({
+                type: SET_USER,
+                payload: res.data.user
+            });
+
+            dispatch({
+                type: SET_EMAIL,
+                payload: ''
+            });
+            dispatch({
+                type: SET_PASSWORD,
+                payload: ''
+            });
+
+            // setTimeout(dispatch({ type: CLEAR_ERRORS }), 3000);
+            // dispatch({ type: CLEAR_ERRORS });
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+};
+
 //Fungsi mau dapetin data2 user (biasanya buat user profile atau mau cantumin nama di headnav)
 export const getAdminData = () => (dispatch) => {
     const API = 'https://tokyofoam.herokuapp.com/api/user/profile';
@@ -613,6 +645,7 @@ export const addComentar = (data) => async (dispatch) => {
         url: API,
         data
     });
+    dispatch(dbResponseSuccess({ response: response?.statusText, label: 'Review' }));
 };
 
 //****************************************************************************** */

@@ -7,7 +7,7 @@ import CameraImage from '../../../../../public/assets/images/CameraImage.png';
 import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { getDataSettingsMainBanner } from '../../../../redux/actions/dataSituskuAction';
+import { getDataSettingsMainBanner, patchDataSettingsMainBanner } from '../../../../redux/actions/dataSituskuAction';
 
 const useStyles = makeStyles((theme) => ({
     Container: {
@@ -90,6 +90,7 @@ const useStyles = makeStyles((theme) => ({
         marginBlock: 20,
         paddingLeft: 20,
         paddingRight: 29
+        // backgroundColor: 'green'
     },
     ContainerUpload: {
         display: 'flex',
@@ -110,14 +111,6 @@ const useStyles = makeStyles((theme) => ({
         border: '1px dashed #9e9e9e',
         borderRadius: 8,
         cursor: 'pointer'
-        // position: 'absolute',
-        // "& .CameraImage": {
-        //     position: 'absolute',
-        //     zIndex: 100
-        // }
-        // [theme.breakpoints.down('tablet')]: {
-        //     width: 350
-        // }
     },
     WrapperUploadDone: {
         display: 'flex',
@@ -136,30 +129,7 @@ const useStyles = makeStyles((theme) => ({
     },
     BoxInputImageUpload: {
         position: 'relative'
-        // '& .ImagePreview': {
-        //     position: 'relative',
-        //     top: 0,
-        //     left: 0,
-        //     zIndex: 100
-
-        // }
     },
-    // ImagePreview: {
-    //     position: 'absolute',
-    //     top: 0,
-    //     left: 0,
-    //     zIndex: 100
-    // },
-    // WrapperUploadDone: {
-    //     textAlign: 'center',
-    //     width: 459,
-    //     height: 191,
-    //     borderRadius: 8,
-    //     cursor: 'pointer',
-    //     display: 'flex',
-    //     alignItems: 'center',
-    //     justifyContent: 'center'
-    // },
     FormControlGroup: {
         display: 'flex',
         columnGap: 80,
@@ -218,17 +188,20 @@ const HomeBanner = () => {
     const dispatch = useDispatch();
     const fileSelect = useRef(null);
     const { credentials } = useSelector((state) => state.user);
+    const token = localStorage.getItem('FBIdToken');
     // console.log(credentials, 'cek credentials');
     const { dataSettingsMainBanner } = useSelector((state) => state.dataSitusku);
     const classes = useStyles();
     const [files, setFiles] = useState([]);
-    const [valueTitle, setValueTitle] = useState('');
-    const [valueSubTitle, setValueSubTitle] = useState('');
-    const [valueLink, setValueLink] = useState('');
+    const [valueTitle, setValueTitle] = useState(dataSettingsMainBanner.title_on_banner);
+    const [valueSubTitle, setValueSubTitle] = useState(dataSettingsMainBanner.subTitle_on_banner);
+    const [valueLink, setValueLink] = useState(dataSettingsMainBanner.link_on_banner);
+    const [dataImage, setDataImage] = useState('');
     const [image, setImage] = useState('');
     const [showNoImage, setShowNoImage] = useState(true);
     const [photoName, setPhotoName] = useState('');
     const [progress, setProgress] = useState(0);
+
     //fungsi buat setor upload image ke server via HTML Request ke cloudinary langsung
     const uploadFile = (files) => {
         // const url = `https://tokyofoam.herokuapp.com/api/product/updatePhotoProduct/${idMongoDb}`;
@@ -251,7 +224,7 @@ const HomeBanner = () => {
 
                 setImage(response.secure_url);
                 setShowNoImage(false);
-                // console.log('seputar image', response.secure_url);
+                // console.log('cek response', response.secure_url);
                 // const formData = {
                 //     photo: response.secure_url
                 // };
@@ -282,31 +255,6 @@ const HomeBanner = () => {
             fileSelect.current.click();
         }
     };
-    // console.log(image, 'cek image');
-
-    // const onDrop = useCallback((acceptedFiles, rejectFiles) => {
-    //     const url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUDNAME}/upload`;
-    //     const uploadPreset=  'process.env.NEXT_PUBLIC_CLOUDINARY_UNSIGNED_UPLOAD_PRESET';
-    //     acceptedFiles.forEach(async (acceptedFile) => {
-    //         const formData = new FormData();
-    //         formData.append('file', acceptedFile);
-    //         formData.append('upload_preset', uploadPreset);
-    //         const response = await fetch(url, {
-    //             method: 'post',
-    //             body: formData
-    //         });
-    //         const data = await response.json();
-    //         console.log(data, 'cek data');
-
-    //         setFiles(
-    //             acceptedFiles.map((file) =>
-    //                 Object.assign(file, {
-    //                     preview: URL.createObjectURL(file)
-    //                 })
-    //             )
-    //         );
-    //     });
-    // }, []);
 
     const onDrop = (acceptedFiles) => {
         setFiles(
@@ -342,38 +290,30 @@ const HomeBanner = () => {
         const data = {
             image_main_banner: image,
             title_on_banner: valueTitle,
-            link_on_banner: valueLink
+            link_on_banner: valueLink,
+            subTitle_on_banner: valueSubTitle
         };
-        console.log(data, 'cek data');
-        dispatch(getDataSettingsMainBanner(data));
+        // console.log(data, 'cek data');
+        dispatch(patchDataSettingsMainBanner(data));
     };
 
-    const { getRootProps, getInputProps } = useDropzone({
-        onDrop,
-        accept: 'image/*',
-        multiple: false
-    });
+    const onChangeLink = (e) => {
+        setValueLink(e);
+    };
 
-    // const { getRootProps, getInputProps } = useDropzone({
-    //     accept: 'image/*',
-    //     onDrop: (acceptedFiles) => {
-    //         setFiles(
-    //             acceptedFiles.map((file) =>
-    //                 Object.assign(file, {
-    //                     preview: URL.createObjectURL(file)
-    //                 })
-    //             )
-    //         );
-    //     }
-    // });
+    useEffect(() => {
+        dispatch(getDataSettingsMainBanner(token, setImage));
+        setValueTitle(dataSettingsMainBanner.title_on_banner);
+        setValueSubTitle(dataSettingsMainBanner.subTitle_on_banner);
+        setValueLink(dataSettingsMainBanner.link_on_banner);
+        // setImage(dataSettingsMainBanner.image_main_banner);
+    }, [
+        dataSettingsMainBanner.title_on_banner,
+        dataSettingsMainBanner.subTitle_on_banner,
+        dataSettingsMainBanner.link_on_banner
 
-    // useEffect(() => {
-    //     setImage(dataSettingsMainBanner.image_main_banner)
-    // },[image])
-
-    // useEffect(() => {
-    //     dispatch(getDataSettingsMainBanner())
-    // },[])
+        // dataSettingsMainBanner.image_main_banner
+    ]);
 
     const images = files.map((file) => (
         <div key={files.name}>
@@ -383,11 +323,8 @@ const HomeBanner = () => {
         </div>
     ));
     console.log(image, 'cek image');
-    // console.log(getInputProps(), getRootProps(), 'cek input props');
     console.log(dataSettingsMainBanner, 'cek data settings Main Banner');
-    const handleEditTitle = () => {};
-    const handleEditSubTitle = () => {};
-    const handleEditLink = () => {};
+    console.log(dataImage, 'cek iamgeeeeee');
 
     return (
         <Card>
@@ -398,31 +335,7 @@ const HomeBanner = () => {
                 <div style={{ width: '100%', border: '1.5px solid #DFE0EB' }}></div>
                 <div className={classes.WrapperItemMain}>
                     <div>
-                        {/* <div style={{ width: '100%' }}>
-                            <div className={classes.ContainerUpload}>
-                                <div className={classes.WrapperUpload} onClick={handleEditPicture}>
-                                    <Image src={CameraImage} alt="Camera Pict" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div
-                            style={{
-                                width: '100%',
-                                overflow: 'hidden',
-                                borderRadius: 8
-                            }}
-                        >
-                            <Image
-                                src={image}
-                                alt="Product Image"
-                                width={459}
-                                height={191}
-                                priority="true"
-                                layout="responsive"
-                            />
-                        </div> */}
-                        {showNoImage === true ? (
+                        {image === '' ? (
                             <div style={{ width: '100%' }}>
                                 <div className={classes.ContainerUpload}>
                                     <div className={classes.WrapperUpload} onClick={handleEditPicture}>
@@ -435,31 +348,25 @@ const HomeBanner = () => {
                                 style={{
                                     width: '100%',
                                     overflow: 'hidden',
-                                    borderRadius: 8
+                                    borderRadius: 8,
+                                    position: 'relative'
                                 }}
                             >
-                                {image.length ? (
-                                    <Image
-                                        src={image}
-                                        alt="Product Image"
-                                        width={459}
-                                        height={191}
-                                        priority="true"
-                                        layout="responsive"
-                                    />
-                                ) : (
-                                    <div className={classes.WrapperUpload} onClick={handleEditPicture}>
-                                        <Image src={CameraImage} alt="Camera Pict" className="CameraImage" />
-                                    </div>
-                                )}
-                                {/* <Image
+                                <Image
                                     src={image}
                                     alt="Product Image"
                                     width={459}
                                     height={191}
                                     priority="true"
                                     layout="responsive"
-                                /> */}
+                                />
+                                <div
+                                    style={{ position: 'absolute', top: 80, left: 230, cursor: 'pointer' }}
+                                    // className={classes.WrapperUpload}
+                                    onClick={handleEditPicture}
+                                >
+                                    <Image src={CameraImage} alt="Camera Pict" className="CameraImage" />
+                                </div>
                             </div>
                         )}
                         <input
@@ -533,7 +440,7 @@ const HomeBanner = () => {
                                 type="text"
                                 value={valueLink}
                                 onChange={(e) => setValueLink(e.target.value)}
-                                placeholder="www.tokyofoam.com/produk?id=12"
+                                placeholder="insert link here"
                                 required
                             />
                         </div>

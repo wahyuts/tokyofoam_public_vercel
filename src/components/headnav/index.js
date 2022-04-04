@@ -269,6 +269,7 @@ const Headnav = () => {
         currentPath === '/about-us' || currentPath === '/' ? null : currentPath === '/cart' ||
           currentPath === '/checkout' ||
           currentPath === '/profile' ||
+          currentPath === '/profile/pages/profile-mobile-payment' ||
           currentPath === '/reset-password' ||
           currentPath === '/change-password-user' ? (
             <div className={classes.slightlyBelowNavbar}>

@@ -29,7 +29,10 @@ import {
     SET_POTONGAN_MEMBERSHIP,
     SET_ID_UNIQ_CART_USER,
     SET_ORDER_ID,
-    GET_ALL_NOTIFICATIONS
+    GET_ALL_NOTIFICATIONS,
+    // SET_EMAIL,
+    // SET_PASSWORD,
+    SET_USER
 
     // TOTAL_PRICE
 } from '../type';
@@ -755,6 +758,36 @@ export const updateStatusPayment = (selected, router) => async (dispatch) => {
         }
         // console.log(error);
     }
+};
+
+//Fungsi buat get user data TANPA Embel2 cart keranjang, box drawer dll
+export const getOnlyUserData2 = () => (dispatch) => {
+    const API = 'https://tokyofoam.herokuapp.com/api/user/profile';
+    // dispatch({ type: LOADING_USER });
+    getAuthorizationHeaderToken();
+    axios
+        .get(API)
+        .then((res) => {
+            dispatch({
+                type: SET_USER,
+                payload: res.data.user
+            });
+
+            // dispatch({
+            //     type: SET_EMAIL,
+            //     payload: ''
+            // });
+            // dispatch({
+            //     type: SET_PASSWORD,
+            //     payload: ''
+            // });
+
+            // setTimeout(dispatch({ type: CLEAR_ERRORS }), 3000);
+            // dispatch({ type: CLEAR_ERRORS });
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 };
 
 // Untuk Notification Product
