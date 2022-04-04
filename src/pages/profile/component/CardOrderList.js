@@ -22,7 +22,7 @@ import Dialog from './dialog';
 import { LOCATION_PATH_DETAILS_ORDER, LOCATION_PATH_MOBILE_PAYMENT } from '../../../types';
 
 const styles = {
-    normalText: { fontWeight: 400, fontSize: '15px', color: '#474747' },
+    normalText: { fontWeight: 400, fontSize: '14px', color: '#474747' },
     normalTextStatusFailed: { fontWeight: 400, fontSize: '14px', color: '#FF7373' },
     normalTextStatusComplete: { fontWeight: 400, fontSize: '14px', color: '#6AB469' },
     normalTextStatusWaiting: { fontWeight: 400, fontSize: '14px', color: '#FFE18E' },
@@ -197,17 +197,22 @@ const CardComponent = ({ dataToRender }) => {
                                                     style={{
                                                         display: 'flex',
                                                         flexDiraction: 'row',
-                                                        width: '45%'
+                                                        width: '80%',
+                                                        backgroundColor: 'red'
                                                     }}
                                                 >
-                                                    <Image
-                                                        src={item?.imageProduct}
-                                                        alt="product image"
-                                                        width={180}
-                                                        height={180}
-                                                        layout="fixed"
-                                                        priority
-                                                    />
+                                                    <div style={{ width: 180 }}>
+                                                        <Image
+                                                            src={item?.imageProduct}
+                                                            alt="product image"
+                                                            width={180}
+                                                            height={180}
+                                                            layout="fixed"
+                                                            objectFit="contain"
+                                                            priority
+                                                        />
+                                                    </div>
+
                                                     <div style={{ marginLeft: 50 }}>
                                                         <p
                                                             style={{
@@ -383,19 +388,22 @@ const CardComponent = ({ dataToRender }) => {
                                                             width: '70%'
                                                         }}
                                                     >
-                                                        <Image
-                                                            src={item?.imageProduct}
-                                                            alt="product image"
-                                                            width={60}
-                                                            height={50}
-                                                            layout="fixed"
-                                                            priority
-                                                        />
+                                                        <div style={{ width: 60 }}>
+                                                            <Image
+                                                                src={item?.imageProduct}
+                                                                alt="product image"
+                                                                width={60}
+                                                                height={60}
+                                                                layout="fixed"
+                                                                objectFit="contain"
+                                                                priority
+                                                            />
+                                                        </div>
                                                         <div style={{ marginLeft: 20 }}>
                                                             <p
                                                                 style={{
                                                                     fontWeight: 600,
-                                                                    fontSize: '12px',
+                                                                    fontSize: '13px',
                                                                     color: '#474747'
                                                                 }}
                                                             >
