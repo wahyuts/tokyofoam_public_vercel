@@ -211,6 +211,11 @@ export default function MenuDrawer() {
     const [regAlamat, setRegAlamat] = React.useState('');
     const [regNoHandphone, setRegNoHandphone] = React.useState('');
     const [forgotPassword, setForgotPassword] = React.useState('');
+    const [checked, setChecked] = React.useState(false);
+
+    const handleChangeChecked = (event) => {
+        setChecked(event.target.checked);
+    };
 
     const { dataProductOnBag } = useSelector((state) => state.bag);
     // const keranjang = dataProductOnBag;
@@ -488,19 +493,31 @@ export default function MenuDrawer() {
                         fullWidth
                         style={{ marginBottom: 15 }}
                     />
-                    <TextField
-                        label="Masukan Password Anda"
-                        size="small"
-                        type="password"
-                        fullWidth
-                        value={password}
-                        onChange={handleChangePassword}
-                        style={{ marginBottom: 15 }}
-                    />
+                    {checked === true ? (
+                        <TextField
+                            label="Masukan Password Anda"
+                            size="small"
+                            type="text"
+                            fullWidth
+                            value={password}
+                            onChange={handleChangePassword}
+                            style={{ marginBottom: 15 }}
+                        />
+                    ) : (
+                        <TextField
+                            label="Masukan Password Anda"
+                            size="small"
+                            type="password"
+                            fullWidth
+                            value={password}
+                            onChange={handleChangePassword}
+                            style={{ marginBottom: 15 }}
+                        />
+                    )}
                 </div>
                 <div className={classes.checkbox}>
-                    <Checkbox style={{ color: '#111' }} />
-                    <p> Remember Me</p>
+                    <Checkbox style={{ color: '#111' }} checked={checked} onChange={handleChangeChecked} />
+                    <p> Show Password</p>
                 </div>
                 <div>
                     <p style={{ fontSize: 12, color: '#FF7373', marginLeft: 20, marginTop: 10 }}>{errors}</p>

@@ -202,6 +202,12 @@ const DesktopLoginDrawer = ({ menuOpens, setMenuOpen }) => {
     // Buat forgot password
     const [forgotPassword, setForgotPassword] = useState('');
 
+    const [checked, setChecked] = React.useState(false);
+
+    const handleChangeChecked = (event) => {
+        setChecked(event.target.checked);
+    };
+
     //onChange Buat Login
     const handleChangeEmail = (e) => {
         dispatch(settingEmail(e.target.value));
@@ -376,20 +382,32 @@ const DesktopLoginDrawer = ({ menuOpens, setMenuOpen }) => {
                         fullWidth
                         style={{ marginBottom: 15 }}
                     />
-                    <TextField
-                        label="Masukan Password Anda"
-                        size="small"
-                        type="password"
-                        value={password}
-                        onChange={handleChangePassword}
-                        fullWidth
-                        style={{ marginBottom: 15 }}
-                    />
+                    {checked === true ? (
+                        <TextField
+                            label="Masukan Password Anda"
+                            size="small"
+                            type="text"
+                            fullWidth
+                            value={password}
+                            onChange={handleChangePassword}
+                            style={{ marginBottom: 15 }}
+                        />
+                    ) : (
+                        <TextField
+                            label="Masukan Password Anda"
+                            size="small"
+                            type="password"
+                            fullWidth
+                            value={password}
+                            onChange={handleChangePassword}
+                            style={{ marginBottom: 15 }}
+                        />
+                    )}
                 </div>
 
                 <div className={classes.checkbox}>
-                    <Checkbox style={{ color: '#111' }} />
-                    <p> Remember Me</p>
+                    <Checkbox style={{ color: '#111' }} checked={checked} onChange={handleChangeChecked} />
+                    <p> Show Password</p>
                 </div>
                 <div>
                     <p style={{ fontSize: 15, color: '#FF7373', marginLeft: 20, marginTop: 10 }}>{errors}</p>
