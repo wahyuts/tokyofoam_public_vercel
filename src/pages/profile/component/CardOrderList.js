@@ -82,7 +82,7 @@ const CardComponent = ({ dataToRender }) => {
 
     const { listOrderUserInUserDashboard } = useSelector((state) => state.dataProduct);
     const { statusResponse } = useSelector((state) => state.dbResponses);
-    console.log('DAFTAR ORDER USER', listOrderUserInUserDashboard);
+    // console.log('DAFTAR ORDER USER', listOrderUserInUserDashboard);
 
     const [showModalPayment, setShowModalPayment] = useState(false);
     const [statusPayment, setStatusPayment] = useState({});
@@ -116,7 +116,7 @@ const CardComponent = ({ dataToRender }) => {
         statusResponse?.response === 'OK' && setOpen(true);
     }, [statusResponse]);
 
-    console.log(statusResponse);
+    // console.log(statusResponse);
 
     return (
         <Container>

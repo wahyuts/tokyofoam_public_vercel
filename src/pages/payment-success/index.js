@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Logo from '../../../public/assets/images/logo-tokyofoam.png';
 import { makeStyles } from '@mui/styles';
