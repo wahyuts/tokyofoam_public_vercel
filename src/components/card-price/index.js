@@ -435,6 +435,8 @@ const CardPrice = ({ image }) => {
     const [types, setTypes] = useState('Pillow');
     const [tabs, setTabs] = React.useState('1');
 
+    // console.log('PRO', productByName.desc.length);
+
     const onTabClicked = (event, newIndex) => {
         setIndex(newIndex);
     };
@@ -495,8 +497,8 @@ const CardPrice = ({ image }) => {
     };
 
     const handleDecrement = () => {
-        if (quantity === 0) {
-            setQuantity(0);
+        if (quantity === 1) {
+            setQuantity(1);
         } else {
             setQuantity((prevCount) => prevCount - 1);
         }
@@ -608,16 +610,39 @@ const CardPrice = ({ image }) => {
     let lookTablet = (
         <div>
             {' '}
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-                <div style={{ display: 'flex', alignItems: 'center', marginBottom: 10 }}>
-                    <span className={classes.firstColor}></span>
+            <div style={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
+                <div style={{ display: 'flex', marginBottom: 10 }}>
+                    {productByName.promo_price === 0 ? (
+                        <div>
+                            <h1 className={classes.normalPrice}>{`IDR ${productByName.price}`}</h1>
+                        </div>
+                    ) : (
+                        <>
+                            <div>
+                                <h1 className={classes.crossedPrice}>{`IDR ${productByName.price}`}</h1>
+                            </div>
+                            <div>
+                                <h1 className={classes.normalPrice}>{`IDR ${productByName.promo_price}`}</h1>
+                            </div>
+                        </>
+                    )}
                 </div>
+
                 <div style={{ display: 'flex', alignItems: 'center', marginBottom: 10 }}>
-                    <CounterButton />
-                    <div style={{}}>
-                        <span>
-                            <AddToFavButton />
-                        </span>
+                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: 10 }}>
+                        <span className={classes.firstColor}></span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: 10 }}>
+                        <CounterButton
+                            handleIncrement={handleIncrement}
+                            handleDecrement={handleDecrement}
+                            quantity={quantity}
+                        />
+                        <div style={{}}>
+                            <span>
+                                <AddToFavButton />
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -696,14 +721,17 @@ const CardPrice = ({ image }) => {
                             </TabList>
                         </Box>
                         {tabs === '1' ? (
-                            <TabPanel value="1">
-                                <ReadMoreLess limit={300}>
+                            productByName.desc.length <= 300 ? (
+                                <TabPanel value="1">
                                     <p className={classes.fontBahan}>{productByName.desc}</p>
-                                    {/* <div className={classes.DetailButton}>
-                                    <MainBlackButton className={'BlackButton'}>Load More</MainBlackButton>
-                                </div> */}
-                                </ReadMoreLess>
-                            </TabPanel>
+                                </TabPanel>
+                            ) : (
+                                <TabPanel value="1">
+                                    <ReadMoreLess limit={300}>
+                                        <p className={classes.fontBahan}>{productByName.desc}</p>
+                                    </ReadMoreLess>
+                                </TabPanel>
+                            )
                         ) : (
                             <TabPanel value="2">
                                 <TabCard />

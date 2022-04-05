@@ -22,7 +22,7 @@ import Dialog from './dialog';
 import { LOCATION_PATH_DETAILS_ORDER, LOCATION_PATH_MOBILE_PAYMENT } from '../../../types';
 
 const styles = {
-    normalText: { fontWeight: 400, fontSize: '14px', color: '#474747' },
+    normalText: { fontWeight: 400, fontSize: '14px', marginLeft: 15, color: '#474747' },
     normalTextStatusFailed: { fontWeight: 400, fontSize: '14px', color: '#FF7373' },
     normalTextStatusComplete: { fontWeight: 400, fontSize: '14px', color: '#6AB469' },
     normalTextStatusWaiting: { fontWeight: 400, fontSize: '14px', color: '#FFE18E' },
@@ -126,406 +126,435 @@ const CardComponent = ({ dataToRender }) => {
                 </Alert>
             </Snackbar>
 
-            {dataToRender.map((data, index) => {
-                const total = currencyFormat(data?.totalPrice_plus_shipping_minus_benefit_member);
-                const shipping_fee = currencyFormat(data?.shipping_fee);
-                const total_exclude_shipping = currencyFormat(data?.total_exclude_shipping);
-                const potongan_benefit_membership = currencyFormat(data?.potongan_benefit_membership);
-                const expedisi = data?.expedisi;
+            {dataToRender.length === 0 ? (
+                <p style={{ fontSize: '14px', textAlign: 'center' }}>Anda belum memiliki pesanan</p>
+            ) : (
+                <>
+                    {dataToRender.map((data, index) => {
+                        const total = currencyFormat(data?.totalPrice_plus_shipping_minus_benefit_member);
+                        const shipping_fee = currencyFormat(data?.shipping_fee);
+                        const total_exclude_shipping = currencyFormat(data?.total_exclude_shipping);
+                        const potongan_benefit_membership = currencyFormat(data?.potongan_benefit_membership);
+                        const expedisi = data?.expedisi;
 
-                return (
-                    <>
-                        <div key={`${index}478398`} className={classes.cardContainerDesktop}>
-                            <Accordion disableGutters>
-                                <AccordionSummary
-                                    expandIcon={<ExpandMoreIcon />}
-                                    aria-controls="panel1a-content"
-                                    id="panel1a-header"
-                                >
-                                    <div
-                                        style={{
-                                            display: 'flex',
-                                            flexDiraction: 'row',
-                                            marginBottom: 20,
-                                            alignItems: 'center'
-                                        }}
-                                    >
-                                        <p
-                                            style={{
-                                                fontWeight: 600,
-                                                fontSize: '20px',
-                                                color: '#474747',
-                                                marginRight: 90
-                                            }}
+                        return (
+                            <>
+                                <div key={`${index}478398`} className={classes.cardContainerDesktop}>
+                                    <Accordion disableGutters>
+                                        <AccordionSummary
+                                            expandIcon={<ExpandMoreIcon />}
+                                            aria-controls="panel1a-content"
+                                            id="panel1a-header"
                                         >
-                                            ID Pesanan {data?._id}
-                                        </p>
-                                        <p style={{ fontWeight: 400, fontSize: '15px', color: '#474747' }}>
-                                            Status Payment:
-                                            <text
-                                                style={
-                                                    data?.status_payment === 'Telah dibayar'
-                                                        ? styles.normalTextStatusComplete
-                                                        : data.status_payment === 'expire'
-                                                        ? styles.normalTextStatusFailed
-                                                        : styles.normalTextStatusWaiting
-                                                }
-                                            >
-                                                {' '}
-                                                {data?.status_payment.toUpperCase()}
-                                            </text>
-                                        </p>
-                                    </div>
-                                </AccordionSummary>
-                                {data?.cart?.map((item) => {
-                                    const price = item?.promo_price === 0 ? item?.price : item?.promo_price_x_qty;
-                                    const newPrice = currencyFormat(price);
-
-                                    return (
-                                        <AccordionDetails key={item?._id}>
                                             <div
-                                                key={item?._id}
                                                 style={{
                                                     display: 'flex',
                                                     flexDiraction: 'row',
-                                                    justifyContent: 'space-between',
-                                                    alignItems: 'center',
-                                                    marginBottom: 30
+                                                    marginBottom: 20,
+                                                    alignItems: 'center'
                                                 }}
                                             >
-                                                <div
+                                                <p
                                                     style={{
-                                                        display: 'flex',
-                                                        flexDiraction: 'row',
-                                                        width: '80%'
-
-                                                        // backgroundColor: 'red'
+                                                        fontWeight: 600,
+                                                        fontSize: '20px',
+                                                        color: '#474747',
+                                                        marginRight: 90
                                                     }}
                                                 >
-                                                    <div style={{ width: 180 }}>
-                                                        <Image
-                                                            src={item?.imageProduct}
-                                                            alt="product image"
-                                                            width={180}
-                                                            height={180}
-                                                            layout="fixed"
-                                                            objectFit="contain"
-                                                            priority
-                                                        />
-                                                    </div>
-
-                                                    <div style={{ marginLeft: 50 }}>
-                                                        <p
-                                                            style={{
-                                                                fontWeight: 600,
-                                                                fontSize: '18px',
-                                                                color: '#474747'
-                                                            }}
-                                                        >
-                                                            {item?.nameProduct}
-                                                        </p>
-                                                        <p style={styles.normalText}>
-                                                            Type:
-                                                            <text style={styles.normalTextDisable}>
-                                                                {' '}
-                                                                {item?.id_manual_product}
-                                                            </text>
-                                                        </p>
-                                                        <p style={styles.normalText}>
-                                                            Qty:
-                                                            <text style={styles.normalTextDisable}> {item.qty}</text>
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <p style={{ textAlign: 'right' }}>
-                                                    <p style={styles.normalTextDisableBold}>Rp {newPrice}</p>
+                                                    ID Pesanan {data?._id}
+                                                </p>
+                                                <p style={{ fontWeight: 400, fontSize: '15px', color: '#474747' }}>
+                                                    Status Payment:
+                                                    <span
+                                                        style={
+                                                            data?.status_payment === 'Telah dibayar'
+                                                                ? styles.normalTextStatusComplete
+                                                                : data.status_payment === 'expire'
+                                                                ? styles.normalTextStatusFailed
+                                                                : styles.normalTextStatusWaiting
+                                                        }
+                                                    >
+                                                        {' '}
+                                                        {data?.status_payment.toUpperCase()}
+                                                    </span>
                                                 </p>
                                             </div>
-                                        </AccordionDetails>
-                                    );
-                                })}
-                            </Accordion>
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    justifyContent: 'flex-end',
-                                    marginBottom: 15,
-                                    marginTop: 15
-                                }}
-                            >
-                                <div>
-                                    <p style={styles.smallTextDisable}>Shipping Fee {`(${expedisi})`}:</p>
-                                    <p style={styles.smallTextDisable}>Total Exclude Shipping:</p>
-                                    <p style={styles.smallTextDisable}>Potongan Benefit Member:</p>
-                                    <div style={{ marginTop: 20 }}>
-                                        <p style={styles.normalTextDisable}>Total Pesanan:</p>
-                                    </div>
-                                </div>
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        alignItems: 'flex-end',
-                                        marginLeft: 20
-                                    }}
-                                >
-                                    <p style={styles.smallTextDisable}>{shipping_fee.toString()}</p>
-                                    <p style={styles.smallTextDisable}>{total_exclude_shipping.toString()}</p>
-                                    <p style={styles.smallTextDisable}>{potongan_benefit_membership.toString()}</p>
-                                    <div style={{ marginTop: 20 }}>
-                                        <p style={styles.boldTextStatus}> Rp {total.toString()}</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <div>
-                                    <p style={styles.normalText}>
-                                        No Resi/Tracking:
-                                        <text style={styles.normalTextDisable}> {data?.no_resi}</text>
-                                    </p>
-                                    <p style={styles.normalText}>
-                                        Tanggal Pesanan:
-                                        <text style={styles.normalTextDisable}> {data?.tanggal_pembelian}</text>
-                                    </p>
-                                </div>
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        flexDiraction: 'row',
-                                        justifyContent: 'space-between',
-                                        alignItems: 'center'
-                                    }}
-                                >
-                                    <IconButton
-                                        aria-label="credit-card"
-                                        className={classes.btnIcon}
-                                        onClick={() => {
-                                            setShowModalPayment(true);
-                                            showPaymentStatusLabel(data?.status_payment);
-                                            setDataCart(data?.cart);
-                                            setDataOrder(data);
+                                        </AccordionSummary>
+                                        {data?.cart?.map((item) => {
+                                            const price =
+                                                item?.promo_price === 0 ? item?.price : item?.promo_price_x_qty;
+                                            const newPrice = currencyFormat(price);
+
+                                            return (
+                                                <AccordionDetails key={item?._id}>
+                                                    <div
+                                                        // key={item?._id}
+                                                        style={{
+                                                            display: 'flex',
+                                                            flexDiraction: 'row',
+                                                            justifyContent: 'space-between',
+                                                            alignItems: 'center',
+                                                            marginBottom: 30
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                display: 'flex',
+                                                                flexDiraction: 'row',
+                                                                width: '80%'
+
+                                                                // backgroundColor: 'red'
+                                                            }}
+                                                        >
+                                                            <div style={{ width: 180 }}>
+                                                                <Image
+                                                                    src={item?.imageProduct}
+                                                                    alt="product image"
+                                                                    width={180}
+                                                                    height={180}
+                                                                    layout="fixed"
+                                                                    objectFit="contain"
+                                                                    priority
+                                                                />
+                                                            </div>
+                                                            <div style={{ marginLeft: 50 }}>
+                                                                <p
+                                                                    style={{
+                                                                        fontWeight: 600,
+                                                                        fontSize: '18px',
+                                                                        color: '#474747'
+                                                                    }}
+                                                                >
+                                                                    {item?.nameProduct}
+                                                                </p>
+                                                                <p style={styles.normalText}>
+                                                                    Type:
+                                                                    <span style={styles.normalTextDisable}>
+                                                                        {' '}
+                                                                        {item?.id_manual_product}
+                                                                    </span>
+                                                                </p>
+                                                                <p style={styles.normalText}>
+                                                                    Qty:
+                                                                    <span style={styles.normalTextDisable}>
+                                                                        {' '}
+                                                                        {item.qty}
+                                                                    </span>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <p style={{ textAlign: 'right' }}>
+                                                            <span style={styles.normalTextDisableBold}>
+                                                                Rp {newPrice}
+                                                            </span>
+                                                        </p>
+                                                    </div>
+                                                </AccordionDetails>
+                                            );
+                                        })}
+                                    </Accordion>
+                                    <div
+                                        style={{
+                                            display: 'flex',
+                                            flexDirection: 'row',
+                                            justifyContent: 'flex-end',
+                                            marginBottom: 15,
+                                            marginTop: 15
                                         }}
                                     >
-                                        <CreditCardOutlined style={{ color: '#474747', marginRight: '10px' }} />
-                                    </IconButton>
+                                        <div>
+                                            <p style={styles.smallTextDisable}>Shipping Fee {`(${expedisi})`}:</p>
+                                            <p style={styles.smallTextDisable}>Total Exclude Shipping:</p>
+                                            <p style={styles.smallTextDisable}>Potongan Benefit Member:</p>
+                                            <div style={{ marginTop: 20 }}>
+                                                <p style={styles.normalTextDisable}>Total Pesanan:</p>
+                                            </div>
+                                        </div>
+                                        <div
+                                            style={{
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                alignItems: 'flex-end',
+                                                marginLeft: 20
+                                            }}
+                                        >
+                                            <p style={styles.smallTextDisable}>{shipping_fee.toString()}</p>
+                                            <p style={styles.smallTextDisable}>{total_exclude_shipping.toString()}</p>
+                                            <p style={styles.smallTextDisable}>
+                                                {potongan_benefit_membership.toString()}
+                                            </p>
+                                            <div style={{ marginTop: 20 }}>
+                                                <p style={styles.boldTextStatus}> Rp {total.toString()}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div
+                                        style={{
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
+                                            alignItems: 'center'
+                                        }}
+                                    >
+                                        <div>
+                                            <p style={styles.normalText}>
+                                                No Resi/Tracking:
+                                                <span style={styles.normalTextDisable}> {data?.no_resi}</span>
+                                            </p>
+                                            <p style={styles.normalText}>
+                                                Tanggal Pesanan:
+                                                <span style={styles.normalTextDisable}> {data?.tanggal_pembelian}</span>
+                                            </p>
+                                        </div>
+                                        <div
+                                            style={{
+                                                display: 'flex',
+                                                flexDiraction: 'row',
+                                                justifyContent: 'space-between',
+                                                alignItems: 'center'
+                                            }}
+                                        >
+                                            <IconButton
+                                                aria-label="credit-card"
+                                                className={classes.btnIcon}
+                                                onClick={() => {
+                                                    setShowModalPayment(true);
+                                                    showPaymentStatusLabel(data?.status_payment);
+                                                    setDataCart(data?.cart);
+                                                    setDataOrder(data);
+                                                }}
+                                            >
+                                                <CreditCardOutlined style={{ color: '#474747', marginRight: '10px' }} />
+                                            </IconButton>
 
-                                    {/* <IconButton
+                                            {/* <IconButton
                                         aria-label="view"
                                         className={classes.btnIcon}
                                         onClick={() => router.push(LOCATION_PATH_DETAILS_ORDER)}
                                     >
                                         <VisibilityOutlined />
                                     </IconButton> */}
-                                    <IconButton
-                                        aria-label="delete"
-                                        className={classes.btnIcon}
-                                        onClick={async () => {
-                                            await dispatch(deleteOrderById(data?._id));
-                                        }}
-                                    >
-                                        <DeleteOutlined style={{ color: '#FF0000', marginRight: '10px' }} />
-                                    </IconButton>
-                                </div>
-                            </div>
-                            <hr
-                                style={{
-                                    backgroundColor: '#D8D8D8',
-                                    height: 0.5,
-                                    marginBottom: 30
-                                }}
-                            />
-                        </div>
-
-                        <div key={index} className={classes.cardContainerMobile}>
-                            <div sx={{ display: 'grid', gridTemplateRows: 'repeat(3, 1fr)' }}>
-                                <Accordion sx={{ width: '100%' }}>
-                                    <AccordionSummary
-                                        expandIcon={<ExpandMoreIcon />}
-                                        aria-controls="panel1a-content"
-                                        id="panel1a-header"
-                                    >
-                                        <div sx={{ display: 'grid', gridTemplateRows: 'repeat(3, 1fr)' }}>
-                                            <p style={{ fontWeight: 600, fontSize: '16px', color: '#474747' }}>
-                                                ID Pesanan {data._id}
-                                            </p>
-                                            <p style={{ fontWeight: 400, fontSize: '15px', color: '#474747' }}>
-                                                Status Pesanan:
-                                                <text
-                                                    style={
-                                                        data?.status_payment === 'Telah dibayar'
-                                                            ? styles.normalTextStatusComplete
-                                                            : data?.status_payment === 'expire'
-                                                            ? styles.normalTextStatusFailed
-                                                            : styles.normalTextStatusWaiting
-                                                    }
-                                                >
-                                                    {' '}
-                                                    {data?.status_payment.toUpperCase()}
-                                                </text>
-                                            </p>
+                                            <IconButton
+                                                aria-label="delete"
+                                                className={classes.btnIcon}
+                                                onClick={async () => {
+                                                    await dispatch(deleteOrderById(data?._id));
+                                                }}
+                                            >
+                                                <DeleteOutlined style={{ color: '#FF0000', marginRight: '10px' }} />
+                                            </IconButton>
                                         </div>
-                                    </AccordionSummary>
-                                    {data?.cart?.map((item) => {
-                                        const price = item?.promo_price === 0 ? item?.price : item?.promo_price_x_qty;
-                                        const newPrice = currencyFormat(price);
+                                    </div>
+                                    <hr
+                                        style={{
+                                            backgroundColor: '#D8D8D8',
+                                            height: 0.5,
+                                            marginBottom: 30
+                                        }}
+                                    />
+                                </div>
 
-                                        return (
-                                            <AccordionDetails key={item?._id}>
-                                                <div
-                                                    key={item?._id}
-                                                    style={{
-                                                        display: 'flex',
-                                                        flexDiraction: 'row',
-                                                        justifyContent: 'space-between',
-                                                        alignItems: 'center',
-                                                        marginBottom: 30
-                                                    }}
-                                                >
-                                                    <div
-                                                        style={{
-                                                            display: 'flex',
-                                                            flexDiraction: 'row',
-                                                            width: '70%'
-                                                        }}
-                                                    >
-                                                        <div style={{ width: 60 }}>
-                                                            <Image
-                                                                src={item?.imageProduct}
-                                                                alt="product image"
-                                                                width={60}
-                                                                height={60}
-                                                                layout="fixed"
-                                                                objectFit="contain"
-                                                                priority
-                                                            />
-                                                        </div>
-                                                        <div style={{ marginLeft: 20 }}>
-                                                            <p
-                                                                style={{
-                                                                    fontWeight: 600,
-                                                                    fontSize: '13px',
-                                                                    color: '#474747'
-                                                                }}
-                                                            >
-                                                                {item?.nameProduct}
-                                                            </p>
-                                                            <p style={styles.normalText}>
-                                                                Type:
-                                                                <text style={styles.normalTextDisable}>
-                                                                    {' '}
-                                                                    {item?.id_manual_product}
-                                                                </text>
-                                                            </p>
-                                                            <p style={styles.normalText}>
-                                                                Qty:
-                                                                <text style={styles.normalTextDisable}>
-                                                                    {' '}
-                                                                    {item.qty}
-                                                                </text>
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                    <p style={{ textAlign: 'right' }}>
-                                                        <p style={styles.normalTextDisableBold}>Rp {newPrice}</p>
+                                <div key={index} className={classes.cardContainerMobile}>
+                                    <div sx={{ display: 'grid', gridTemplateRows: 'repeat(3, 1fr)' }}>
+                                        <Accordion sx={{ width: '100%' }}>
+                                            <AccordionSummary
+                                                expandIcon={<ExpandMoreIcon />}
+                                                aria-controls="panel1a-content"
+                                                id="panel1a-header"
+                                            >
+                                                <div sx={{ display: 'grid', gridTemplateRows: 'repeat(3, 1fr)' }}>
+                                                    <p style={{ fontWeight: 600, fontSize: '16px', color: '#474747' }}>
+                                                        ID Pesanan {data._id}
+                                                    </p>
+                                                    <p style={{ fontWeight: 400, fontSize: '15px', color: '#474747' }}>
+                                                        Status Pesanan:
+                                                        <span
+                                                            style={
+                                                                data?.status_payment === 'Telah dibayar'
+                                                                    ? styles.normalTextStatusComplete
+                                                                    : data?.status_payment === 'expire'
+                                                                    ? styles.normalTextStatusFailed
+                                                                    : styles.normalTextStatusWaiting
+                                                            }
+                                                        >
+                                                            {' '}
+                                                            {data?.status_payment.toUpperCase()}
+                                                        </span>
                                                     </p>
                                                 </div>
-                                            </AccordionDetails>
-                                        );
-                                    })}
-                                </Accordion>
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        justifyContent: 'flex-end',
-                                        marginBottom: 15,
-                                        marginTop: 15
-                                    }}
-                                >
-                                    <div>
-                                        <p style={styles.smallTextDisable}>Shipping Fee {`(${expedisi})`}:</p>
-                                        <p style={styles.smallTextDisable}>Total Exclude Shipping:</p>
-                                        <p style={styles.smallTextDisable}>Potongan Benefit Member:</p>
-                                        <div style={{ marginTop: 20 }}>
-                                            <p style={styles.normalTextDisable}>Total Pesanan:</p>
-                                        </div>
-                                    </div>
-                                    <div
-                                        style={{
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            alignItems: 'flex-end',
-                                            marginLeft: 20
-                                        }}
-                                    >
-                                        <p style={styles.smallTextDisable}>{shipping_fee.toString()}</p>
-                                        <p style={styles.smallTextDisable}>{total_exclude_shipping.toString()}</p>
-                                        <p style={styles.smallTextDisable}>{potongan_benefit_membership.toString()}</p>
-                                        <div style={{ marginTop: 20 }}>
-                                            <p style={styles.boldTextStatus}> Rp {total.toString()}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        flexDiraction: 'row',
-                                        justifyContent: 'space-between',
-                                        alignItems: 'center'
-                                    }}
-                                >
-                                    <div>
-                                        <p style={styles.normalText}>
-                                            No Tracking:
-                                            <text style={styles.normalTextDisable}> {data?.no_resi}</text>
-                                        </p>
-                                        <p style={styles.normalText}>
-                                            Tanggal Pesanan:
-                                            <text style={styles.normalTextDisable}> {data?.tanggal_pembelian}</text>
-                                        </p>
-                                    </div>
-                                    <div
-                                        style={{
-                                            display: 'flex',
-                                            flexDiraction: 'row',
-                                            alignItems: 'center'
-                                        }}
-                                    >
-                                        <CreditCardOutlined
-                                            style={{ color: '#474747', marginRight: '10px' }}
-                                            onClick={async () => {
-                                                await dispatch(getOrderById(data?._id));
-                                                await dispatch(setLabelStatusPayment(data?.status_payment));
-                                                router.push(LOCATION_PATH_MOBILE_PAYMENT);
-                                            }}
-                                        />
+                                            </AccordionSummary>
+                                            {data?.cart?.map((item) => {
+                                                const price =
+                                                    item?.promo_price === 0 ? item?.price : item?.promo_price_x_qty;
+                                                const newPrice = currencyFormat(price);
 
-                                        {/* <VisibilityOutlined onClick={() => router.push(LOCATION_PATH_DETAILS_ORDER)}/> */}
-                                        <IconButton
-                                            aria-label="delete"
-                                            className={classes.btnIcon}
-                                            onClick={async () => {
-                                                await dispatch(deleteOrderById(data?._id));
+                                                return (
+                                                    <AccordionDetails key={item?._id}>
+                                                        <div
+                                                            // key={item?._id}
+                                                            style={{
+                                                                display: 'flex',
+                                                                flexDiraction: 'row',
+                                                                justifyContent: 'space-between',
+                                                                alignItems: 'center',
+                                                                marginBottom: 30
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    display: 'flex',
+                                                                    flexDiraction: 'row',
+                                                                    width: '70%'
+                                                                }}
+                                                            >
+                                                                <div style={{ width: 60 }}>
+                                                                    <Image
+                                                                        src={item?.imageProduct}
+                                                                        alt="product image"
+                                                                        width={60}
+                                                                        height={60}
+                                                                        layout="fixed"
+                                                                        objectFit="contain"
+                                                                        priority
+                                                                    />
+                                                                </div>
+                                                                <div style={{ marginLeft: 20 }}>
+                                                                    <p
+                                                                        style={{
+                                                                            fontWeight: 600,
+                                                                            fontSize: '13px',
+                                                                            color: '#474747'
+                                                                        }}
+                                                                    >
+                                                                        {item?.nameProduct}
+                                                                    </p>
+                                                                    <p style={styles.normalText}>
+                                                                        Type:
+                                                                        <span style={styles.normalTextDisable}>
+                                                                            {' '}
+                                                                            {item?.id_manual_product}
+                                                                        </span>
+                                                                    </p>
+                                                                    <p style={styles.normalText}>
+                                                                        Qty:
+                                                                        <span style={styles.normalTextDisable}>
+                                                                            {' '}
+                                                                            {item.qty}
+                                                                        </span>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                            <p style={{ textAlign: 'right' }}>
+                                                                <span style={styles.normalTextDisableBold}>
+                                                                    Rp {newPrice}
+                                                                </span>
+                                                            </p>
+                                                        </div>
+                                                    </AccordionDetails>
+                                                );
+                                            })}
+                                        </Accordion>
+                                        <div
+                                            style={{
+                                                display: 'flex',
+                                                flexDirection: 'row',
+                                                justifyContent: 'flex-end',
+                                                marginBottom: 15,
+                                                marginTop: 15
                                             }}
                                         >
-                                            <DeleteOutlined style={{ color: '#FF0000', marginRight: '10px' }} />
-                                        </IconButton>
+                                            <div>
+                                                <p style={styles.smallTextDisable}>Shipping Fee {`(${expedisi})`}:</p>
+                                                <p style={styles.smallTextDisable}>Total Exclude Shipping:</p>
+                                                <p style={styles.smallTextDisable}>Potongan Benefit Member:</p>
+                                                <div style={{ marginTop: 20 }}>
+                                                    <p style={styles.normalTextDisable}>Total Pesanan:</p>
+                                                </div>
+                                            </div>
+                                            <div
+                                                style={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    alignItems: 'flex-end',
+                                                    marginLeft: 20
+                                                }}
+                                            >
+                                                <p style={styles.smallTextDisable}>{shipping_fee.toString()}</p>
+                                                <p style={styles.smallTextDisable}>
+                                                    {total_exclude_shipping.toString()}
+                                                </p>
+                                                <p style={styles.smallTextDisable}>
+                                                    {potongan_benefit_membership.toString()}
+                                                </p>
+                                                <div style={{ marginTop: 20 }}>
+                                                    <p style={styles.boldTextStatus}> Rp {total.toString()}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div
+                                            style={{
+                                                display: 'flex',
+                                                flexDiraction: 'row',
+                                                justifyContent: 'space-between',
+                                                alignItems: 'center'
+                                            }}
+                                        >
+                                            <div>
+                                                <p style={styles.normalText}>
+                                                    No Tracking:
+                                                    <span style={styles.normalTextDisable}> {data?.no_resi}</span>
+                                                </p>
+                                                <p style={styles.normalText}>
+                                                    Tanggal Pesanan:
+                                                    <span style={styles.normalTextDisable}>
+                                                        {' '}
+                                                        {data?.tanggal_pembelian}
+                                                    </span>
+                                                </p>
+                                            </div>
+                                            <div
+                                                style={{
+                                                    display: 'flex',
+                                                    flexDiraction: 'row',
+                                                    alignItems: 'center'
+                                                }}
+                                            >
+                                                <CreditCardOutlined
+                                                    style={{ color: '#474747', marginRight: '10px' }}
+                                                    onClick={async () => {
+                                                        await dispatch(getOrderById(data?._id));
+                                                        await dispatch(setLabelStatusPayment(data?.status_payment));
+                                                        router.push(LOCATION_PATH_MOBILE_PAYMENT);
+                                                    }}
+                                                />
+
+                                                {/* <VisibilityOutlined onClick={() => router.push(LOCATION_PATH_DETAILS_ORDER)}/> */}
+                                                <IconButton
+                                                    aria-label="delete"
+                                                    className={classes.btnIcon}
+                                                    onClick={async () => {
+                                                        await dispatch(deleteOrderById(data?._id));
+                                                    }}
+                                                >
+                                                    <DeleteOutlined style={{ color: '#FF0000', marginRight: '10px' }} />
+                                                </IconButton>
+                                            </div>
+                                        </div>
+                                        <hr
+                                            style={{
+                                                backgroundColor: '#D8D8D8',
+                                                height: 0.5,
+                                                marginBottom: 30,
+                                                marginTop: 10
+                                            }}
+                                        />
                                     </div>
                                 </div>
-                                <hr
-                                    style={{
-                                        backgroundColor: '#D8D8D8',
-                                        height: 0.5,
-                                        marginBottom: 30,
-                                        marginTop: 10
-                                    }}
-                                />
-                            </div>
-                        </div>
-                    </>
-                );
-            })}
+                            </>
+                        );
+                    })}
+                </>
+            )}
 
             <Dialog
                 open={showModalPayment}

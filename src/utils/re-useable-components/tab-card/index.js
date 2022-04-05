@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
         boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.25)',
         borderRadius: 10,
         paddingLeft: 10,
+        paddingRight: 10,
         [theme.breakpoints.down('mobile')]: {
             width: '100%'
         }
@@ -97,7 +98,7 @@ export default function TabCard() {
                                 {/* <label className={classes.TextLabel}>Lorem Ipsum</label> */}
                                 <span className={classes.TextSpan}>{`${theComment.comment}`}</span>
                             </div>
-                            <div style={{ width: '100%', marginTop: 15 }}>
+                            <div style={{ width: '100%', marginTop: 15, marginLeft: 0 }}>
                                 <hr />
                             </div>
                             <div className={classes.ReviewText}>

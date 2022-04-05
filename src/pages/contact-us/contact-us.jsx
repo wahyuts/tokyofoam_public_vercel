@@ -154,7 +154,7 @@ const ContactUs = () => {
                                 </div>
                                 <div className={classes.innerIconContainer}>
                                     <i className={`far fa-envelope ${classes.icon}`}></i>
-                                    <p>tokyofoam@gmail.com</p>
+                                    <p>tokyofoam99@gmail.com</p>
                                 </div>
                                 <div className={classes.innerIconContainer} style={{ marginTop: '18px' }}>
                                     <i className={`fab fa-instagram ${classes.icon}`}></i>

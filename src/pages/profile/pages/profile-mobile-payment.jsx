@@ -86,7 +86,7 @@ const Payment = (params) => {
                 <p style={{ fontWeight: '500', fontSize: '14px', fontWeight: 700 }}>Delivery Address</p>
                 <p style={{ fontSize: '14px', fontWeight: '400', marginTop: '10px' }}>
                     {`${dataOrderById?.nama_pembeli}, ${dataOrderById?.alamat_pengiriman}`}
-                    <text>{`No Hp ${dataOrderById?.no_handphone}`}</text>
+                    {`No Hp ${dataOrderById?.no_handphone}`}
                 </p>
                 <p style={{ fontSize: '14px', fontWeight: '400', marginTop: '10px', fontWeight: 700 }}>
                     By Kurir: {expedisi}

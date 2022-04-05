@@ -97,7 +97,7 @@ const ProfilePage = () => {
 
     useEffect(() => {
         dispatch(getListOrderUserOnUserDashboard());
-    }, []);
+    }, [dispatch]);
 
     return (
         <>

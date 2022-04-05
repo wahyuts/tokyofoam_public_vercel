@@ -255,6 +255,8 @@ const useStyles = makeStyles((theme) => ({
         width: '60%',
         marginTop: 20,
         marginBottom: 20,
+        marginLeft: 'auto',
+        marginRight: 'auto',
         // backgroundColor: 'green',
         [theme.breakpoints.down('mobile')]: {
             width: '100%',
@@ -266,6 +268,9 @@ const useStyles = makeStyles((theme) => ({
         width: '65%',
         marginRight: 'auto',
         marginLeft: 'auto',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
         // backgroundColor: 'red',
         [theme.breakpoints.down('mobile')]: {
             width: '100%',
@@ -956,7 +961,9 @@ const Checkout = () => {
                                 Confirm Order & Pay
                             </MainBlackButton> */}
                         </div>
-                        <div style={{ marginLeft: 10, marginRight: 10, marginTop: 10 }}>
+                        {/*Permintaan Client Tobol Pay Later Dibawah ini Di Non Akrifkan*/}
+
+                        {/* <div style={{ marginLeft: 10, marginRight: 10, marginTop: 10 }}>
                             <p className={classes.pSize}>Or</p>
                         </div>
                         <div style={{ width: 328 }}>
@@ -969,10 +976,7 @@ const Checkout = () => {
                                     Confirm Order & Pay Later
                                 </MainBlackButton>
                             )}
-                            {/* <MainBlackButton className={'BorderButton'} onClick={handleClickConfirmOrderPayLater}>
-                                Confirm Order & Pay Later
-                            </MainBlackButton> */}
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>
