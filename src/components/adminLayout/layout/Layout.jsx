@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import Topbar from '../topNav/Topbar';
 import { getAllDataProduct, getAllNotificationFunction } from '../../../redux/actions/dataProductActions';
 import Appbar from '../appBar/Appbar';
+import SnackbarComponent from '../../../utils/re-useable-components/admin-components/Snackbar/SnackbarComponent';
 // import RoutesLink from '../../RoutesLink';
 export default function Layout({ children }) {
     const dispatch = useDispatch();
@@ -23,6 +24,7 @@ export default function Layout({ children }) {
             <div className={Styles.LayoutContent}>
                 <Topbar />
                 {/* <Appbar /> */}
+                <SnackbarComponent />
                 <div className={Styles.LayoutContentMain}>{children}</div>
             </div>
         </div>

@@ -1,13 +1,24 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
+
 import { Typography, TextField } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Box } from '@mui/system';
 
+import { setAddressLabel } from '../../../redux/actions/urlOnProfileButtonTabAction';
+import {
+    addKecamatanLogreg,
+    addKotaLogreg,
+    editUserAddress,
+    setLocProvinceLogreg
+} from '../../../redux/actions/userActions';
+
 import HorizontalSpacer from '../../../components/HorizontalSpacer';
 import MainBlackButton from '../../../utils/re-useable-components/buttons/MainBlackButton';
 import Dialog from '../component/dialog';
+import Wishlist from './profile-wishlist';
+
 import {
     LOCATION_PATH_ADDRESS_ADD_NEW_ADDRESS,
     SET_HEADER_ADD_NEW_ADDRESS,
@@ -17,13 +28,6 @@ import {
     SET_PROFILE_PROMO_AND_SALE,
     SET_PROFILE_WISHLIST
 } from '../../../types';
-import { setAddressLabel } from '../../../redux/actions/urlOnProfileButtonTabAction';
-import Dashboard from './profile-dashboard';
-import Wishlist from './profile-wishlist';
-import PromoAndSale from './profile-promo-and-sale';
-import AutoCompleteProvinceLogreg from '../../../utils/re-useable-components/dropdown-log-reg/AutoComplete-Province-Logreg';
-import DropdownKabupatenLogreg from '../../../utils/re-useable-components/dropdown-log-reg/dropdown-kabupaten-logreg';
-import DropdownKecamatanLogreg from '../../../utils/re-useable-components/dropdown-log-reg/dropdown-kecamatan-logreg';
 
 const style = {
     btnPrimaryContained: {
@@ -67,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        paddingTop: '102px',
+        // paddingTop: '80px',
         marginBottom: '100px',
         '& .title': {
             display: 'none'
@@ -134,7 +138,11 @@ const useStyles = makeStyles((theme) => ({
             },
             '& .username': {
                 marginTop: '20px',
-                marginBottom: '10px'
+                marginBottom: '10px',
+                fontSize: 13
+            },
+            '& .userAddressMobile': {
+                fontSize: 13
             },
             '& .btnDesktop': {
                 display: 'none'
@@ -142,7 +150,8 @@ const useStyles = makeStyles((theme) => ({
             '& .btnMobile': {
                 display: 'flex',
                 flexDirection: 'row',
-                alignItems: 'center'
+                alignItems: 'center',
+                marginBottom: 30
             }
         }
     },
@@ -167,7 +176,7 @@ const useStyles = makeStyles((theme) => ({
     },
     dialogFormWrapper: {
         width: '100%',
-        marginTop: '30px',
+        marginTop: '20px',
         marginBottom: '15px'
     },
     dialogInput: {
@@ -186,18 +195,33 @@ const Address = (params) => {
     const classes = useStyles();
     const router = useRouter();
     const dispatch = useDispatch();
-    const [showModal, setShowModal] = useState(false);
-    const [age, setAge] = useState('');
+
     const { headerPage, show_label_profile } = useSelector((state) => state.url_profile);
     const { credentials } = useSelector((state) => state.user);
 
-    const handleChange = (event) => {
-        setAge(event.target.value);
+    const [showModal, setShowModal] = useState(false);
+    const [dataAddress, setDataAddress] = useState({
+        alamat: credentials?.alamat,
+        no_telp: credentials?.no_telp
+
+        // provinsi: credentials?.provinsi,
+        // kota: credentials?.kota,
+        // kecamatan: credentials?.kecamatan
+    });
+
+    const onChangeHandler = (e) => {
+        setDataAddress({ ...dataAddress, alamat: e.target.value });
     };
 
-    useEffect(() => {}, [show_label_profile]);
+    const onChangeHandlerNoHp = (e) => {
+        setDataAddress({ ...dataAddress, no_telp: e.target.value });
+    };
 
-    console.log(credentials);
+    useEffect(() => {}, [show_label_profile, dataAddress, credentials]);
+
+    // console.log(credentials);
+    // console.log(dataAddress);
+
     return (
         <div>
             <div className={classes.profileContainer}>
@@ -207,11 +231,16 @@ const Address = (params) => {
                         <Box className={classes.addressContainer}>
                             <Box className={'information'}>
                                 <p style={{ fontSize: '20px', fontWeight: '500' }}>Default Address</p>
-                                <p className={'username'}>{credentials?.nama}</p>
-                                <p style={{ marginBottom: '10px', textAlign: 'center' }}>{credentials?.alamat}</p>
+                                <p className={'username'}>{`${credentials?.nama} (${dataAddress.no_telp})`}</p>
+                                <p
+                                    className={'userAddressMobile'}
+                                    style={{ marginBottom: '10px', textAlign: 'center' }}
+                                >
+                                    {credentials?.alamat}
+                                </p>
                             </Box>
                             <Box className={'btnDesktop'}>
-                                {/* <MainBlackButton
+                                <MainBlackButton
                                     className={'BlackButton'}
                                     onClick={async () => {
                                         await dispatch(setAddressLabel(SET_HEADER_EDIT_ADDRESS));
@@ -220,18 +249,10 @@ const Address = (params) => {
                                     innerContaunerStyle={style.btnSecondaryContained}
                                 >
                                     Edit
-                                </MainBlackButton> */}
-                                {/* <HorizontalSpacer widht={{ marginRight: '15px' }} />
-                                <MainBlackButton
-                                    className={'WhiteButton'}
-                                    innerContaunerStyle={style.btnPrimaryOutline}
-                                    variant="outlined"
-                                >
-                                    Delete
-                                </MainBlackButton> */}
+                                </MainBlackButton>
                             </Box>
                             <Box className={'btnMobile'}>
-                                {/* <MainBlackButton
+                                <MainBlackButton
                                     className={'BlackButton'}
                                     onClick={async () => {
                                         await dispatch(setAddressLabel(SET_HEADER_EDIT_ADDRESS));
@@ -240,7 +261,7 @@ const Address = (params) => {
                                     innerContaunerStyle={style.btnPrimaryContained_mobile}
                                 >
                                     Edit
-                                </MainBlackButton> */}
+                                </MainBlackButton>
                                 {/* <HorizontalSpacer widht={{ marginRight: '15px' }} />
                                 <MainBlackButton
                                     className={'WhiteButton'}
@@ -254,6 +275,7 @@ const Address = (params) => {
                     </>
                 )}
             </div>
+
             <Dialog
                 open={showModal}
                 innerContainerStyle={{ width: '798px', left: '50%' }}
@@ -267,16 +289,21 @@ const Address = (params) => {
                         <Typography className={'lable'}>*Name</Typography>
                         <TextField
                             id="outlined-basic"
-                            placeholder={headerPage === 'Add New Address' ? '' : 'Mia Artina'}
+                            // placeholder={headerPage === 'Add New Address' ? '' : credentials?.nama}
+                            label={headerPage === 'Add New Address' ? '' : credentials?.nama}
+                            sx={{ color: 'red' }}
                             variant="outlined"
                             className={classes.dialogInput}
                             size="small"
+                            disabled
                         />
                     </Box>
                     <Box className={classes.dialogFormWrapper}>
                         <Typography className={'lable'}>*Address</Typography>
                         <TextField
-                            placeholder={headerPage === 'Add New Address' ? '' : credentials?.alamat}
+                            onChange={onChangeHandler}
+                            value={headerPage === 'Add New Address' ? '' : dataAddress.alamat}
+                            // value={headerPage === 'Add New Address' ? '' : credentials?.alamat}
                             id="outlined-basic"
                             className={classes.dialogInput}
                             size="small"
@@ -286,47 +313,28 @@ const Address = (params) => {
                 </Box>
                 <Box className={'dialogInnerContainerTwiceForm'}>
                     <Box className={classes.dialogFormWrapper}>
-                        <Typography className={'lable'}>*Provinsi</Typography>
-                        <AutoCompleteProvinceLogreg />
-                    </Box>
-                    {/* <HorizontalSpacer widht={{ marginRight: '31px' }} />
-                    <Box className={classes.dialogFormWrapper}>
-                        <Typography className={'lable'}>*Kode Pos</Typography>
+                        <Typography className={'lable'}>*No Handphone</Typography>
                         <TextField
-                            placeholder={headerPage === 'Add New Address' ? '' : 'Kode Pos'}
+                            onChange={onChangeHandlerNoHp}
+                            value={headerPage === 'Add New Address' ? '' : dataAddress.no_telp}
                             variant="outlined"
                             className={classes.dialogInput}
                             size="small"
-                        />
-                    </Box> */}
-                </Box>
-                <Box className={'dialogInnerContainerTwiceForm'}>
-                    <Box className={classes.dialogFormWrapper}>
-                        <Typography className={'lable'}>*Kota / Kabupaten</Typography>
-                        <DropdownKabupatenLogreg />
-                    </Box>
-                    <HorizontalSpacer widht={{ marginRight: '31px' }} />
-                    <Box className={classes.dialogFormWrapper}>
-                        <Typography className={'lable'}>*No Telp</Typography>
-                        <TextField
-                            placeholder={headerPage === 'Add New Address' ? '' : credentials?.no_telp}
-                            variant="outlined"
-                            className={classes.dialogInput}
-                            size="small"
+                            type="number"
                         />
                     </Box>
                 </Box>
-                <Box className={'dialogInnerContainerTwiceForm'}>
-                    <Box className={classes.dialogFormWrapper}>
-                        <Typography className={'lable'}>*Kecamatan</Typography>
-                        <DropdownKecamatanLogreg />
-                    </Box>
-                    <HorizontalSpacer widht={{ marginRight: '31px' }} />
-                    <Box className={classes.dialogFormWrapper}></Box>
-                </Box>
+
                 <Box className={classes.dialogBtnWrapper}>
                     <MainBlackButton
-                        onClick={() => setShowModal(false)}
+                        onClick={async () => {
+                            setDataAddress({
+                                ...dataAddress,
+                                alamat: credentials?.alamat,
+                                no_telp: credentials?.no_telp
+                            });
+                            setShowModal(false);
+                        }}
                         innerContaunerStyle={style.btnBoxPrimaryOutline}
                         className="WhiteButton"
                         variant="outlined"
@@ -335,7 +343,14 @@ const Address = (params) => {
                     </MainBlackButton>
                     <HorizontalSpacer widht={{ marginRight: '15px' }} />
                     <MainBlackButton
-                        onClick={() => {}}
+                        onClick={async () => {
+                            try {
+                                await dispatch(editUserAddress(dataAddress, setShowModal));
+                                // setShowModal(false);
+                            } catch (error) {
+                                console.log(error);
+                            }
+                        }}
                         innerContaunerStyle={style.btnBoxPrimariContainer}
                         className="BlackButton"
                         variant="contained"

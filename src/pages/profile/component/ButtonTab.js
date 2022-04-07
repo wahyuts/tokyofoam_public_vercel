@@ -17,7 +17,9 @@ const useStyles = makeStyles((theme) => ({
     btnMenuContainer: {
         display: 'flex',
         justifyContent: 'center',
-        marginTop: '55px'
+        marginTop: '55px',
+        paddingLeft: 100
+        // backgroundColor: 'red'
     },
     button: {
         '&.MuiButton-root': {

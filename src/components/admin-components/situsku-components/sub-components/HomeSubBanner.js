@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { makeStyles } from '@mui/styles';
 import { Button, Card } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
@@ -7,6 +7,8 @@ import CameraImage from '../../../../../public/assets/images/CameraImage.png';
 import FirstImage from './HomeSubBannerComp/FirstImage';
 import SecondImage from './HomeSubBannerComp/SecondImage';
 import ThirdImage from './HomeSubBannerComp/ThirdImage';
+import { useDispatch, useSelector } from 'react-redux';
+import { getDataSettingsSubBanner } from '../../../../redux/actions/dataSituskuAction';
 
 const useStyles = makeStyles((theme) => ({
     Container: {
@@ -93,10 +95,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const HomeSubBanner = () => {
+    const token = localStorage.getItem('FBIdToken');
+    const { dataSettingsSubBanner } = useSelector((state) => state.dataSitusku);
+    const dispatch = useDispatch();
     const classes = useStyles();
     const fileSelect = useRef(null);
     const fileSelect2 = useRef(null);
-
     const [image, setImage] = useState('');
     const [image2, setImage2] = useState('');
     const [showNoImage, setShowNoImage] = useState(true);
@@ -208,9 +212,11 @@ const HomeSubBanner = () => {
             fileSelect2.current.click();
         }
     };
-    console.log(image, 'cek image');
-    console.log(image2, 'cek image 2');
 
+    // useEffect(() => {
+    //     dispatch(getDataSettingsSubBanner(token))
+    // },[])
+    // console.log(dataSettingsSubBanner, 'cek data')
     return (
         <Card>
             <div className={classes.Container}>
@@ -220,11 +226,11 @@ const HomeSubBanner = () => {
                 <div style={{ width: '100%', border: '1.5px solid #DFE0EB' }}></div>
                 <div className={classes.WrapperItemMain}>
                     <div className={classes.ItemLeft}>
-                        <FirstImage />
+                        <FirstImage data1={dataSettingsSubBanner} />
                     </div>
                     <div className={classes.ItemRight}>
-                        <SecondImage />
-                        <ThirdImage />
+                        <SecondImage data2={dataSettingsSubBanner} />
+                        <ThirdImage data3={dataSettingsSubBanner} />
                     </div>
                 </div>
             </div>

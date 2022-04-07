@@ -8,6 +8,7 @@ import Tooltip from '@mui/material/Tooltip';
 import { useDispatch, useSelector } from 'react-redux';
 import { setProfile } from '../../../redux/actions/urlOnProfileButtonTabAction';
 import { SET_PROFILE_LOGOUT } from '../../../types';
+import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
 
 function stringToColor(string) {
     let hash = 0;
@@ -66,6 +67,8 @@ export default function AccountMenu() {
                         <Avatar {...stringAvatar(credentials?.nama ? credentials?.nama : 'user')} />
                     </IconButton>
                 </Tooltip>
+                <DoubleArrowIcon />
+                <p style={{ marginLeft: 10, color: 'orange' }}>Klik Avatar For Menu</p>
             </Box>
             <Menu
                 anchorEl={anchorEl}

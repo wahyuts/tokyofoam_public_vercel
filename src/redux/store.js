@@ -27,6 +27,7 @@ import { persistStore, persistReducer } from 'redux-persist';
 import dataHistoryOrder from './reducers/dataHistoryOrderReducer';
 // import dataAllSitusku from './reducers/dataSituskuReducer';
 import dataAllSituskuReducer from './reducers/dataSituskuReducer';
+import snackbarReducer from './reducers/snackbarReducer';
 
 // If you don't bother about the error redux-persist failed to create sync storage. falling back to noop storage...uncomment the next line and comment out the previous import. See more on - https://github.com/vercel/next.js/discussions/15687
 // const storage = require('redux-persist/lib/storage').default;
@@ -49,6 +50,7 @@ const combinedReducer = combineReducers({
     theComment: commentReducer,
     theNotifications: notificationsReducer,
     dataSitusku: dataAllSituskuReducer,
+    snackbar: snackbarReducer,
     uiPesanan,
     dbResponses
 });

@@ -182,21 +182,32 @@ const useStyles = makeStyles((theme) => ({
         height: 191,
         borderRadius: 8,
         objectFit: 'fill'
+    },
+    ParentImageAfterUpload: {
+        width: '100%',
+        height: '100%',
+        overflow: 'hidden',
+        borderRadius: 8,
+        position: 'relative'
+    },
+    ImageAfterUpload: {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        cursor: 'pointer'
     }
 }));
 const HomeBanner = () => {
+    const { dataSettingsMainBanner } = useSelector((state) => state.dataSitusku);
+    const token = localStorage.getItem('FBIdToken');
     const dispatch = useDispatch();
     const fileSelect = useRef(null);
-    const { credentials } = useSelector((state) => state.user);
-    const token = localStorage.getItem('FBIdToken');
-    // console.log(credentials, 'cek credentials');
-    const { dataSettingsMainBanner } = useSelector((state) => state.dataSitusku);
     const classes = useStyles();
     const [files, setFiles] = useState([]);
     const [valueTitle, setValueTitle] = useState(dataSettingsMainBanner.title_on_banner);
     const [valueSubTitle, setValueSubTitle] = useState(dataSettingsMainBanner.subTitle_on_banner);
     const [valueLink, setValueLink] = useState(dataSettingsMainBanner.link_on_banner);
-    const [dataImage, setDataImage] = useState('');
     const [image, setImage] = useState('');
     const [showNoImage, setShowNoImage] = useState(true);
     const [photoName, setPhotoName] = useState('');
@@ -286,19 +297,14 @@ const HomeBanner = () => {
         });
     };
 
-    const saveImage = () => {
+    const saveData = () => {
         const data = {
             image_main_banner: image,
             title_on_banner: valueTitle,
             link_on_banner: valueLink,
             subTitle_on_banner: valueSubTitle
         };
-        // console.log(data, 'cek data');
         dispatch(patchDataSettingsMainBanner(data));
-    };
-
-    const onChangeLink = (e) => {
-        setValueLink(e);
     };
 
     useEffect(() => {
@@ -322,9 +328,9 @@ const HomeBanner = () => {
             </div>
         </div>
     ));
-    console.log(image, 'cek image');
-    console.log(dataSettingsMainBanner, 'cek data settings Main Banner');
-    console.log(dataImage, 'cek iamgeeeeee');
+    // console.log(image, 'cek image');
+    // console.log(dataSettingsMainBanner, 'cek data settings Main Banner');
+    // console.log(dataImage, 'cek iamgeeeeee');
 
     return (
         <Card>
@@ -345,12 +351,14 @@ const HomeBanner = () => {
                             </div>
                         ) : (
                             <div
-                                style={{
-                                    width: '100%',
-                                    overflow: 'hidden',
-                                    borderRadius: 8,
-                                    position: 'relative'
-                                }}
+                                // style={{
+                                //     width: '100%',
+                                //     height: '100%',
+                                //     overflow: 'hidden',
+                                //     borderRadius: 8,
+                                //     position: 'relative'
+                                // }}
+                                className={classes.ParentImageAfterUpload}
                             >
                                 <Image
                                     src={image}
@@ -361,11 +369,11 @@ const HomeBanner = () => {
                                     layout="responsive"
                                 />
                                 <div
-                                    style={{ position: 'absolute', top: 80, left: 230, cursor: 'pointer' }}
-                                    // className={classes.WrapperUpload}
+                                    // style={{ position: 'absolute', top: 80, left: 230, cursor: 'pointer' }}
+                                    className={classes.ImageAfterUpload}
                                     onClick={handleEditPicture}
                                 >
-                                    <Image src={CameraImage} alt="Camera Pict" className="CameraImage" />
+                                    <Image src={CameraImage} alt="Camera Pict" className="CameraCenterImage" />
                                 </div>
                             </div>
                         )}
@@ -385,7 +393,7 @@ const HomeBanner = () => {
                                     borderRadius: 12,
                                     textTransform: 'none'
                                 }}
-                                onClick={saveImage}
+                                onClick={saveData}
                             >
                                 <span style={{ fontSize: 14, fontWeight: 600, color: '#FFFFFF' }}>Save</span>
                             </Button>
@@ -404,7 +412,7 @@ const HomeBanner = () => {
                                 className={classes.InputForm}
                                 style={{ fontSize: 14, fontWeight: 600, color: '#252733', paddingTop: 14 }}
                                 type="text"
-                                value={valueTitle}
+                                value={valueTitle || ''}
                                 onChange={(e) => setValueTitle(e.target.value)}
                                 placeholder="Welcome to TokyoFoam"
                                 required
@@ -417,11 +425,11 @@ const HomeBanner = () => {
                                     <EditIcon sx={{ width: 16, height: 16, color: '#ADADAD' }} />
                                 </Button>
                             </div>
-                            <input
+                            <textarea
                                 className={classes.InputForm}
                                 style={{ fontSize: 14, fontWeight: 400, color: '#252733' }}
                                 type="text"
-                                value={valueSubTitle}
+                                value={valueSubTitle || ''}
                                 onChange={(e) => setValueSubTitle(e.target.value)}
                                 placeholder="Lorem ipsum dolar sit amet"
                                 required
@@ -438,7 +446,7 @@ const HomeBanner = () => {
                                 className={classes.InputForm}
                                 style={{ fontSize: 14, fontWeight: 400, color: '#252733' }}
                                 type="text"
-                                value={valueLink}
+                                value={valueLink || ''}
                                 onChange={(e) => setValueLink(e.target.value)}
                                 placeholder="insert link here"
                                 required
@@ -483,26 +491,3 @@ const HomeBanner = () => {
 };
 
 export default HomeBanner;
-
-// {images.length ? (
-//     <div className={classes.ContainerUpload} key={images.id}>
-//         <div className={classes.WrapperUploadDone} {...getRootProps()}>
-//             <input type="text" {...getInputProps()} />
-//             <div className={classes.BoxInputImage}>
-
-//                 <div>{images}</div>
-//             </div>
-
-//         </div>
-//     </div>
-// ) : (
-//     <div className={classes.ContainerUpload}>
-//         <div className={classes.WrapperUpload} {...getRootProps()}>
-//             <input type="text" {...getInputProps()} />
-//             <div className={classes.BoxInputImage}>
-//                 <Image src={CameraImage} alt="Camera Pict" />
-//                 <div>{images}</div>
-//             </div>
-//         </div>
-//     </div>
-// )}

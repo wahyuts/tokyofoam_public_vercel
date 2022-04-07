@@ -1,4 +1,5 @@
-import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { TextField, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Box } from '@mui/system';
@@ -7,6 +8,7 @@ import DropdownKecamatan from '../../../utils/re-useable-components/dropdown/dro
 import MainBlackButton from '../../../utils/re-useable-components/buttons/MainBlackButton';
 import HorizontalSpacer from '../../../components/HorizontalSpacer';
 import { useRouter } from 'next/router';
+import { editUserAddressMobile } from '../../../redux/actions/userActions';
 
 const style = {
     btnBoxPrimariContainer: {
@@ -70,7 +72,30 @@ const useStyles = makeStyles((theme) => ({
 const NewAddress = (props) => {
     const classes = useStyles();
     const router = useRouter();
+    const dispatch = useDispatch();
     const { headerPage } = useSelector((state) => state.url_profile);
+    const { credentials } = useSelector((state) => state.user);
+
+    const [showModal, setShowModal] = useState(false);
+    const [dataAddress, setDataAddress] = useState({
+        alamat: credentials?.alamat,
+        no_telp: credentials?.no_telp
+
+        // provinsi: credentials?.provinsi,
+        // kota: credentials?.kota,
+        // kecamatan: credentials?.kecamatan
+    });
+
+    const onChangeHandler = (e) => {
+        setDataAddress({ ...dataAddress, alamat: e.target.value });
+    };
+
+    const onChangeHandlerNoHp = (e) => {
+        setDataAddress({ ...dataAddress, no_telp: e.target.value });
+    };
+
+    useEffect(() => {}, [dataAddress, credentials]);
+
     return (
         <div className={classes.container}>
             <p className={'title'}>{headerPage}</p>
@@ -78,19 +103,21 @@ const NewAddress = (props) => {
                 <p className={classes.label}>*Name</p>
                 <TextField
                     id="outlined-basic"
-                    placeholder={headerPage === 'Add New Address' ? '' : 'Mia Artina'}
+                    // placeholder={headerPage === 'Add New Address' ? '' : credentials?.nama}
+                    label={headerPage === 'Add New Address' ? '' : credentials?.nama}
+                    sx={{ color: 'red' }}
                     variant="outlined"
-                    r
                     className={classes.dialogInput}
                     size="small"
+                    disabled
                 />
             </Box>
             <Box className={classes.formWrapped}>
                 <p className={classes.label}>*Address</p>
                 <TextField
-                    placeholder={
-                        headerPage === 'Add New Address' ? '' : 'Jln. Gunung Saputan no.22X, Kecamatan Denpasar Barat'
-                    }
+                    onChange={onChangeHandler}
+                    value={headerPage === 'Add New Address' ? '' : dataAddress.alamat}
+                    // value={headerPage === 'Add New Address' ? '' : credentials?.alamat}
                     id="outlined-basic"
                     className={classes.dialogInput}
                     size="small"
@@ -98,34 +125,28 @@ const NewAddress = (props) => {
                 />
             </Box>
             <Box className={classes.formWrapped}>
-                <p className={classes.label}>*Kode Pos</p>
+                <p className={classes.label}>*No Handphone</p>
                 <TextField
-                    placeholder={headerPage === 'Add New Address' ? '' : 'Kode Pos'}
+                    onChange={onChangeHandlerNoHp}
+                    value={headerPage === 'Add New Address' ? '' : dataAddress.no_telp}
                     variant="outlined"
                     className={classes.dialogInput}
                     size="small"
-                />
-            </Box>
-            <Box className={classes.formWrapped}>
-                <p className={classes.label}>*Kota / Kabupaten</p>
-                <DropdownKabupaten />
-            </Box>
-            <Box className={classes.formWrapped}>
-                <p className={classes.label}>*Kecamatan</p>
-                <DropdownKabupaten />
-            </Box>
-            <Box className={classes.formWrapped}>
-                <p className={classes.label}>*No Telp</p>
-                <TextField
-                    placeholder={headerPage === 'Add New Address' ? '' : 'Your number'}
-                    variant="outlined"
-                    className={classes.dialogInput}
-                    size="small"
+                    type="number"
                 />
             </Box>
             <Box className={classes.dialogBtnWrapper}>
                 <MainBlackButton
-                    onClick={() => router.back()}
+                    onClick={async () => {
+                        setDataAddress({
+                            ...dataAddress,
+                            alamat: credentials?.alamat,
+                            no_telp: credentials?.no_telp
+                        });
+                        // setShowModal(false);
+                        router.back();
+                    }}
+                    // onClick={() => router.back()}
                     innerContaunerStyle={style.btnBoxPrimaryOutline}
                     className="WhiteButton"
                     variant="outlined"
@@ -134,7 +155,14 @@ const NewAddress = (props) => {
                 </MainBlackButton>
                 <HorizontalSpacer widht={{ marginRight: '8px' }} />
                 <MainBlackButton
-                    onClick={() => {}}
+                    onClick={async () => {
+                        try {
+                            await dispatch(editUserAddressMobile(dataAddress, setShowModal, router));
+                            // setShowModal(false);
+                        } catch (error) {
+                            console.log(error);
+                        }
+                    }}
                     innerContaunerStyle={style.btnBoxPrimariContainer}
                     className="BlackButton"
                     variant="contained"

@@ -28,10 +28,5 @@ export const SidebarData = [
         title: 'Situsku',
         icon: 'bx bx-desktop',
         link: 'admin/situsku'
-    },
-    {
-        title: 'Report',
-        icon: 'bx bxs-report',
-        link: 'admin/report'
     }
 ];

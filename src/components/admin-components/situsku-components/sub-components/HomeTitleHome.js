@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import { Button, Card } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
+import { useDispatch, useSelector } from 'react-redux';
+import { getDataSettingsTitleHome, patchDataSettingsTitleHome } from '../../../../redux/actions/dataSituskuAction';
 
 const useStyles = makeStyles((theme) => ({
     Container: {
@@ -73,10 +75,30 @@ const useStyles = makeStyles((theme) => ({
         color: '#ADADAD'
     }
 }));
+
 const HomeTitleHome = () => {
-    const [valueTitle, setValueTitle] = useState();
-    const [valueSubTitle, setValueSubTitle] = useState();
     const classes = useStyles();
+    const dispatch = useDispatch();
+    const token = localStorage.getItem('FBIdToken');
+    const { dataSettingsHomeTitle } = useSelector((state) => state.dataSitusku);
+    const [valueTitle, setValueTitle] = useState('');
+    const [valueSubTitle, setValueSubTitle] = useState('');
+
+    const saveData = () => {
+        const data = {
+            title_in_home: valueTitle,
+            description_in_home: valueSubTitle
+        };
+        // console.log(data)
+        dispatch(patchDataSettingsTitleHome(data));
+    };
+    useEffect(() => {
+        dispatch(getDataSettingsTitleHome(token));
+        setValueTitle(dataSettingsHomeTitle.title_in_home);
+        setValueSubTitle(dataSettingsHomeTitle.description_in_home);
+    }, [dataSettingsHomeTitle.title_in_home, dataSettingsHomeTitle.description_in_home]);
+
+    console.log(dataSettingsHomeTitle, 'cek data');
     return (
         <Card>
             <div className={classes.Container}>
@@ -85,7 +107,7 @@ const HomeTitleHome = () => {
                 </div>
                 <div style={{ width: '100%', border: '1.5px solid #DFE0EB' }}></div>
                 <div className={classes.WrapperItemMain}>
-                    <form className={classes.FormControlGroup} onSubmit={() => {}}>
+                    <form className={classes.FormControlGroup}>
                         <div className={classes.FormControl}>
                             <div className={classes.ItemTopTitle}>
                                 <span className={classes.TextTitle}>Title</span>
@@ -97,9 +119,9 @@ const HomeTitleHome = () => {
                                 className={classes.InputForm}
                                 style={{ fontSize: 14, fontWeight: 600, color: '#252733', marginTop: 3 }}
                                 type="text"
-                                value={valueTitle}
+                                value={valueTitle || ''}
                                 onChange={(e) => setValueTitle(e.target.value)}
-                                placeholder="Welcome to TokyoFoam"
+                                placeholder="Insert text here"
                                 required
                             />
                         </div>
@@ -110,31 +132,31 @@ const HomeTitleHome = () => {
                                     <EditIcon sx={{ width: 16, height: 16, color: '#ADADAD' }} />
                                 </Button>
                             </div>
-                            <input
+                            <textarea
                                 className={classes.InputForm}
                                 style={{ fontSize: 14, fontWeight: 400, color: '#252733' }}
                                 type="text"
-                                value={valueSubTitle}
+                                value={valueSubTitle || ''}
                                 onChange={(e) => setValueSubTitle(e.target.value)}
-                                placeholder="Lorem ipsum dolar sit amet"
+                                placeholder="Insert text here"
                                 required
                             />
                         </div>
-                        {/* <div style={{ paddingTop: 20 }}>
-                            <Button
-                                style={{
-                                    width: 179,
-                                    height: 37,
-                                    background: '#2C2C2C',
-                                    borderRadius: 12,
-                                    textTransform: 'none'
-                                }}
-                                type="submit"
-                            >
-                                <span style={{ fontSize: 14, fontWeight: 600, color: '#FFFFFF' }}>Save</span>
-                            </Button>
-                        </div> */}
                     </form>
+                    <div style={{ paddingTop: 20 }}>
+                        <Button
+                            style={{
+                                width: 179,
+                                height: 37,
+                                background: '#673AB7',
+                                borderRadius: 12,
+                                textTransform: 'none'
+                            }}
+                            onClick={saveData}
+                        >
+                            <span style={{ fontSize: 14, fontWeight: 600, color: '#FFFFFF' }}>Save</span>
+                        </Button>
+                    </div>
                 </div>
             </div>
         </Card>

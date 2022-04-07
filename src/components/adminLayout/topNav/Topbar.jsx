@@ -204,7 +204,7 @@ export default function Topbar() {
                             <i className="bx bx-log-out-circle bx-rotate-180"></i>
                             <span>Logout</span>
                         </div> */}
-                        <MenuItem onClick={handleClickSettings}>
+                        <MenuItem onClick={() => {}}>
                             <i
                                 className="bx bx-cog bx-sm"
                                 style={{ fontSize: 16, color: '#898989', marginRight: 20 }}

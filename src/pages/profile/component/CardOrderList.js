@@ -40,15 +40,20 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: 35,
         marginLeft: '10%',
         marginRight: '10%',
+        // width: '80%',
         [theme.breakpoints.down('mobile')]: {
             display: 'none'
         }
     },
     cardContainerMobile: {
         display: 'none',
+        width: '100%',
+        // backgroundColor: 'red',
         [theme.breakpoints.down('mobile')]: {
             marginBottom: 35,
-            display: 'flex'
+            display: 'flex',
+            marginLeft: 'auto',
+            marginRight: 'auto'
         }
     },
     btnIcon: {
@@ -355,7 +360,8 @@ const CardComponent = ({ dataToRender }) => {
                                 </div>
 
                                 <div key={index} className={classes.cardContainerMobile}>
-                                    <div sx={{ display: 'grid', gridTemplateRows: 'repeat(3, 1fr)' }}>
+                                    {/* <div sx={{ display: 'grid', gridTemplateRows: 'repeat(3, 1fr)' }}> */}
+                                    <div style={{ width: '100%' }}>
                                         <Accordion sx={{ width: '100%' }}>
                                             <AccordionSummary
                                                 expandIcon={<ExpandMoreIcon />}

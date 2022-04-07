@@ -1,9 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { makeStyles } from '@mui/styles';
 import { Button, Card } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import Image from 'next/image';
 import CameraImage from '../../../../../../public/assets/images/CameraImage.png';
+import { getDataSettingsSubBanner, patchDataSettingsSubBanner } from '../../../../../redux/actions/dataSituskuAction';
+import { useDispatch } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
     Container: {
@@ -83,13 +85,30 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: 8,
         cursor: 'pointer',
         position: 'relative'
+    },
+    ParentImageAfterUpload: {
+        width: '100%',
+        height: '100%',
+        overflow: 'hidden',
+        borderRadius: 8,
+        position: 'relative',
+        display: 'block'
+    },
+    ImageAfterUpload: {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        cursor: 'pointer'
     }
 }));
 
-export default function SecondImage() {
+export default function SecondImage({ data2 }) {
     const classes = useStyles();
+    const dispatch = useDispatch();
+    const token = localStorage.getItem('FBIdToken');
     const fileSelect = useRef(null);
-    const [image, setImage] = useState('');
+    const [image2, setImage2] = useState('');
     const [showNoImage, setShowNoImage] = useState(true);
     const [photoName, setPhotoName] = useState('');
     const [progress, setProgress] = useState(0);
@@ -113,9 +132,9 @@ export default function SecondImage() {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 const response = JSON.parse(xhr.responseText);
                 const response2 = JSON.parse(xhr.responseText);
-                setImage(response.secure_url);
+                setImage2(response.secure_url);
                 setShowNoImage(false);
-                console.log('seputar image', response.secure_url);
+                // console.log('seputar image', response.secure_url);
                 // const formData = {
                 //     photo: response.secure_url
                 // };
@@ -145,11 +164,18 @@ export default function SecondImage() {
             fileSelect.current.click();
         }
     };
-
-    console.log(image, 'cek image');
+    const saveData = () => {
+        const data = {
+            image_sub_banner2: image2
+        };
+        dispatch(patchDataSettingsSubBanner(data, token));
+    };
+    // useEffect(() => {
+    //     dispatch(getDataSettingsSubBanner(token, setImage2));
+    // }, []);
     return (
         <div>
-            {showNoImage === true ? (
+            {image2 === '' ? (
                 <div style={{ width: '100%' }}>
                     <div className={classes.ImageRight1} onClick={handleEditPicture}>
                         <Image src={CameraImage} alt="Camera Pict" />
@@ -163,14 +189,19 @@ export default function SecondImage() {
                         borderRadius: 8
                     }}
                 >
-                    <Image
-                        src={image}
-                        alt="Product Image"
-                        width={240}
-                        height={112}
-                        priority="true"
-                        layout="responsive"
-                    />
+                    <div className={classes.ParentImageAfterUpload}>
+                        <Image
+                            src={image2}
+                            alt="Product Image"
+                            width={240}
+                            height={112}
+                            priority="true"
+                            layout="responsive"
+                        />
+                        <div className={classes.ImageAfterUpload} onClick={handleEditPicture}>
+                            <Image src={CameraImage} alt="Camera Pict" className="CameraCenterImage" />
+                        </div>
+                    </div>
                 </div>
             )}
 
@@ -190,8 +221,7 @@ export default function SecondImage() {
                         borderRadius: 12,
                         textTransform: 'none'
                     }}
-                    // onClick={() => uploadImage()}
-                    onClick={handleEditPicture}
+                    onClick={saveData}
                 >
                     <span style={{ fontSize: 14, fontWeight: 600, color: '#FFFFFF' }}>Save</span>
                 </Button>

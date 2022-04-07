@@ -401,7 +401,7 @@ const PostBundlingProduct = ({ defaultImage }) => {
                             type="text"
                             rows="1"
                             disabled
-                            placeholder="Name Image"
+                            placeholder="Name Image (*Size must be Max 250kb)"
                             // onChange={handleChangeTitle}
                             value={photoName}
                         >

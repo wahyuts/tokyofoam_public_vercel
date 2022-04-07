@@ -294,11 +294,20 @@ const FormEditProduk = ({ defaultImage }) => {
     };
 
     function handleFiles(files) {
+        // for (let i = 0; i < files.length; i++) {
+        //     console.log(files[i]);
+        //     uploadFile(files[i]);
+        //     setPhotoName(files[i].name);
+        // }
         for (let i = 0; i < files.length; i++) {
-            console.log(files[i]);
-            uploadFile(files[i]);
-            // handleImage(files[i]);
-            setPhotoName(files[i].name);
+            if (files[i].size >= 250000) {
+                alert('Tidak bisa upload! File gambar Max 250kb size!');
+            } else {
+                // console.log(files[i]);
+                uploadFile(files[i]);
+                // handleImage(files[i]);
+                setPhotoName(files[i].name);
+            }
         }
     }
 
@@ -519,7 +528,7 @@ const FormEditProduk = ({ defaultImage }) => {
                             type="text"
                             rows="1"
                             disabled
-                            placeholder="Name Image"
+                            placeholder="Name Image (*Size must be Max 250kb)"
                             // onChange={handleChangeTitle}
                             value={photoName}
                         >

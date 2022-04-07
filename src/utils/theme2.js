@@ -22,7 +22,8 @@ let theme = createTheme({
             mobile: 925,
             // mobile: 769,
             tablet: 1280,
-            desktopHD: 1336
+            desktopHD: 1336,
+            desktop4k: 2560
         }
     }
 });

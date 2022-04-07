@@ -7,6 +7,9 @@ import CameraImage from '../../../../../public/assets/images/CameraImage.png';
 import FirstImage from './HomeSubBannerComp/FirstImage';
 import SecondImage from './HomeSubBannerComp/SecondImage';
 import ThirdImage from './HomeSubBannerComp/ThirdImage';
+import GaleryFirst from './HomeGaleriComp/GaleryFirst';
+import GalerySecondComp from './HomeGaleriComp/GalerySecondComp';
+import GaleryThirdComp from './HomeGaleriComp/GaleryThirdComp';
 
 const useStyles = makeStyles((theme) => ({
     Container: {
@@ -96,7 +99,6 @@ const HomeGaleri = () => {
     const classes = useStyles();
     const fileSelect = useRef(null);
     const fileSelect2 = useRef(null);
-
     const [image, setImage] = useState('');
     const [image2, setImage2] = useState('');
     const [showNoImage, setShowNoImage] = useState(true);
@@ -220,11 +222,11 @@ const HomeGaleri = () => {
                 <div style={{ width: '100%', border: '1.5px solid #DFE0EB' }}></div>
                 <div className={classes.WrapperItemMain}>
                     <div className={classes.ItemLeft}>
-                        <FirstImage />
+                        <GaleryFirst />
                     </div>
                     <div className={classes.ItemRight}>
-                        <SecondImage />
-                        <ThirdImage />
+                        <GalerySecondComp />
+                        <GaleryThirdComp />
                     </div>
                 </div>
             </div>

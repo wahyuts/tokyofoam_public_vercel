@@ -667,3 +667,53 @@ const getAuthorizationResetToken = () => {
     const resetPassword = localStorage.getItem('ResetToken');
     axios.defaults.headers.common['Authorization'] = resetPassword; // code ini itu pengganti Authorization: Bearer token di postman
 };
+
+export const editUserAddress = (data, setShowModal) => async (dispatch) => {
+    const API = 'https://tokyofoam.herokuapp.com/api/user/profile';
+    // console.log('Dtanya AP sih', data);
+    try {
+        getAuthorizationHeaderTokenUser();
+        const res = await axios.put(API, data);
+        if (res.data.message === 'Data profile sudah di perbaharui') {
+            alert('Data berhasil diperbaharui!');
+            dispatch(getOnlyUserData());
+            setShowModal(false);
+        }
+    } catch (error) {
+        console.log(error.request);
+        alert('Gangguan Koneksi Atau Ho Handphone Sudah Digunakan!');
+    }
+};
+
+export const editUserAddressMobile = (data, setShowModal, router) => (dispatch) => {
+    const API = 'https://tokyofoam.herokuapp.com/api/user/profile';
+    getAuthorizationHeaderTokenUser();
+    // console.log(data);
+    axios
+        .put(API, data)
+        .then((res) => {
+            // console.log(res);
+            if (res.data.success === true) {
+                alert('Data berhasil diperbaharui!');
+                dispatch(getOnlyUserData());
+                // dispatch(dbResponseSuccess({ response: res?.statusText, label: 'Change address' }));
+                setShowModal(false);
+                router.back();
+            }
+        })
+        .catch((error) => {
+            // console.log(error.response.data.code);
+            if (error.request) {
+                alert('Gangguan Koneksi Atau Ho Handphone Sudah Digunakan!');
+            }
+
+            // if (error.response.data.code === 400) {
+            //     alert('No Handphone Sudah Digunakan!');
+            // } else {
+            //     if (error) {
+            //         alert('Terjadi Gangguan Pada Koneksi Anda!');
+            //     }
+            // }
+            // alert('Terjadi Gangguan Pada Koneksi Anda!');
+        });
+};

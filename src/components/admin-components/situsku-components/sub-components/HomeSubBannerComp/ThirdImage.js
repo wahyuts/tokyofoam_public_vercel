@@ -86,7 +86,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function ThirdImage() {
+export default function ThirdImage({ data3 }) {
     const classes = useStyles();
     const fileSelect = useRef(null);
 
@@ -147,7 +147,7 @@ export default function ThirdImage() {
         }
     };
 
-    console.log(image, 'cek image');
+    // console.log(image, 'cek image');
     return (
         <div>
             {showNoImage === true ? (
