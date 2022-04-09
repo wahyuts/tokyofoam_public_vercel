@@ -637,7 +637,7 @@ export const getAllCommentar = () => async (dispatch) => {
         console.log(error);
     }
 };
-export const addComentar = (data, setShowModal) => async (dispatch) => {
+export const addComentar = (data, setReview, setReviewErrorMsg, setShowModal) => async (dispatch) => {
     const API = 'https://tokyofoam.herokuapp.com/api/comment/create';
     try {
         getAuthorizationHeaderTokenUser();
