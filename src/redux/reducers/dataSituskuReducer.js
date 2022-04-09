@@ -1,4 +1,5 @@
 import {
+    SET_GET_DATA_HOW_TO_BUY,
     SET_GET_DATA_MAIN_BANNER,
     SET_GET_DATA_SETTING_ABOUT_US,
     SET_GET_DATA_SUB_BANNER,
@@ -9,8 +10,10 @@ const initialState = {
     dataSettingsMainBanner: {},
     dataSettingsHomeTitle: {},
     dataSettingsSubBanner: {},
-    dataSettingsAboutUs: {}
+    dataSettingsAboutUs: {},
+    dataSettingsHowToBuy: {}
 };
+
 // DATA REDUCER DISINI DIPAKAI UNTUK GET DATA DAN UPDATE DATA SEKALIGUS
 export default function dataAllSituskuReducer(state = initialState, action) {
     switch (action.type) {
@@ -33,6 +36,11 @@ export default function dataAllSituskuReducer(state = initialState, action) {
             return {
                 ...state,
                 dataSettingsAboutUs: action.payload
+            };
+        case SET_GET_DATA_HOW_TO_BUY:
+            return {
+                ...state,
+                dataSettingsHowToBuy: action.payload
             };
         default:
             return state;

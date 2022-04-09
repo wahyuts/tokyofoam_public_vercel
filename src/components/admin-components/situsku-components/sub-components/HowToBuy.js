@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import { Card, Button } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
+import { useDispatch, useSelector } from 'react-redux';
+import { getDataSettingsHowTobuy, patchDataSettingsHowTobuy } from '../../../../redux/actions/dataSituskuAction';
 
 const useStyles = makeStyles((theme) => ({
     Container: {
@@ -209,10 +211,28 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 export default function HowToBuy() {
+    const { dataSettingsHowToBuy } = useSelector((state) => state.dataSitusku);
+    const token = localStorage.getItem('FBIdToken');
+    const dispatch = useDispatch();
     const classes = useStyles();
     const [valueTitle, setValueTitle] = useState('');
     const [valueText, setValueText] = useState('');
 
+    const handleUpdate = () => {
+        const data = {
+            title_how_to_buy: valueTitle,
+            description_how_to_buy: valueText
+        };
+        console.log(data);
+        dispatch(patchDataSettingsHowTobuy(data));
+    };
+
+    useEffect(() => {
+        dispatch(getDataSettingsHowTobuy(token));
+        setValueTitle(dataSettingsHowToBuy.title_how_to_buy);
+        setValueText(dataSettingsHowToBuy.description_how_to_buy);
+    }, [dataSettingsHowToBuy.title_how_to_buy, dataSettingsHowToBuy.description_how_to_buy]);
+    // console.log(dataSettingsHowToBuy, 'how to buy');
     return (
         <Card>
             <div className={classes.Container}>
@@ -233,7 +253,7 @@ export default function HowToBuy() {
                                 className={classes.InputForm}
                                 style={{ fontSize: 14, fontWeight: 600, color: '#252733', marginTop: 3 }}
                                 type="text"
-                                value={valueTitle}
+                                value={valueTitle || ''}
                                 onChange={(e) => setValueTitle(e.target.value)}
                                 placeholder="Introduction"
                                 required
@@ -250,26 +270,26 @@ export default function HowToBuy() {
                                 className={classes.InputFormTextArea}
                                 style={{ fontSize: 14, fontWeight: 400, color: '#252733' }}
                                 type="text"
-                                value={valueText}
+                                value={valueText || ''}
                                 onChange={(e) => setValueText(e.target.value)}
                                 placeholder="Produk Mulsk 100% Mulberry Silk Pillowcase dengan kandungan natural yang memiliki.."
                                 required
                             />
                         </div>
-                        {/* <div style={{ paddingTop: 20 }}>
+                        <div style={{ paddingTop: 20 }}>
                             <Button
                                 style={{
                                     width: 179,
                                     height: 37,
-                                    background: '#2C2C2C',
+                                    background: '#673AB7',
                                     borderRadius: 12,
                                     textTransform: 'none'
                                 }}
-                                type="submit"
+                                onClick={handleUpdate}
                             >
                                 <span style={{ fontSize: 14, fontWeight: 600, color: '#FFFFFF' }}>Save</span>
                             </Button>
-                        </div> */}
+                        </div>
                     </form>
                 </div>
             </div>

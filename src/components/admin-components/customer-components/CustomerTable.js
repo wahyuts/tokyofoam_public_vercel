@@ -25,12 +25,13 @@ import CustomerListHead from './CustomerListHead';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllUsers, getDataOrdersById, getHistoryOrdersById } from '../../../redux/actions/userActions';
 import { filter } from 'lodash';
+import ExportCSV from '../../../utils/re-useable-components/admin-components/ExportCsv';
 
 // table stuff
 const TABLE_HEAD = [
     { id: 'pelanggan', label: 'Pelanggan', alignRight: false },
     { id: 'alamat', label: 'Alamat', alignRight: false },
-    { id: 'notelp', label: 'No Telp', alignRight: false },
+    { id: 'notelp', label: 'NoTelp', alignRight: false },
     { id: 'tanggal', label: 'Tanggal Datfar', alignRight: false }
 ];
 
@@ -178,6 +179,7 @@ export default function CustomerTable() {
     //     setDateTo(newValue);
     // };
     const { usersDataAll } = useSelector((state) => state.user);
+    // console.log('LOG', usersDataAll);
     // console.log(usersDataAll._id, 'usersDataAll Id');
     const dispatch = useDispatch();
     useEffect(() => {
@@ -203,7 +205,7 @@ export default function CustomerTable() {
     };
 
     const filteredUsers = applySortFilter(usersDataAll, getComparator(order, orderBy), filterName);
-    console.log(filteredUsers, 'filtered users ');
+    // console.log(filteredUsers, 'filtered users ');
 
     // const handleFilterDate = (createdAt, field) => {
     //     const filteredUsersData = usersDataAll.filter((item) => {
@@ -250,17 +252,18 @@ export default function CustomerTable() {
                     </div>
                     <div className={classes.ItemTopRight}>
                         <div className={classes.BtnExport}>
-                            <Button
-                                style={{
-                                    textTransform: 'none',
-                                    border: '1px solid #898989',
-                                    width: 179,
-                                    height: 37,
-                                    borderRadius: 12
-                                }}
-                            >
-                                <span className={classes.TextExport}>Export</span>
-                            </Button>
+                            {usersDataAll === undefined ? null : (
+                                <ExportCSV
+                                    data={usersDataAll.map((el, ind) => ({
+                                        'No. ': ind + 1,
+                                        Pelanggan: el.nama,
+                                        Alamat: el.alamat,
+                                        'No Telp': el.no_telp,
+                                        'Tanggal Daftar': el.createdAt.substring(0, 10)
+                                    }))}
+                                    filename="Customer Report"
+                                />
+                            )}
                         </div>
                         {/* <div className={classes.BtnTambah}>
                             <Button

@@ -466,7 +466,7 @@ const CardPrice = ({ image }) => {
         imageProduct: productByName.image,
         price: productByName.price,
         promo_price: productByName.promo_price,
-
+        weight: productByName.weight,
         qty: quantity,
         price_x_qty: quantity * productByName.price,
         promo_price_x_qty: quantity * productByName.promo_price

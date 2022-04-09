@@ -1,11 +1,12 @@
 import axios from 'axios';
 import {
     CLEAR_ERRORS,
+    SET_GET_DATA_HOW_TO_BUY,
     SET_GET_DATA_MAIN_BANNER,
     SET_GET_DATA_SETTING_ABOUT_US,
     SET_GET_DATA_SUB_BANNER,
-    SET_GET_DATA_TITLE_HOME,
-    SET_PATCH_DATA_MAIN_BANNER
+    SET_GET_DATA_TITLE_HOME
+    // SET_PATCH_DATA_MAIN_BANNER
 } from '../type';
 import { setSnackbar } from './snackbarAction';
 
@@ -114,7 +115,7 @@ export const patchDataSettingsTitleHome = (data) => async (dispatch) => {
 };
 
 // HOME SUB BANNER
-export const getDataSettingsSubBanner = (token, setImageSubBanner1, setImage2) => async (dispatch) => {
+export const getDataSettingsSubBanner = (token, setImage, setImage2, setImage3) => async (dispatch) => {
     const API = 'https://tokyofoam.herokuapp.com/api/setting/get/Setting_sub_banner';
     getAuthorizationHeaderToken();
     try {
@@ -123,9 +124,9 @@ export const getDataSettingsSubBanner = (token, setImageSubBanner1, setImage2) =
             type: SET_GET_DATA_SUB_BANNER,
             payload: res.data.Setting_sub_banner
         });
-        // setImageSubBanner1(res.data.Setting_sub_banner.image_sub_banner1)
-        // setImage2(res.data.Setting_sub_banner.image_sub_banner2)
-        // setImage3(res.data.Setting_sub_banner.image_sub_banner3)
+        setImage(res.data.Setting_sub_banner.image_sub_banner1);
+        setImage2(res.data.Setting_sub_banner.image_sub_banner2);
+        setImage3(res.data.Setting_sub_banner.image_sub_banner3);
     } catch (error) {
         console.log(error);
     }
@@ -145,6 +146,49 @@ export const patchDataSettingsSubBanner = (data) => async (dispatch) => {
                 snackbarOpen: true,
                 snackbarType: 'success',
                 snackbarMessage: 'You have changed data at Sub Banner'
+            })
+        );
+    } catch (error) {
+        console.log(error);
+        dispatch(
+            setSnackbar({
+                snackbarOpen: true,
+                snackbarType: 'error',
+                snackbarMessage: res.data.message
+            })
+        );
+    }
+};
+
+// HOME HOW TO BUY
+export const getDataSettingsHowTobuy = (token) => async (dispatch) => {
+    const API = 'https://tokyofoam.herokuapp.com/api/setting/get/Setting_how_to_buy';
+    getAuthorizationHeaderToken();
+    try {
+        const res = await axios.get(API, token);
+        dispatch({
+            type: SET_GET_DATA_HOW_TO_BUY,
+            payload: res.data.Setting_how_to_buy
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const patchDataSettingsHowTobuy = (data) => async (dispatch) => {
+    const API = 'https://tokyofoam.herokuapp.com/api/setting/update/Setting_how_to_buy';
+    getAuthorizationHeaderToken();
+    try {
+        const res = await axios.patch(API, data);
+        dispatch({
+            type: SET_GET_DATA_HOW_TO_BUY,
+            payload: res.data.Setting_how_to_buy
+        });
+        dispatch(
+            setSnackbar({
+                snackbarOpen: true,
+                snackbarType: 'success',
+                snackbarMessage: 'You have changed data at How to buy'
             })
         );
     } catch (error) {

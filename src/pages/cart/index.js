@@ -315,6 +315,7 @@ const Cart = () => {
     const { isMobile, isTablet, isDesktop } = ReactResponsiveHook();
     const { handleClickProductPage } = AllButtonFunctions();
     const [arrPrice, setArrPrice] = useState([]);
+    const [arrAllWeight, setArrAllWeight] = useState([]);
 
     useEffect(() => {
         //CATATAN bukan untuk useEffect disini, TAPI UNTUK tombol login
@@ -345,6 +346,16 @@ const Cart = () => {
         });
         setArrPrice(Arr);
 
+        /**Buat Weight Yang dimasukan kedalam array */
+        let ArrayAllWeight = dataProductOnBag.map((bag) => {
+            return {
+                id_Product: bag.id,
+                weight: bag.weight * bag.qty
+            };
+        });
+        setArrAllWeight(ArrayAllWeight);
+        /************************************************** */
+
         if (!resAPI) {
             setStatusShippingEstimation('result');
         }
@@ -354,15 +365,24 @@ const Cart = () => {
         localStorage.setItem('URLCheckout', currentPath);
     }, [dataProductOnBag, resAPI, dispatch, currentPath, idUniqCartUser]);
 
+    // console.log('Tampilan Array Weight', arrAllWeight);
+
     // console.log('ARR Khusus Harga', arrPrice);
     // Untuk menjumlahkan data array yang ada di arrPrice
     let sum = 0;
-    // let sum = totalPrice;
-
     for (let i = 0; i < arrPrice.length; i++) {
         sum += arrPrice[i].price_x_qty;
     }
     // console.log('TOTAL HARGA ', sum);
+    /*********************************************** */
+
+    // Untuk menjumlahkan semua berat yang ada dicart (atau didalam array)
+    let sumWeight = 0;
+    for (let i = 0; i < arrAllWeight.length; i++) {
+        sumWeight += arrAllWeight[i].weight;
+    }
+    // console.log('TOTAL BERAT ', sumWeight);
+    /************************************************************************* */
 
     const handleClickCalculate = () => {
         const kumpulData = {
@@ -370,7 +390,8 @@ const Cart = () => {
             originType: 'subdistrict',
             destination: `${stateIdKecamatan}`,
             destinationType: 'subdistrict',
-            weight: 1700,
+            // weight: 1700,
+            weight: sumWeight,
             courier: `${kurir}`
         };
 
@@ -490,7 +511,8 @@ const Cart = () => {
                                 </h2> */}
                                 <div style={{ display: 'flex', marginBottom: 5 }}>
                                     <span className={classes.circleColor}></span>
-                                    <p className={classes.pSize}>{`(1500 gr)`}</p>
+                                    {/* <p className={classes.pSize}>{`(1500 gr)`}</p> */}
+                                    <p className={classes.pSize}>{`(${bag.weight}) gr`}</p>
                                 </div>
                                 {bag.promo_price ? (
                                     <div>
@@ -510,8 +532,10 @@ const Cart = () => {
                                 <DeleteCartItem
                                     bagId={bag.id}
                                     arrPrice={arrPrice}
+                                    arrAllWeight={arrAllWeight}
                                     idUniqCartUser={idUniqCartUser}
                                     authenticated={authenticated}
+                                    handleClickBack={handleClickBack}
                                 />
                             </div>
                         </div>

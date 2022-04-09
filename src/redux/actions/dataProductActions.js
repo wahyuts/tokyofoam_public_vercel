@@ -248,6 +248,7 @@ export const deleteCartBE = (dataProductOnBag, idUniqCartUser) => async (dispatc
                     imageProduct: bag.imageProduct,
                     price: bag.price,
                     promo_price: bag.promo_price,
+                    weight: bag.weight,
                     qty: bag.qty,
                     price_x_qty: bag.price_x_qty,
                     promo_price_x_qty: bag.promo_price_x_qty

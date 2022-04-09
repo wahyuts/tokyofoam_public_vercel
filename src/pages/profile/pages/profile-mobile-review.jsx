@@ -7,7 +7,7 @@ import { PhotoCamera } from '@mui/icons-material';
 import MainBlackButton from '../../../utils/re-useable-components/buttons/MainBlackButton';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import { addComentar } from '../../../redux/actions/userActions';
+import { addComentarMobile } from '../../../redux/actions/userActions';
 import { setProfile } from '../../../redux/actions/urlOnProfileButtonTabAction';
 import { SET_PROFILE_DASHBOARD } from '../../../types';
 
@@ -44,7 +44,7 @@ const Riview = () => {
             </Typography>
 
             <Box className={classes.dialogFormWrapper}>
-                <Typography style={{ color: '#474747' }}>*Judul Riview</Typography>
+                <Typography style={{ color: '#474747' }}>*Judul Review</Typography>
                 <input
                     placeholder="Write Something"
                     type="text"
@@ -55,7 +55,7 @@ const Riview = () => {
                 />
             </Box>
             <Box className={classes.dialogFormWrapper}>
-                <Typography style={{ color: '#474747' }}>*Isi Riview</Typography>
+                <Typography style={{ color: '#474747' }}>*Isi Review</Typography>
                 <textarea
                     placeholder="Write Something"
                     type="text"
@@ -74,9 +74,9 @@ const Riview = () => {
                     onClick={async () => {
                         try {
                             if (review.judul.length !== 0) {
-                                dispatch(addComentar(review));
-                                setReview({ judul: '', comment: '' });
-                                setReviewErrorMsg('');
+                                dispatch(addComentarMobile(review, setReview, setReviewErrorMsg));
+                                // setReview({ judul: '', comment: '' });
+                                // setReviewErrorMsg('');
                                 dispatch(setProfile(SET_PROFILE_DASHBOARD));
                             } else setReviewErrorMsg('judul tidak boleh kosong, comment tidak boleh kosong');
                         } catch (error) {

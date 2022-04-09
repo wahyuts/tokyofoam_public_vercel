@@ -104,7 +104,7 @@ const ButtonTab = () => {
                     Give Us Reviews
                 </Typography>
                 <Box className={classes.dialogFormWrapper}>
-                    <Typography style={{ color: '#474747' }}>*Judul Riview</Typography>
+                    <Typography style={{ color: '#474747' }}>*Judul Review</Typography>
                     <input
                         placeholder="Write Something"
                         type="text"
@@ -115,7 +115,7 @@ const ButtonTab = () => {
                     />
                 </Box>
                 <Box className={classes.dialogFormWrapper}>
-                    <Typography style={{ color: '#474747' }}>*Isi Riview</Typography>
+                    <Typography style={{ color: '#474747' }}>*Isi Review</Typography>
                     <textarea
                         placeholder="Write Something"
                         type="text"
@@ -131,6 +131,8 @@ const ButtonTab = () => {
                         className={'BorderWhiteButton2'}
                         onClick={() => {
                             setShowModal(false);
+                            setReviewErrorMsg('');
+                            setReview({ judul: '', comment: '' });
                         }}
                         innerContaunerStyle={{ width: '256px', fontSize: '20px' }}
                     >
@@ -143,10 +145,7 @@ const ButtonTab = () => {
                         onClick={async () => {
                             try {
                                 if (review.judul.length !== 0 && review.comment.length !== 0) {
-                                    await dispatch(addComentar(review));
-                                    setReview({ judul: '', comment: '' });
-                                    setShowModal(false);
-                                    setReviewErrorMsg('');
+                                    await dispatch(addComentar(review, setReview, setShowModal, setReviewErrorMsg));
                                 } else setReviewErrorMsg('judul tidak boleh kosong, comment tidak boleh kosong');
                             } catch (error) {
                                 console.log(error);

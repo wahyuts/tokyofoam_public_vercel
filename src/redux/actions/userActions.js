@@ -637,15 +637,46 @@ export const getAllCommentar = () => async (dispatch) => {
         console.log(error);
     }
 };
-export const addComentar = (data) => async (dispatch) => {
+export const addComentar = (data, setShowModal) => async (dispatch) => {
     const API = 'https://tokyofoam.herokuapp.com/api/comment/create';
-    getAuthorizationHeaderTokenUser();
-    const response = await axios({
-        method: 'post',
-        url: API,
-        data
+    try {
+        getAuthorizationHeaderTokenUser();
+        const res = await axios.post(API, data);
+
+        if (res.data.success === true) {
+            alert('Terima Kasih Atas Komentar Anda, Masukan Anda Sangat Berarti Bagi Kami');
+            setReview({ judul: '', comment: '' });
+            setReviewErrorMsg('');
+            setShowModal(false);
+        }
+    } catch (error) {
+        console.log(error.request);
+        alert('Terjadi Gangguan Pada Koneksi Anda!');
+    }
+};
+
+export const addComentarMobile = (data, setReview, setReviewErrorMsg) => async (dispatch) => {
+    const API = 'https://tokyofoam.herokuapp.com/api/comment/create';
+    try {
+        getAuthorizationHeaderTokenUser();
+        const res = await axios.post(API, data);
+
+        if (res.data.success === true) {
+            alert('Terima Kasih Atas Komentar Anda, Masukan Anda Sangat Berarti Bagi Kami');
+            setReview({ judul: '', comment: '' });
+            setReviewErrorMsg('');
+            // dispatch(setProfileMobile(SET_PROFILE_DASHBOARD));
+        }
+    } catch (error) {
+        console.log(error.request);
+        alert('Terjadi Gangguan Pada Koneksi Anda!');
+    }
+};
+
+export const setProfileMobile = (label) => (dispatch) => {
+    return dispatch({
+        type: label
     });
-    dispatch(dbResponseSuccess({ response: response?.statusText, label: 'Review' }));
 };
 
 //****************************************************************************** */

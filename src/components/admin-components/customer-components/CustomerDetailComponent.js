@@ -205,10 +205,7 @@ export default function CustomerDetailComponent() {
         detailHistoryOrder.tanggal_pembelian
     ]);
 
-    // useEffect(() => {
-    //     dispatch(getAllUsers());
-    // }, [dispatch]);
-    console.log(detailHistoryOrder, 'cek user dat');
+    // console.log(detailHistoryOrder, 'cek user dat');
     // console.log(paymentDate, 'payment Date');
     return (
         <Container>
