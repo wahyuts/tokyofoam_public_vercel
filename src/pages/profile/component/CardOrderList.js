@@ -18,6 +18,7 @@ import MainBlackButton from '../../../utils/re-useable-components/buttons/MainBl
 import HorizontalSpacer from '../../../components/HorizontalSpacer';
 import ScrollForModal from '../../../utils/re-useable-components/scroll-for-modal';
 import Dialog from './dialog';
+import dayjs from 'dayjs';
 
 import { LOCATION_PATH_DETAILS_ORDER, LOCATION_PATH_MOBILE_PAYMENT } from '../../../types';
 
@@ -84,6 +85,8 @@ const CardComponent = ({ dataToRender }) => {
     const classes = useStyles();
     const router = useRouter();
     const dispatch = useDispatch();
+    // const reverseData = dataToRender.reverse();
+    // console.log('reverseDATA', reverseData);
 
     const { listOrderUserInUserDashboard } = useSelector((state) => state.dataProduct);
     const { statusResponse } = useSelector((state) => state.dbResponses);
@@ -121,6 +124,7 @@ const CardComponent = ({ dataToRender }) => {
         statusResponse?.response === 'OK' && setOpen(true);
     }, [statusResponse]);
 
+    // console.log('dataRender', dataToRender);
     // console.log(statusResponse);
 
     return (
@@ -135,7 +139,7 @@ const CardComponent = ({ dataToRender }) => {
                 <p style={{ fontSize: '14px', textAlign: 'center' }}>Anda belum memiliki pesanan</p>
             ) : (
                 <>
-                    {dataToRender.map((data, index) => {
+                    {dataToRender?.reverse().map((data, index) => {
                         const total = currencyFormat(data?.totalPrice_plus_shipping_minus_benefit_member);
                         const shipping_fee = currencyFormat(data?.shipping_fee);
                         const total_exclude_shipping = currencyFormat(data?.total_exclude_shipping);
@@ -308,7 +312,11 @@ const CardComponent = ({ dataToRender }) => {
                                             </p>
                                             <p style={styles.normalText}>
                                                 Tanggal Pesanan:
-                                                <span style={styles.normalTextDisable}> {data?.tanggal_pembelian}</span>
+                                                {/* <span style={styles.normalTextDisable}> {data?.tanggal_pembelian}</span> */}
+                                                <span style={styles.normalTextDisable}>
+                                                    {' '}
+                                                    {dayjs(data?.tanggal_pembelian).format('DD MMMM YYYY')}
+                                                </span>
                                             </p>
                                         </div>
                                         <div
@@ -512,9 +520,13 @@ const CardComponent = ({ dataToRender }) => {
                                                 </p>
                                                 <p style={styles.normalText}>
                                                     Tanggal Pesanan:
-                                                    <span style={styles.normalTextDisable}>
+                                                    {/* <span style={styles.normalTextDisable}>
                                                         {' '}
                                                         {data?.tanggal_pembelian}
+                                                    </span> */}
+                                                    <span style={styles.normalTextDisable}>
+                                                        {' '}
+                                                        {dayjs(data?.tanggal_pembelian).format('DD MMMM YYYY')}
                                                     </span>
                                                 </p>
                                             </div>
