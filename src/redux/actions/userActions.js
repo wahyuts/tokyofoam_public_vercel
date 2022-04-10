@@ -30,7 +30,8 @@ import {
     SET_GET_ALL_DATA_USER,
     SET_GET_DATA_USER_ORDER,
     GET_COMMENT,
-    SET_GET_DATA_USER_HISTORY_ORDER
+    SET_GET_DATA_USER_HISTORY_ORDER,
+    DELETE_ALL_BAG
 } from '../type';
 import { dbResponseSuccess } from './dbResponses';
 
@@ -144,6 +145,7 @@ export const updatePutCartBEFromLogin = (keranjang) => async (dispatch) => {
                             imageProduct: bag.imageProduct,
                             price: bag.price,
                             promo_price: bag.promo_price,
+                            weight: bag.weight,
                             qty: bag.qty,
                             price_x_qty: bag.price_x_qty,
                             promo_price_x_qty: bag.promo_price_x_qty
@@ -176,6 +178,7 @@ export const updatePutCartBEFromLogin = (keranjang) => async (dispatch) => {
                                 imageProduct: bag.imageProduct,
                                 price: bag.price,
                                 promo_price: bag.promo_price,
+                                weight: bag.weight,
                                 qty: bag.qty,
                                 price_x_qty: bag.price_x_qty,
                                 promo_price_x_qty: bag.promo_price_x_qty
@@ -387,7 +390,17 @@ export const logoutUser = () => (dispatch) => {
     delete axios.defaults.headers.common['Authorization'];
     dispatch({ type: SET_UNAUTHENTICATED });
     dispatch({ type: CLEAR_ERRORS });
+    dispatch(deleteBagReduxFromLogout());
     alert('Anda Baru Saja Logout !');
+};
+
+export const deleteBagReduxFromLogout = (selected) => (dispatch) => {
+    // let arr = [];
+    // arr.unshift(selected);
+    dispatch({
+        type: DELETE_ALL_BAG,
+        payload: []
+    });
 };
 
 //Fungsi mau dapetin data2 user (biasanya buat user profile atau mau cantumin nama di headnav)

@@ -208,6 +208,7 @@ export const updatePutCartBE = (dataProductOnBag) => async (dispatch) => {
                     imageProduct: bag.imageProduct,
                     price: bag.price,
                     promo_price: bag.promo_price,
+                    weight: bag.weight,
                     qty: bag.qty,
                     price_x_qty: bag.price_x_qty,
                     promo_price_x_qty: bag.promo_price_x_qty
@@ -700,6 +701,7 @@ export const postNewPesananPayNow =
     ) =>
     async (dispatch) => {
         const API = `https://tokyofoam.herokuapp.com/api/order/create`;
+        // const API = `https://backup-tokyofoam.herokuapp.com/api/order/create`;
 
         try {
             await dispatch({ type: LOADING_BUTTON_PAYNOW });
@@ -716,6 +718,7 @@ export const postNewPesananPayNow =
                 // console.log('RESPONSE', res);
 
                 getAuthorizationHeaderToken();
+                // const resp = await axios.get(`https://backup-tokyofoam.herokuapp.com/api/payment/getToken/${order_id}`);
                 const resp = await axios.get(`https://tokyofoam.herokuapp.com/api/payment/getToken/${order_id}`);
                 console.log;
                 if (resp.data.success === true) {

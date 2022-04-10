@@ -14,14 +14,28 @@ export const historyOrder = () => (dispatch) => {
 export const deleteOrderById = (id) => async (dispatch) => {
     const API = `https://tokyofoam.herokuapp.com/api/order/delete/${id}`;
     try {
-        const response = await axios({
-            method: 'delete',
-            url: API
-        });
-        await dispatch(getListOrderUserOnUserDashboard());
-        await dispatch(dbResponseSuccess({ response: response?.statusText, label: 'Deleted' }));
+        const results = await axios.delete(API);
+        if (results.data.message === 'Data diatas berhasil dihapus') {
+            alert('Pesanan Berhasil Dihapus!');
+            await dispatch(getListOrderUserOnUserDashboard());
+        }
+        // const response = await axios({
+        //     method: 'delete',
+        //     url: API
+        // });
+        // await dispatch(getListOrderUserOnUserDashboard());
+        // await dispatch(dbResponseSuccess({ response: response?.statusText, label: 'Deleted' }));
     } catch (error) {
-        console.log(error);
+        if (error.response) {
+            // internet online, request made, tapi error karena data tidak match dengan BE
+            console.log(error);
+        } else if (error.request) {
+            // jiks internet offline / disconnect/ gangguan koneksi terjadi
+            console.log(error.request);
+            alert('Terjadi Gangguan Pada Koneksi Anda!');
+        } else {
+            console.log('Error', error.message);
+        }
     }
 };
 export const getOrderById = (id) => async (dispatch) => {
