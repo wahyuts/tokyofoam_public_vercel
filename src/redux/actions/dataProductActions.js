@@ -700,8 +700,8 @@ export const postNewPesananPayNow =
         setOtherKodeposMember
     ) =>
     async (dispatch) => {
-        const API = `https://tokyofoam.herokuapp.com/api/order/create`;
-        // const API = `https://backup-tokyofoam.herokuapp.com/api/order/create`;
+        // const API = `https://tokyofoam.herokuapp.com/api/order/create`;
+        const API = `https://backup-tokyofoam.herokuapp.com/api/order/create`;
 
         try {
             await dispatch({ type: LOADING_BUTTON_PAYNOW });
@@ -718,8 +718,8 @@ export const postNewPesananPayNow =
                 // console.log('RESPONSE', res);
 
                 getAuthorizationHeaderToken();
-                // const resp = await axios.get(`https://backup-tokyofoam.herokuapp.com/api/payment/getToken/${order_id}`);
-                const resp = await axios.get(`https://tokyofoam.herokuapp.com/api/payment/getToken/${order_id}`);
+                const resp = await axios.get(`https://backup-tokyofoam.herokuapp.com/api/payment/getToken/${order_id}`);
+                // const resp = await axios.get(`https://tokyofoam.herokuapp.com/api/payment/getToken/${order_id}`);
                 console.log;
                 if (resp.data.success === true) {
                     const midtrans_url = resp.data.url;
