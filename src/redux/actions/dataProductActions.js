@@ -750,7 +750,7 @@ export const postNewPesananPayNow =
 export const updateStatusPayment = (selected, router) => async (dispatch) => {
     try {
         getAuthorizationHeaderToken();
-        const res = await axios.post(`https://tokyofoam.herokuapp.com/api/payment/success/${selected}`);
+        const res = await axios.post(`https://backup-tokyofoam.herokuapp.com/api/payment/success/${selected}`);
         if (res.data.message === 'Status pembayaran saat ini: Pending') {
             router.push('/payment-pending');
         } else if (res.data.message === 'Pesan pemberitahuan telah dikirim ke email') {
